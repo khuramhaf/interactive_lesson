@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Demand Curve Lesson</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --text-main: #1f2937;
+            --bg-light: #f3f4f6;
+            --revenue-fill: rgba(37, 99, 235, 0.08);
+            --revenue-stroke: rgba(37, 99, 235, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: var(--text-main);
+            background-color: #fafafa;
+        }
+
+        .workspace-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr; 
+            gap: 25px;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .interactive-section {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .lesson-text-section {
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg-light);
+            padding: 24px;
+            border-left: 5px solid var(--primary);
+            border-radius: 6px;
+            height: fit-content;
+        }
+
+        h1 {
+            font-size: 1.6rem;
+            margin-top: 0;
+            color: #111827;
+        }
+
+        .lesson-text-section p, .lesson-text-section li {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            color: #374151;
+        }
+
+        .lesson-text-section ul {
+            padding-left: 20px;
+            margin-top: 5px;
+        }
+
+        .lesson-text-section li {
+            margin-bottom: 8px;
+        }
+
+        #chart-wrapper {
+            width: 100%;
+            min-height: 380px;
+            aspect-ratio: 1.45 / 1; 
+            position: relative;
+            touch-action: pan-y; 
+            margin-bottom: 5px;
+        }
+
+        .live-metrics {
+            margin: 5px 0 12px 0;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px 15px;
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .metric-item {
+            display: flex;
+            flex-direction: column;
+            font-size: 1.05rem;
+        }
+        
+        .metric-item span:first-child {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #64748b;
+            margin-bottom: 2px;
+            font-weight: 700;
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 0; }
+            .workspace-grid {
+                grid-template-columns: 1fr; 
+                padding: 12px;
+                border-radius: 0;
+                box-shadow: none;
+                gap: 12px;
+            }
+            .interactive-section { order: 1; }
+            #chart-wrapper {
+                height: 42vh; 
+                min-height: 280px;
+                aspect-ratio: auto;
+            }
+            .lesson-text-section {
+                order: 2; 
+                border-left: none;
+                border-top: 5px solid var(--primary);
+                padding: 15px;
+            }
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: #f8fafc;
+            padding: 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+        }
+
+        .control-row {
+            display: grid;
+            grid-template-columns: 110px 1fr;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .label-group label {
+            font-size: 1.05rem; 
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .slider-input-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+        }
+
+        .thick-slider {
+            flex-grow: 1;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 10px; 
+            border-radius: 5px;
+            background: #cbd5e1;
+            outline: none;
+        }
+
+        .thick-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .thick-slider::-moz-range-thumb {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .num-input {
+            width: 75px;
+            padding: 5px 2px;
+            font-size: 1.05rem; 
+            border: 2px solid #94a3b8;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 800;
+            color: var(--primary-dark);
+        }
+
+        .num-input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        .axis-line { stroke: #000000; stroke-width: 4px; }
+        .axis-text { font-size: 16px; font-weight: bold; fill: #475569; }
+        .axis-label { font-size: 17px; font-weight: 900; fill: #0f172a; }
+        .demand-line { stroke: #dc2626; stroke-width: 5px; stroke-linecap: round; }
+        .projection-line { stroke: #64748b; stroke-width: 2.5px; stroke-dasharray: 6,6; }
+        .interactive-dot { fill: var(--primary); cursor: grab; touch-action: none; }
+        .interactive-dot:active { cursor: grabbing; }
+        .dot-glow { fill: var(--primary); fill-opacity: 0.15; cursor: grab; touch-action: none; }
+        
+        .revenue-box {
+            fill: var(--revenue-fill);
+            stroke: var(--revenue-stroke);
+            stroke-width: 2px;
+            stroke-dasharray: 4,4;
+        }
+    </style>
+</head>
+<body>
+
+<div class="workspace-grid">
+    
+    <div class="interactive-section">
+        <div id="chart-wrapper"></div>
+
+        <div class="live-metrics">
+            <div class="metric-item">
+                <span>Active Equation</span>
+                <span id="live-eq" style="color: #dc2626; font-weight: bold;">20 - 2(5.00) = 10.00</span>
+            </div>
+            <div class="metric-item" style="text-align: right;">
+                <span>Total Revenue (P × Q)</span>
+                <span id="live-revenue" style="color: var(--primary-dark); font-weight: 800;">$50.00</span>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="control-row">
+                <div class="label-group">
+                    <label for="price-slider">Price (P)</label>
+                </div>
+                <div class="slider-input-container">
+                    <input type="range" id="price-slider" class="thick-slider" min="0" max="20" step="0.05" value="10">
+                    <input type="number" id="price-input" class="num-input" min="0" max="20" step="0.1" value="10.0">
+                </div>
+            </div>
+
+            <div class="control-row">
+                <div class="label-group">
+                    <label for="quant-slider">Quantity (Q<sub>d</sub>)</label>
+                </div>
+                <div class="slider-input-container">
+                    <input type="range" id="quant-slider" class="thick-slider" min="0" max="10" step="0.025" value="5">
+                    <input type="number" id="quant-input" class="num-input" min="0" max="10" step="0.1" value="5.0">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="lesson-text-section">
+        <h1>Understanding the Demand Curve</h1>
+        <p>This curve visualizes consumer behavior according to the linear function inverse:</p>
+        <p style="text-align: center; font-size: 1.4rem; font-weight: bold; color: #dc2626; margin: 10px 0;">P = 20 - 2Q<sub>d</sub></p>
+        
+        <p>Notice how changing values visually changes the total area under the curve—this represented region equals total consumer expenditure or business revenue.</p>
+        
+        <p style="margin-top: 15px;"><strong>Analysis Tasks:</strong></p>
+        <ul>
+            <li>Find the price point where <strong>Total Revenue</strong> reaches its absolute maximum size ($Q=5$).</li>
+            <li>Observe the <strong>Choke Price</strong> ($P=20$): At this price threshold, quantity drops exactly to zero.</li>
+        </ul>
+    </div>
+
+</div>
+
+<script>
+    const wrapper = d3.select("#chart-wrapper");
+    
+    function renderChart() {
+        wrapper.selectAll("*").remove();
+
+        const width = wrapper.node().getBoundingClientRect().width;
+        const height = wrapper.node().getBoundingClientRect().height;
+        const isMobile = window.innerWidth <= 768;
+
+        let marginTop = 25;
+        let marginRight = 50;
+        let marginBottom = 45;
+        let marginLeft = 55;
+
+        if (isMobile) {
+            marginRight = 30;
+            marginLeft = 45;
+        }
+
+        const chartWidth = width - marginLeft - marginRight;
+        const chartHeight = height - marginTop - marginBottom;
+
+        const svg = wrapper.append("svg")
+            .attr("width", "100%")
+            .attr("height", "100%")
+            .attr("viewBox", "0 0 " + width + " " + height)
+            .attr("preserveAspectRatio", "xMidYMid meet");
+
+        const g = svg.append("g")
+            .attr("transform", "translate(" + marginLeft + "," + marginTop + ")");
+
+        function getQ(P) { 
+            return 10 - (P / 2); 
+        }
+        function getP(Q) { 
+            return 20 - (2 * Q); 
+        }
+
+        const xScale = d3.scaleLinear().domain([0, 10.5]).range([0, chartWidth]);
+        const yScale = d3.scaleLinear().domain([0, 21]).range([chartHeight, 0]);
+
+        const revenueBox = g.append("rect").attr("class", "revenue-box");
+
+        g.append("line").attr("class", "axis-line").attr("x1", 0).attr("y1", chartHeight).attr("x2", chartWidth).attr("y2", chartHeight);
+        g.append("line").attr("class", "axis-line").attr("x1", 0).attr("y1", 0).attr("x2", 0).attr("y2", chartHeight);
+
+        const xTicks = d3.range(0, 11, 2);
+        const yTicks = d3.range(0, 21, 4);
+
+        g.selectAll(".x-tick")
+            .data(xTicks)
+            .enter()
+            .append("text")
+            .attr("class", "axis-text")
+            .attr("x", function(d) { return xScale(d); })
+            .attr("y", chartHeight + 18) 
+            .attr("text-anchor", "middle")
+            .text(function(d) { return d; });
+
+        g.selectAll(".y-tick")
+            .data(yTicks)
+            .enter()
+            .append("text")
+            .attr("class", "axis-text")
+            .attr("x", -10)              
+            .attr("y", function(d) { return yScale(d) + 5; }) 
+            .attr("text-anchor", "end")
+            .text(function(d) { return d; });
+
+        g.append("text").attr("class", "axis-label").attr("x", chartWidth).attr("y", chartHeight + 38).attr("text-anchor", "end").text("Quantity (Q)");
+        g.append("text").attr("class", "axis-label").attr("y", -10).attr("x", 0).attr("text-anchor", "start").text("Price (P)");
+
+        g.append("line")
+            .attr("class", "demand-line")
+            .attr("x1", xScale(0))
+            .attr("y1", yScale(20)) 
+            .attr("x2", xScale(10))
+            .attr("y2", yScale(0));
+
+        g.append("text")
+            .attr("x", xScale(9.7))
+            .attr("y", yScale(0.8))
+            .attr("fill", "#dc2626")
+            .style("font-weight", "900")
+            .style("font-size", "16px")
+            .text("D");
+
+        const horizLine = g.append("line").attr("class", "projection-line");
+        const vertLine = g.append("line").attr("class", "projection-line");
+
+        let calculatedRadius = xScale(0.15) - xScale(0);
+        if (calculatedRadius < 10) {
+            calculatedRadius = 10;
+        }
+        const dotRadius = calculatedRadius;
+        const glowRadius = dotRadius * 1.8; 
+
+        const glow = g.append("circle").attr("class", "dot-glow").attr("r", glowRadius);
+        const dot = g.append("circle").attr("class", "interactive-dot").attr("r", dotRadius);
+
+        function updateAll(price, origin) {
+            if (price < 0) { price = 0; }
+            if (price > 20) { price = 20; }
+            
+            let quantity = getQ(price);
+
+            let cx = xScale(quantity);
+            let cy = yScale(price);
+
+            dot.attr("cx", cx).attr("cy", cy);
+            glow.attr("cx", cx).attr("cy", cy);
+
+            horizLine.attr("x1", 0).attr("y1", cy).attr("x2", cx).attr("y2", cy);
+            vertLine.attr("x1", cx).attr("y1", chartHeight).attr("x2", cx).attr("y2", cy);
+
+            revenueBox
+                .attr("x", 0)
+                .attr("y", cy)
+                .attr("width", cx)
+                .attr("height", chartHeight - cy);
+
+            if (origin !== 'price-slider') {
+                d3.select("#price-slider").property("value", price);
+            }
+            if (origin !== 'price-input') {
+                d3.select("#price-input").property("value", parseFloat(price.toFixed(2)));
+            }
+            if (origin !== 'quant-slider') {
+                d3.select("#quant-slider").property("value", quantity);
+            }
+            if (origin !== 'quant-input') {
+                d3.select("#quant-input").property("value", parseFloat(quantity.toFixed(2)));
+            }
+
+            const currentRevenue = price * quantity;
+            d3.select("#live-eq").text("20 - 2(" + quantity.toFixed(2) + ") = " + price.toFixed(2));
+            d3.select("#live-revenue").text("$" + currentRevenue.toFixed(2));
+        }
+
+        const dragBehavior = d3.drag()
+            .on("drag", function(event) {
+                let currentQ = xScale.invert(event.x);
+                if (currentQ < 0) { currentQ = 0; }
+                if (currentQ > 10) { currentQ = 10; }
+                updateAll(getP(currentQ), 'drag');
+            });
+            
+        dot.call(dragBehavior);
+        glow.call(dragBehavior);
+
+        d3.select("#price-slider").on("input", function() { 
+            updateAll(+(this.value), 'price-slider'); 
+        });
+        
+        d3.select("#quant-slider").on("input", function() { 
+            updateAll(getP(+(this.value)), 'quant-slider'); 
+        });
+
+        d3.select("#price-input").on("input", function() {
+            let val = +(this.value); 
+            if (!isNaN(val)) {
+                updateAll(val, 'price-input');
+            }
+        });
+
+        d3.select("#quant-input").on("input", function() {
+            let val = +(this.value); 
+            if (!isNaN(val)) {
+                updateAll(getP(val), 'quant-input');
+            }
+        });
+
+        const initialPrice = +(d3.select("#price-slider").property("value"));
+        updateAll(initialPrice, 'init');
+    }
+
+    renderChart();
+    window.addEventListener("resize", renderChart);
+</script>
+
+</body>
+</html>

@@ -22,7 +22,7 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
-            padding: 15px;
+            padding: 20px;
             color: var(--text-main);
             background-color: #fafafa;
         }
@@ -85,8 +85,11 @@
             touch-action: pan-y; 
             margin-bottom: 5px;
         }
+        
+        #chart-wrapper svg {
+            overflow: visible !important;
+        }
 
-        /* Live Metrics Configuration with significantly enhanced typography */
         .live-metrics {
             margin: 5px 0 15px 0;
             background: #ffffff;
@@ -95,13 +98,14 @@
             padding: 15px 20px;
             display: flex;
             justify-content: space-between;
-            gap: 15px;
+            gap: 10px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
 
         .metric-item {
             display: flex;
             flex-direction: column;
+            white-space: nowrap; 
         }
 
         .metric-item span:first-child {
@@ -114,7 +118,7 @@
         }
         
         .metric-value {
-            font-size: 1.5rem; /* Increased size significantly for equation and revenue readouts */
+            font-size: 1.5rem; 
             font-weight: 800;
         }
 
@@ -128,7 +132,6 @@
             border-radius: 10px;
         }
 
-        /* Two-line responsive stack structure for control parameters */
         .control-row {
             display: flex;
             flex-direction: column;
@@ -154,7 +157,6 @@
             align-items: center;
         }
 
-        /* Thickened slider track properties tailored for fingers */
         .thick-slider {
             width: 100%;
             -webkit-appearance: none;
@@ -166,7 +168,6 @@
             margin: 8px 0;
         }
 
-        /* Bigger touch points for effortless mobile adjustment interactivity */
         .thick-slider::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
@@ -213,34 +214,41 @@
             outline: none;
         }
 
-        /* Mobile specific viewport layout optimization */
         @media (max-width: 768px) {
             body { 
-                padding: 10px; 
+                padding: 0; 
             }
             .workspace-grid {
                 grid-template-columns: 1fr; 
-                padding: 12px;
-                border-radius: 8px;
+                padding: 0; 
+                border-radius: 0;
+                box-shadow: none;
                 gap: 15px;
             }
             .interactive-section { 
                 order: 1; 
+                padding: 0;
             }
             #chart-wrapper {
-                height: 40vh; 
-                min-height: 290px;
+                height: 44vh; 
+                min-height: 320px; 
                 aspect-ratio: auto;
                 margin-bottom: 0px;
+                background: #ffffff;
             }
             .live-metrics {
-                padding: 12px;
-                margin-bottom: 12px;
+                padding: 12px 14px;
+                margin: 5px 12px 12px 12px; 
+                gap: 8px;
+            }
+            .metric-item span:first-child {
+                font-size: 0.8rem; 
             }
             .metric-value {
-                font-size: 1.35rem; /* Balanced size for compact mobile displays */
+                font-size: 1.18rem; 
             }
             .controls {
+                margin: 0 12px;
                 padding: 12px;
                 gap: 15px;
             }
@@ -251,14 +259,15 @@
                 order: 2; 
                 border-left: none;
                 border-top: 5px solid var(--primary);
-                padding: 15px;
+                padding: 20px 15px;
+                margin: 10px 12px;
+                border-radius: 0 0 6px 6px;
             }
         }
 
-        /* Graphic Elements styling styling blocks */
         .axis-line { stroke: #000000; stroke-width: 4px; }
-        .axis-text { font-size: 16px; font-weight: bold; fill: #475569; }
-        .axis-label { font-size: 17px; font-weight: 900; fill: #0f172a; }
+        .axis-text { font-size: 15px; font-weight: bold; fill: #475569; }
+        .axis-label { font-size: 16px; font-weight: 900; fill: #0f172a; }
         .demand-line { stroke: #dc2626; stroke-width: 5px; stroke-linecap: round; }
         .projection-line { stroke: #64748b; stroke-width: 2.5px; stroke-dasharray: 6,6; }
         .interactive-dot { fill: var(--primary); cursor: grab; touch-action: none; }
@@ -344,14 +353,17 @@
         const height = wrapper.node().getBoundingClientRect().height;
         const isMobile = window.innerWidth <= 768;
 
-        let marginTop = 25;
+        // FIXED: Base margins changed from 25 to 35 to shift layout down 10px on desktop and mobile
+        let marginTop = 35;
         let marginRight = 50;
         let marginBottom = 45;
         let marginLeft = 55;
 
         if (isMobile) {
-            marginRight = 30;
-            marginLeft = 45;
+            marginTop = 35;
+            marginRight = 25;
+            marginBottom = 45;
+            marginLeft = 40;
         }
 
         const chartWidth = width - marginLeft - marginRight;
@@ -399,13 +411,24 @@
             .enter()
             .append("text")
             .attr("class", "axis-text")
-            .attr("x", -10)              
+            .attr("x", -8)              
             .attr("y", function(d) { return yScale(d) + 5; }) 
             .attr("text-anchor", "end")
             .text(function(d) { return d; });
 
-        g.append("text").attr("class", "axis-label").attr("x", chartWidth).attr("y", chartHeight + 38).attr("text-anchor", "end").text("Quantity (Q)");
-        g.append("text").attr("class", "axis-label").attr("y", -10).attr("x", 0).attr("text-anchor", "start").text("Price (P)");
+        g.append("text")
+            .attr("class", "axis-label")
+            .attr("x", chartWidth)
+            .attr("y", chartHeight + 34)
+            .attr("text-anchor", "end")
+            .text("Quantity (Q)");
+
+        g.append("text")
+            .attr("class", "axis-label")
+            .attr("x", 45)
+            .attr("y", -5)
+            .attr("text-anchor", "end")
+            .text("Price (P)");
 
         g.append("line")
             .attr("class", "demand-line")

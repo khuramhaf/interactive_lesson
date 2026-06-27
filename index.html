@@ -289,7 +289,7 @@
     <div class="interactive-section">
         <div id="chart-wrapper"></div>
 
-        <div class="live-metrics">
+        <div class="live-metrics" aria-live="polite">
             <div class="metric-item">
                 <span>Active Equation</span>
                 <div id="live-eq" class="metric-value" style="color: #dc2626;">20 - 2(5.00) = 10.00</div>
@@ -306,7 +306,7 @@
                     <div class="label-group">
                         <label for="price-slider">Price (P)</label>
                     </div>
-                    <input type="number" id="price-input" class="num-input" min="0" max="20" step="0.1" value="10.0">
+                    <input type="number" id="price-input" class="num-input" aria-label="Price value" min="0" max="20" step="0.1" value="10.0">
                 </div>
                 <div class="slider-row">
                     <input type="range" id="price-slider" class="thick-slider" min="0" max="20" step="0.05" value="10">
@@ -318,7 +318,7 @@
                     <div class="label-group">
                         <label for="quant-slider">Quantity (Q<sub>d</sub>)</label>
                     </div>
-                    <input type="number" id="quant-input" class="num-input" min="0" max="10" step="0.1" value="5.0">
+                    <input type="number" id="quant-input" class="num-input" aria-label="Quantity value" min="0" max="10" step="0.1" value="5.0">
                 </div>
                 <div class="slider-row">
                     <input type="range" id="quant-slider" class="thick-slider" min="0" max="10" step="0.025" value="5">
@@ -353,7 +353,7 @@
         const height = wrapper.node().getBoundingClientRect().height;
         const isMobile = window.innerWidth <= 768;
 
-        // FIXED: Base margins changed from 25 to 35 to shift layout down 10px on desktop and mobile
+        // Margins leave room for axis ticks/labels; tighter on mobile (see below)
         let marginTop = 35;
         let marginRight = 50;
         let marginBottom = 45;
@@ -448,6 +448,24 @@
         const horizLine = g.append("line").attr("class", "projection-line");
         const vertLine = g.append("line").attr("class", "projection-line");
 
+        // Faint reference line at Q=5 — the revenue-maximizing quantity students
+        // are asked to find in the lesson text. Helps them self-check visually.
+        g.append("line")
+            .attr("x1", xScale(5)).attr("y1", 0)
+            .attr("x2", xScale(5)).attr("y2", chartHeight)
+            .attr("stroke", "#94a3b8")
+            .attr("stroke-width", 1.5)
+            .attr("stroke-dasharray", "2,4")
+            .attr("opacity", 0.5);
+        g.append("text")
+            .attr("x", xScale(5))
+            .attr("y", -8)
+            .attr("text-anchor", "middle")
+            .attr("fill", "#94a3b8")
+            .style("font-size", "11px")
+            .style("font-weight", "700")
+            .text("Q=5");
+
         let calculatedRadius = xScale(0.15) - xScale(0);
         if (calculatedRadius < 11) {
             calculatedRadius = 11;
@@ -479,18 +497,13 @@
                 .attr("width", cx)
                 .attr("height", chartHeight - cy);
 
-            if (origin !== 'price-slider') {
-                d3.select("#price-slider").property("value", price);
-            }
-            if (origin !== 'price-input') {
-                d3.select("#price-input").property("value", parseFloat(price.toFixed(2)));
-            }
-            if (origin !== 'quant-slider') {
-                d3.select("#quant-slider").property("value", quantity);
-            }
-            if (origin !== 'quant-input') {
-                d3.select("#quant-input").property("value", parseFloat(quantity.toFixed(2)));
-            }
+            d3.select("#price-slider").property("value", price);
+            d3.select("#quant-slider").property("value", quantity);
+            // Always sync the number inputs too, even the one that triggered this
+            // update — otherwise typing an out-of-range value leaves the box
+            // showing a number that disagrees with the chart/slider.
+            d3.select("#price-input").property("value", parseFloat(price.toFixed(2)));
+            d3.select("#quant-input").property("value", parseFloat(quantity.toFixed(2)));
 
             const currentRevenue = price * quantity;
             d3.select("#live-eq").text("20 - 2(" + quantity.toFixed(2) + ") = " + price.toFixed(2));

@@ -341,6 +341,16 @@
                 box-shadow: 0 4px 15px rgba(0,0,0,0.08);
                 overflow-y: visible;
             }
+
+            .interactive-section:focus-within {
+        position: static !important;
+        box-shadow: none !important;
+    }
+    
+    /* Ensure the input itself behaves nicely when tapped */
+    .quiz-input {
+        font-size: 16px !important; /* Forces iOS/Android to not zoom in on focus */
+    }
             
             #chart-wrapper {
                 width: 100%;

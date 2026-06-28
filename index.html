@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Demand Curve Lesson</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --text-main: #1f2937;
+            --bg-light: #f3f4f6;
+            --revenue-fill: rgba(37, 99, 235, 0.08);
+            --revenue-stroke: rgba(37, 99, 235, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text-main);
+            background-color: #f8fafc;
+            height: 100vh;
+            overflow: hidden; /* Prevents whole-body scrolling on desktop */
+        }
+
+        /* Responsive Layout Engine */
+        .workspace-grid {
+            display: grid;
+            grid-template-columns: 0.9fr 0.9fr; 
+            width: 100vw;
+            height: 100vh;
+            background: white;
+        }
+
+        /* Left Side: Stays fixed, holds graph, inputs and floating card */
+        .interactive-section {
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            background: #ffffff;
+            border-right: 1px solid #e2e8f0;
+            justify-content: flex-start;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        /* Right Side: Scrollable lesson text & questions */
+        .lesson-text-section {
+            display: flex;
+            flex-direction: column;
+            background-color: #fafafa;
+            padding: 30px;
+            overflow-y: auto; /* Scroll questions independently */
+            height: 100%;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin-top: 0;
+            color: #111827;
+        }
+
+        .lesson-text-section p, .lesson-text-section li {
+            font-size: 1.05rem;
+            line-height: 1.5;
+            color: #374151;
+        }
+
+        .lesson-text-section ul {
+            padding-left: 0;
+            list-style: none;
+            margin-top: 15px;
+        }
+
+        .lesson-text-section li {
+            margin-bottom: 24px;
+            background: #ffffff;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+
+        .task-title {
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: block;
+            color: #0f172a;
+        }
+
+        .task-check {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        /* MC Option Container Blocks */
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            width: 100%;
+            margin-top: 8px;
+        }
+
+        .options-grid label {
+            display: flex;
+            align-items: center;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            padding: 10px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: background 0.15s, border-color 0.15s;
+        }
+
+        .options-grid label:hover {
+            background: #f1f5f9;
+        }
+
+        .options-grid input[type="radio"] {
+            margin-right: 12px;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        .check-btn {
+            padding: 8px 16px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #fff;
+            background: var(--primary);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.1s;
+        }
+
+        .check-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .check-feedback {
+            font-weight: 700;
+            font-size: 0.95rem;
+            width: 100%;
+            margin-top: 4px;
+            display: block;
+        }
+
+        .muted-feedback {
+            opacity: 0.35;
+            filter: grayscale(0.8);
+            transition: opacity 0.2s ease;
+        }
+
+        #chart-wrapper {
+            width: 100%;
+            height: 48%;
+            min-height: 260px;
+            position: relative;
+            touch-action: pan-y; 
+            margin-bottom: 15px;
+        }
+        
+        #chart-wrapper svg {
+            overflow: visible !important;
+        }
+
+        .live-metrics {
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 12px 15px;
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .metric-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .metric-item span:first-child {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #64748b;
+            margin-bottom: 2px;
+            font-weight: 700;
+        }
+        
+        .metric-value {
+            font-size: 1.3rem; 
+            font-weight: 800;
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background: #f8fafc;
+            padding: 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .control-row {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .control-header-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .control-header-line label {
+            font-size: 1rem; 
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .slider-row {
+            width: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .thick-slider {
+            width: 100%;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 10px; 
+            border-radius: 50px;
+            background: #cbd5e1;
+            outline: none;
+            margin: 6px 0;
+        }
+
+        .thick-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .thick-slider::-moz-range-thumb {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .num-input {
+            width: 75px;
+            padding: 4px;
+            font-size: 1.05rem; 
+            border: 2px solid #94a3b8;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 800;
+            color: var(--primary-dark);
+        }
+
+        /* Floating Panel Component */
+        .mobile-question-deck {
+            display: none;
+            background: #f1f5f9;
+            border: 2px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 14px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .deck-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            border-bottom: 1px solid #cbd5e1;
+            padding-bottom: 8px;
+        }
+
+        .deck-title {
+            font-weight: 800;
+            color: #1e293b;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+        }
+
+        .deck-btn {
+            background: #ffffff;
+            border: 1px solid #94a3b8;
+            padding: 6px 12px;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            color: #334155;
+        }
+
+        .deck-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        #deck-content-target li {
+            list-style: none;
+            background: transparent;
+            border: none;
+            padding: 0;
+            margin: 0;
+            box-shadow: none;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                overflow: auto; 
+                height: auto;
+            }
+            .workspace-grid {
+                display: flex;
+                flex-direction: column;
+                height: auto;
+                width: 100%;
+            }
+            .interactive-section {
+                position: sticky;
+                top: 0;
+                z-index: 1000;
+                height: auto;
+                padding: 10px;
+                border-right: none;
+                border-bottom: 2px solid #e2e8f0;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+                overflow-y: visible;
+            }
+            
+            #chart-wrapper {
+                width: 100%;
+                height: 80vw;
+                min-height: 200px;
+                max-height: 320px;
+                margin: 0 auto 5px auto;
+            }
+            
+            .live-metrics {
+                margin-bottom: 8px;
+                padding: 6px 10px;
+            }
+            .metric-value {
+                font-size: 1.05rem;
+            }
+            
+            .controls {
+                display: flex;
+                flex-direction: row;
+                gap: 15px;
+                padding: 8px;
+                justify-content: space-between;
+                margin-bottom: 10px;
+            }
+            .control-row {
+                flex: 1;
+                border-bottom: none;
+                padding-bottom: 0;
+            }
+            .control-header-line {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 8px;
+            }
+            .control-header-line label {
+                font-size: 1.1rem;
+            }
+            .num-input {
+                width: 75px;
+                padding: 4px;
+                font-size: 1.1rem;
+            }
+            
+            .slider-row {
+                display: none !important; 
+            }
+
+            .mobile-question-deck {
+                display: block; /* Visible on mobile */
+            }
+
+            .lesson-text-section {
+                overflow-y: visible;
+                height: auto;
+                padding: 15px 20px 80px 20px;
+            }
+
+            /* Hide the original static list elements on mobile to prevent redundancy */
+            #master-question-list {
+                display: none;
+            }
+        }
+
+        .axis-line { stroke: #000000; stroke-width: 4px; }
+        .axis-text { font-size: 18px; font-weight: bold; fill: #64748b; }
+        .axis-label { font-size: 20px; font-weight: 900; fill: #0f172a; }
+        .demand-line { stroke: #dc2626; stroke-width: 5px; stroke-linecap: round; }
+        .projection-line { stroke: #64748b; stroke-width: 3px; stroke-dasharray: 4,4; }
+        .interactive-dot { fill: var(--primary); cursor: grab; touch-action: none; }
+        .dot-glow { fill: var(--primary); fill-opacity: 0.25; cursor: grab; touch-action: none; }
+        .revenue-box { fill: var(--revenue-fill); stroke: var(--revenue-stroke); stroke-width: 1.5px; stroke-dasharray: 4,4; }
+    </style>
+</head>
+<body>
+
+<div class="workspace-grid">
+    
+    <div class="interactive-section">
+        <div id="chart-wrapper"></div>
+
+        <div class="live-metrics" aria-live="polite">
+            <div class="metric-item">
+                <span>Active Equation</span>
+                <div id="live-eq" class="metric-value" style="color: #dc2626;">20 - 2(5.0) = 10.0</div>
+            </div>
+            <div class="metric-item" style="text-align: right;">
+                <span>Total Revenue (P × Q)</span>
+                <div id="live-revenue" class="metric-value" style="color: var(--primary-dark);">$50.00</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="control-row">
+                <div class="control-header-line">
+                    <label for="price-input">P</label>
+                    <input type="number" id="price-input" class="num-input" min="0" max="20" step="0.1" value="10.0">
+                </div>
+                <div class="slider-row">
+                    <input type="range" id="price-slider" class="thick-slider" min="0" max="20" step="0.1" value="10">
+                </div>
+            </div>
+
+            <div class="control-row">
+                <div class="control-header-line">
+                    <label for="quant-input">Q</label>
+                    <input type="number" id="quant-input" class="num-input" min="0" max="10" step="0.1" value="5.0">
+                </div>
+                <div class="slider-row">
+                    <input type="range" id="quant-slider" class="thick-slider" min="0" max="10" step="0.1" value="5">
+                </div>
+            </div>
+        </div>
+
+        <div class="mobile-question-deck">
+            <div class="deck-navigation">
+                <button class="deck-btn" id="deck-prev-btn">◀ Prev</button>
+                <span class="deck-title" id="deck-counter-label">Question 1 of 14</span>
+                <button class="deck-btn" id="deck-next-btn">Next ▶</button>
+            </div>
+            <div id="deck-content-target"></div>
+        </div>
+    </div>
+
+    <div class="lesson-text-section">
+        <h1>Understanding the Demand Curve</h1>
+        <p>This curve visualizes consumer behavior according to the linear function inverse:</p>
+        <p style="text-align: center; font-size: 1.3rem; font-weight: bold; color: #dc2626; margin: 5px 0;">P = 20 - 2Q<sub>d</sub></p>
+        <p>Modify graph parameters to monitor total continuous changes to business expenditures below.</p>
+        
+        <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 15px 0;">
+        
+        <p><strong>Practice Questions:</strong></p>
+       <ul id="master-question-list">
+
+<li data-index="0">
+    <span class="task-title">Question 1: Explore the Graph</span>
+    Move the dot anywhere on the demand curve. Watch how <strong>Price</strong>, <strong>Quantity</strong>, and <strong>Total Revenue</strong> change.
+    <div class="task-check">
+        <button id="submit-t1" class="check-btn">Done</button>
+        <span id="feedback-t1" class="check-feedback"></span>
+    </div>
+</li>
+
+<li data-index="1">
+    <span class="task-title">Question 2: Set the Price</span>
+    Move the graph until <strong>Price = $8</strong>.
+    <div class="task-check">
+        <button id="submit-t2" class="check-btn">Check Answer</button>
+        <span id="feedback-t2" class="check-feedback"></span>
+    </div>
+</li>
+
+<li data-index="2">
+    <span class="task-title">Question 3: Find the Quantity</span>
+    Set <strong>Price = $14</strong>. What is the quantity demanded?
+    <div class="options-grid">
+        <label><input type="radio" name="q3" value="2"> 2</label>
+        <label><input type="radio" name="q3" value="3"> 3</label>
+        <label><input type="radio" name="q3" value="5"> 5</label>
+        <label><input type="radio" name="q3" value="6"> 6</label>
+    </div>
+    <div class="task-check">
+        <button id="submit-t3" class="check-btn">Check Answer</button>
+        <span id="feedback-t3" class="check-feedback"></span>
+    </div>
+</li>
+
+<li data-index="3">
+    <span class="task-title">Question 4: Find the Price</span>
+    Set <strong>Quantity = 7</strong>. What is the price?
+    <div class="options-grid">
+        <label><input type="radio" name="q4" value="4"> $4</label>
+        <label><input type="radio" name="q4" value="6"> $6</label>
+        <label><input type="radio" name="q4" value="8"> $8</label>
+        <label><input type="radio" name="q4" value="10"> $10</label>
+    </div>
+    <div class="task-check">
+        <button id="submit-t4" class="check-btn">Check Answer</button>
+        <span id="feedback-t4" class="check-feedback"></span>
+    </div>
+</li>
+
+<li data-index="4">
+    <span class="task-title">Question 5: Highest Price</span>
+    Find the highest possible price on the demand curve. What happens to quantity demanded?
+    <div class="task-check">
+        <button id="submit-t5" class="check-btn">Check Answer</button>
+        <span id="feedback-t5" class="check-feedback"></span>
+    </div>
+</li>
+
+<li data-index="5">
+    <span class="task-title">Question 6: Lowest Price</span>
+    Move the graph until <strong>Price = $0</strong>. Enter the quantity demanded.
+    <div class="options-grid">
+        <label><input type="radio" name="q6" value="0"> 0</label>
+        <label><input type="radio" name="q6" value="5"> 5</label>
+        <label><input type="radio" name="q6" value="8"> 8</label>
+        <label><input type="radio" name="q6" value="10"> 10</label>
+    </div>
+    <div class="task-check">
+        <button id="submit-t6" class="check-btn">Check Answer</button>
+        <span id="feedback-t6" class="check-feedback"></span>
+    </div>
+</li>
+
+<li data-index="6">
+    <span class="task-title">Question 7: Revenue Challenge</span>
+    Can you find a point where <strong>Total Revenue = $32</strong>?
+    <div class="task-check">
+        <button id="submit-t7" class="check-btn">Check Answer</button>
+        <span id="feedback-t7" class="check-feedback"></span>
+    </div>
+</li>
+
+<li data-index="7">
+    <span class="task-title">Question 8: Maximum Revenue</span>
+    Move the graph until Total Revenue is as high as possible.
+    <div class="task-check">
+        <button id="submit-t8" class="check-btn">Check Answer</button>
+        <span id="feedback-t8" class="check-feedback"></span>
+    </div>
+</li>
+
+<li data-index="8">
+    <span class="task-title">Question 9: Prediction</span>
+    Without moving the graph, answer this question:<br><br>
+    <strong>If price increases, what happens to quantity demanded?</strong>
+    <div class="options-grid">
+        <label><input type="radio" name="q9" value="a"> Quantity increases</label>
+        <label><input type="radio" name="q9" value="b"> Quantity decreases</label>
+        <label><input type="radio" name="q9" value="c"> Quantity stays the same</label>
+    </div>
+    <div class="task-check">
+        <button id="submit-t9" class="check-btn">Check Answer</button>
+        <span id="feedback-t9" class="check-feedback"></span>
+    </div>
+</li>
+
+<li data-index="9">
+    <span class="task-title">Question 10: Final Challenge</span>
+    Find the point on Graph where <strong>Price = $10</strong>, <strong>Quantity = 5</strong>, and <strong>Total Revenue = $50</strong>.
+    <div class="task-check">
+        <button id="submit-t10" class="check-btn">Check Answer</button>
+        <span id="feedback-t10" class="check-feedback"></span>
+    </div>
+</li>
+
+<li data-index="10">
+    <span class="task-title">Question 11: Use the Equation</span>
+    Using the equation
+    <p style="text-align:center;font-weight:bold;color:#dc2626;font-size:1.15rem;">P = 20 − 2Q</p>
+    If <strong>Price (P) = 4</strong>, what is the value of <strong>Quantity (Q)</strong>?
+    <div class="options-grid">
+        <label><input type="radio" name="q11" value="4"> Q = 4</label>
+        <label><input type="radio" name="q11" value="6"> Q = 6</label>
+        <label><input type="radio" name="q11" value="8"> Q = 8</label>
+        <label><input type="radio" name="q11" value="12"> Q = 12</label>
+    </div>
+    <div class="task-check">
+        <button id="submit-t11" class="check-btn">Check Answer</button>
+        <span id="feedback-t11" class="check-feedback"></span>
+    </div>
+</li>
+
+<li data-index="11">
+    <span class="task-title">Question 12: Use the Equation</span>
+    Using the equation
+    <p style="text-align:center;font-weight:bold;color:#dc2626;font-size:1.15rem;">P = 20 − 2Q</p>
+    If <strong>Quantity (Q) = 6</strong>, what is the value of <strong>Price (P)</strong>?
+    <div class="options-grid">
+        <label><input type="radio" name="q12" value="6"> P = $6</label>
+        <label><input type="radio" name="q12" value="8"> P = $8</label>
+        <label><input type="radio" name="q12" value="10"> P = $10</label>
+        <label><input type="radio" name="q12" value="12"> P = $12</label>
+    </div>
+    <div class="task-check">
+        <button id="submit-t12" class="check-btn">Check Answer</button>
+        <span id="feedback-t12" class="check-feedback"></span>
+    </div>
+</li>
+
+<li data-index="12">
+    <span class="task-title">Question 13: Direct Demand Equation</span>
+    The inverse demand equation is
+    <p style="text-align:center;font-weight:bold;color:#dc2626;font-size:1.15rem;">P = 20 − 2Q</p>
+    Which of the following is the <strong>Direct Demand Equation</strong>?
+    <div class="options-grid">
+        <label><input type="radio" name="q13" value="a"> Q = 20 − 2P</label>
+        <label><input type="radio" name="q13" value="b"> Q = 10 − 0.5P</label>
+        <label><input type="radio" name="q13" value="c"> Q = 20 + 2P</label>
+        <label><input type="radio" name="q13" value="d"> Q = 2P − 20</label>
+    </div>
+    <div class="task-check">
+        <button id="submit-t13" class="check-btn">Check Answer</button>
+        <span id="feedback-t13" class="check-feedback"></span>
+    </div>
+</li>
+
+<li data-index="13">
+    <span class="task-title">Question 14: Inverse Demand Equation</span>
+    The direct demand equation is
+    <p style="text-align:center;font-weight:bold;color:#dc2626;font-size:1.15rem;">Q = 10 − 0.5P</p>
+    Which of the following is the <strong>Inverse Demand Equation</strong>?
+    <div class="options-grid">
+        <label><input type="radio" name="q14" value="a"> P = 20 − 2Q</label>
+        <label><input type="radio" name="q14" value="b"> P = 10 − 0.5Q</label>
+        <label><input type="radio" name="q14" value="c"> P = 2Q − 20</label>
+        <label><input type="radio" name="q14" value="d"> P = 20 + 2Q</label>
+    </div>
+    <div class="task-check">
+        <button id="submit-t14" class="check-btn">Check Answer</button>
+        <span id="feedback-t14" class="check-feedback"></span>
+    </div>
+</li>
+
+</ul>
+    </div>
+
+</div>
+
+<script>
+    const wrapper = d3.select("#chart-wrapper");
+    const currentState = { price: 10, quantity: 5 };
+    
+    // Bridge variable to expose active internal updates globally
+    let updateGraph;
+
+    // Array tracking all list node components to slide inside active mobile card deck
+    let questionsArray = [];
+    let currentQuestionIndex = 0;
+
+    function renderChart() {
+        wrapper.selectAll("*").remove();
+
+        const width = wrapper.node().getBoundingClientRect().width;
+        const isMobile = window.innerWidth <= 768;
+        const height = isMobile ? width * 0.78 : wrapper.node().getBoundingClientRect().height;
+
+        let marginTop = 25;         
+        let marginRight = 20;
+        let marginBottom = 40;     
+        let marginLeft = isMobile ? 40 : 65; 
+
+        const chartWidth = width - marginLeft - marginRight;
+        const chartHeight = height - marginTop - marginBottom;
+
+        const svg = wrapper.append("svg")
+            .attr("width", "100%")
+            .attr("height", "100%")
+            .attr("viewBox", `0 0 ${width} ${height}`)
+            .attr("preserveAspectRatio", "xMidYMid meet");
+
+        const g = svg.append("g")
+            .attr("transform", `translate(${marginLeft},${marginTop})`);
+
+        function getQ(P) { return Math.max(0, Math.min(10, 10 - (P / 2))); }
+        function getP(Q) { return Math.max(0, Math.min(20, 20 - (2 * Q))); }
+
+        const xScale = d3.scaleLinear().domain([0, 10.5]).range([0, chartWidth]);
+        const yScale = d3.scaleLinear().domain([0, 21]).range([chartHeight, 0]);
+
+        const revenueBox = g.append("rect").attr("class", "revenue-box");
+
+        g.append("line").attr("class", "axis-line").attr("x1", 0).attr("y1", chartHeight).attr("x2", chartWidth).attr("y2", chartHeight);
+        g.append("line").attr("class", "axis-line").attr("x1", 0).attr("y1", 0).attr("x2", 0).attr("y2", chartHeight);
+
+        const xTicks = d3.range(0, 11, 2);
+        const yTicks = d3.range(0, 21, 4);
+
+        g.selectAll(".x-tick").data(xTicks).enter().append("text").attr("class", "axis-text")
+            .attr("x", d => xScale(d)).attr("y", chartHeight + 20).attr("text-anchor", "middle").text(d => d);
+
+        g.selectAll(".y-tick").data(yTicks).enter().append("text").attr("class", "axis-text")
+            .attr("x", -6).attr("y", d => yScale(d) + 4).attr("text-anchor", "end").text(d => d);
+
+        g.append("text").attr("class", "axis-label").attr("x", chartWidth).attr("y", chartHeight + 40).attr("text-anchor", "end").text("Q");
+        g.append("text").attr("class", "axis-label").attr("x", 30).attr("y", -4).attr("text-anchor", "end").text("P");
+
+        g.append("line").attr("class", "demand-line").attr("x1", xScale(0)).attr("y1", yScale(20)).attr("x2", xScale(10)).attr("y2", yScale(0));
+
+        const horizLine = g.append("line").attr("class", "projection-line");
+        const vertLine = g.append("line").attr("class", "projection-line");
+
+        const dotRadius = isMobile ? 11 : 8;
+        const glow = g.append("circle").attr("class", "dot-glow").attr("r", dotRadius * 2);
+        const dot = g.append("circle").attr("class", "interactive-dot").attr("r", dotRadius);
+
+        function updateAll(price, origin) {
+            price = Math.round(price * 10) / 10;
+            if (price < 0) price = 0;
+            if (price > 20) price = 20;
+            
+            let quantity = Math.round(getQ(price) * 20) / 20;
+
+            let cx = xScale(quantity);
+            let cy = yScale(price);
+
+            dot.attr("cx", cx).attr("cy", cy);
+            glow.attr("cx", cx).attr("cy", cy);
+
+            horizLine.attr("x1", 0).attr("y1", cy).attr("x2", cx).attr("y2", cy);
+            vertLine.attr("x1", cx).attr("y1", chartHeight).attr("x2", cx).attr("y2", cy);
+
+            revenueBox.attr("x", 0).attr("y", cy).attr("width", cx).attr("height", chartHeight - cy);
+
+            const pSlider = d3.select("#price-slider");
+            const qSlider = d3.select("#quant-slider");
+            if (!pSlider.empty() && origin !== 'price-slider') pSlider.property("value", price);
+            if (!qSlider.empty() && origin !== 'quant-slider') qSlider.property("value", quantity);
+
+            if (origin !== 'price-input') d3.select("#price-input").property("value", price.toFixed(1));
+            if (origin !== 'quant-input') d3.select("#quant-input").property("value", parseFloat(quantity.toFixed(2)));
+
+            currentState.price = price;
+            currentState.quantity = quantity;
+            
+            d3.select("#live-eq").text(`20 - 2(${quantity.toFixed(2)}) = ${price.toFixed(1)}`);
+            d3.select("#live-revenue").text(`$${(price * quantity).toFixed(2)}`);
+
+            // Mute active feedback when student modifies graph values manually
+            if (origin === 'drag' || origin === 'price-slider' || origin === 'quant-slider' || origin === 'price-input' || origin === 'quant-input') {
+                d3.selectAll("#feedback-t1, #feedback-t2, #feedback-t3, #feedback-t4, #feedback-t5, #feedback-t6, #feedback-t7, #feedback-t8, #feedback-t10")
+                  .classed("muted-feedback", true);
+            }
+        }
+
+        updateGraph = updateAll;
+
+        const dragBehavior = d3.drag()
+            .on("drag", function(event) {
+                let currentQ = xScale.invert(event.x);
+                currentQ = Math.round(currentQ * 20) / 20;
+                if (currentQ < 0) currentQ = 0;
+                if (currentQ > 10) currentQ = 10;
+                updateAll(getP(currentQ), 'drag');
+            });
+            
+        dot.call(dragBehavior);
+        glow.call(dragBehavior);
+
+        d3.select("#price-slider").on("input", function() { updateAll(+(this.value), 'price-slider'); });
+        d3.select("#quant-slider").on("input", function() { updateAll(getP(+(this.value)), 'quant-slider'); });
+
+        d3.select("#price-input").on("input", function() { 
+            let val = parseFloat(this.value);
+            if (!isNaN(val)) {
+                if (val > 20) { val = 20; this.value = val; }
+                if (val < 0) { val = 0; this.value = val; }
+                updateAll(val, 'price-input'); 
+            } 
+        });
+
+        d3.select("#quant-input").on("input", function() { 
+            let val = parseFloat(this.value);
+            if (!isNaN(val)) {
+                if (val > 10) { val = 10; this.value = val; }
+                if (val < 0) { val = 0; this.value = val; }
+                updateAll(getP(val), 'quant-input'); 
+            } 
+        });
+
+        updateAll(currentState.price, 'init');
+    }
+
+    // Dynamic Mobile Deck System Controller Engine
+    function initMobileDeckSystem() {
+        // Collect references to each original question list item node
+        questionsArray = d3.selectAll("#master-question-list li").nodes();
+        
+        // Render target active layout position depending on screen state
+        syncLayoutState();
+    }
+
+    function syncLayoutState() {
+        const isMobile = window.innerWidth <= 768;
+        const targetContainer = document.getElementById("deck-content-target");
+        const masterList = document.getElementById("master-question-list");
+
+        if (isMobile) {
+            // Append the active question node inside the mobile card slot
+            if(questionsArray.length > 0 && targetContainer) {
+                targetContainer.innerHTML = "";
+                targetContainer.appendChild(questionsArray[currentQuestionIndex]);
+                
+                // Update UI counter tags
+                document.getElementById("deck-counter-label").innerText = `Question ${currentQuestionIndex + 1} of ${questionsArray.length}`;
+                document.getElementById("deck-prev-btn").disabled = (currentQuestionIndex === 0);
+                document.getElementById("deck-next-btn").disabled = (currentQuestionIndex === questionsArray.length - 1);
+            }
+        } else {
+            // Desktop view: Return all question items back to the main layout list container
+            if (masterList && questionsArray.length > 0) {
+                questionsArray.forEach((node) => masterList.appendChild(node));
+            }
+        }
+    }
+
+    // Set up click events for deck navigation buttons
+    d3.select("#deck-prev-btn").on("click", function() {
+        if (currentQuestionIndex > 0) {
+            currentQuestionIndex--;
+            syncLayoutState();
+        }
+    });
+
+    d3.select("#deck-next-btn").on("click", function() {
+        if (currentQuestionIndex < questionsArray.length - 1) {
+            currentQuestionIndex++;
+            syncLayoutState();
+        }
+    });
+
+    // Run app initializers
+    renderChart();
+    initMobileDeckSystem();
+
+    window.addEventListener("resize", function() {
+        renderChart();
+        syncLayoutState();
+    });
+
+    // Dynamic Quiz Grading Engine
+    const STEP_TOLERANCE = 0.15;
+
+    d3.select("#submit-t1").on("click", function () {
+        d3.select("#feedback-t1")
+            .classed("muted-feedback", false)
+            .style("color", "#16a34a")
+            .text("✅ Great! Now let's start solving problems.");
+    });
+
+    d3.select("#submit-t2").on("click", function () {
+        const feedback = d3.select("#feedback-t2").classed("muted-feedback", false);
+        if (Math.abs(currentState.price - 8) <= STEP_TOLERANCE) {
+            feedback.style("color", "#16a34a").text("✅ Correct! Price is $8 and Quantity is 6.");
+        } else {
+            feedback.style("color", "#dc2626").text("❌ Keep moving the point until Price = $8.");
+        }
+    });
+
+    d3.select("#submit-t3").on("click", function () {
+        const feedback = d3.select("#feedback-t3").classed("muted-feedback", false);
+        const checkedOption = document.querySelector('input[name="q3"]:checked');
+
+        if (!checkedOption) {
+            feedback.style("color", "#dc2626").text("❌ Please select an option.");
+            return;
+        }
+
+        const answer = parseFloat(checkedOption.value);
+        if (Math.abs(answer - 3) <= STEP_TOLERANCE) {
+            updateGraph(14, 'script');
+            feedback.style("color", "#16a34a").text("✅ Correct! Quantity Demanded is 3.");
+        } else {
+            if (Math.abs(currentState.price - 14) > STEP_TOLERANCE) {
+                feedback.style("color", "#dc2626").text("❌ Hint: Move the graph dot to Price = $14 to find the answer.");
+            } else {
+                feedback.style("color", "#dc2626").text("❌ Look closely at where the dashed line hits the bottom axis.");
+            }
+        }
+    });
+
+    d3.select("#submit-t4").on("click", function () {
+        const feedback = d3.select("#feedback-t4").classed("muted-feedback", false);
+        const checkedOption = document.querySelector('input[name="q4"]:checked');
+
+        if (!checkedOption) {
+            feedback.style("color", "#dc2626").text("❌ Please select an option.");
+            return;
+        }
+
+        const answer = parseFloat(checkedOption.value);
+        if (Math.abs(answer - 6) <= STEP_TOLERANCE) {
+            updateGraph(6, 'script');
+            feedback.style("color", "#16a34a").text("✅ Correct! Price is $6.");
+        } else {
+            if (Math.abs(currentState.quantity - 7) > STEP_TOLERANCE) {
+                feedback.style("color", "#dc2626").text("❌ Hint: Move the graph dot sideways until Quantity = 7.");
+            } else {
+                feedback.style("color", "#dc2626").text("❌ Incorrect. Read the vertical axis value for that quantity.");
+            }
+        }
+    });
+
+    d3.select("#submit-t5").on("click", function () {
+        const feedback = d3.select("#feedback-t5").classed("muted-feedback", false);
+        if (Math.abs(currentState.price - 20) <= STEP_TOLERANCE && Math.abs(currentState.quantity) <= STEP_TOLERANCE) {
+            feedback.style("color", "#16a34a").text("✅ Excellent! At the highest price ($20), Quantity Demanded is 0.");
+        } else {
+            feedback.style("color", "#dc2626").text("❌ Move the point to the top of the demand curve.");
+        }
+    });
+
+    d3.select("#submit-t6").on("click", function () {
+        const feedback = d3.select("#feedback-t6").classed("muted-feedback", false);
+        const checkedOption = document.querySelector('input[name="q6"]:checked');
+
+        if (!checkedOption) {
+            feedback.style("color", "#dc2626").text("❌ Please select an option.");
+            return;
+        }
+
+        const answer = parseFloat(checkedOption.value);
+        if (Math.abs(answer - 10) <= STEP_TOLERANCE) {
+            updateGraph(0, 'script');
+            feedback.style("color", "#16a34a").text("✅ Correct! Quantity Demanded is 10.");
+        } else {
+            if (Math.abs(currentState.price) > STEP_TOLERANCE) {
+                feedback.style("color", "#dc2626").text("❌ Hint: Drag the dot all the way down to the bottom axis ($0 price).");
+            } else {
+                feedback.style("color", "#dc2626").text("❌ Not quite. Look at where the line hits the horizontal axis max point.");
+            }
+        }
+    });
+
+    d3.select("#submit-t7").on("click", function () {
+        const feedback = d3.select("#feedback-t7").classed("muted-feedback", false);
+        const revenue = currentState.price * currentState.quantity;
+        if (Math.abs(revenue - 32) <= 0.5) {
+            feedback.style("color", "#16a34a").text("✅ Great! Total Revenue is $32.");
+        } else {
+            feedback.style("color", "#dc2626").text("❌ Current Revenue is $" + revenue.toFixed(2) + ". Keep trying.");
+        }
+    });
+
+    d3.select("#submit-t8").on("click", function () {
+        const feedback = d3.select("#feedback-t8").classed("muted-feedback", false);
+        const revenue = currentState.price * currentState.quantity;
+        if (Math.abs(revenue - 50) <= 0.5) {
+            feedback.style("color", "#16a34a").text("✅ Excellent! You found the maximum Total Revenue.");
+        } else {
+            feedback.style("color", "#dc2626").text("❌ Keep looking for the highest Total Revenue.");
+        }
+    });
+
+    d3.select("#submit-t9").on("click", function () {
+        const feedback = d3.select("#feedback-t9").classed("muted-feedback", false);
+        const answer = document.querySelector('input[name="q9"]:checked');
+        if (!answer) {
+            feedback.style("color", "#dc2626").text("❌ Please choose an answer.");
+            return;
+        }
+        if (answer.value === "b") {
+            feedback.style("color", "#16a34a").text("✅ Correct! As price increases, quantity demanded decreases.");
+        } else {
+            feedback.style("color", "#dc2626").text("❌ Not quite. Remember the Law of Demand.");
+        }
+    });
+
+    d3.select("#submit-t10").on("click", function () {
+        const feedback = d3.select("#feedback-t10").classed("muted-feedback", false);
+        const revenue = currentState.price * currentState.quantity;
+        if (Math.abs(currentState.price - 10) <= STEP_TOLERANCE && Math.abs(currentState.quantity - 5) <= STEP_TOLERANCE && Math.abs(revenue - 50) <= 0.5) {
+            feedback.style("color", "#16a34a").text("🏆 Correct!");
+        } else {
+            feedback.style("color", "#dc2626").text("❌ One or more values are incorrect. Check Price, Quantity, and Total Revenue.");
+        }
+    });
+
+    d3.select("#submit-t11").on("click", function () {
+        const feedback = d3.select("#feedback-t11").classed("muted-feedback", false);
+        const checkedOption = document.querySelector('input[name="q11"]:checked');
+
+        if (!checkedOption) {
+            feedback.style("color", "#dc2626").text("❌ Please select an option.");
+            return;
+        }
+
+        const answer = parseFloat(checkedOption.value);
+        if (Math.abs(answer - 8) <= STEP_TOLERANCE) {
+            feedback.style("color", "#16a34a").text("✅ Correct! Q = 8 because 4 = 20 − 2Q.");
+        } else {
+            feedback.style("color", "#dc2626").text("❌ Step hint: Substitute P = 4 into the equation: 4 = 20 − 2Q. Rearranging it leaves 2Q = 16.");
+        }
+    });
+
+    d3.select("#submit-t12").on("click", function () {
+        const feedback = d3.select("#feedback-t12").classed("muted-feedback", false);
+        const checkedOption = document.querySelector('input[name="q12"]:checked');
+
+        if (!checkedOption) {
+            feedback.style("color", "#dc2626").text("❌ Please select an option.");
+            return;
+        }
+
+        const answer = parseFloat(checkedOption.value);
+        if (Math.abs(answer - 8) <= STEP_TOLERANCE) {
+            feedback.style("color", "#16a34a").text("✅ Correct! P = 8 because P = 20 − 2(6).");
+        } else {
+            feedback.style("color", "#dc2626").text("❌ Not correct. Substitute Q = 6 directly into the formula.");
+        }
+    });
+
+    d3.select("#submit-t13").on("click", function () {
+        const feedback = d3.select("#feedback-t13").classed("muted-feedback", false);
+        const answer = document.querySelector('input[name="q13"]:checked');
+        if (!answer) {
+            feedback.style("color", "#dc2626").text("❌ Please choose an answer.");
+            return;
+        }
+        if (answer.value === "b") {
+            feedback.style("color", "#16a34a").text("✅ Correct! Rearranging the equation gives Q = 10 − 0.5P.");
+        } else {
+            feedback.style("color", "#dc2626").text("❌ Incorrect. Rearrange the equation to make Q the subject.");
+        }
+    });
+
+    d3.select("#submit-t14").on("click", function () {
+        const feedback = d3.select("#feedback-t14").classed("muted-feedback", false);
+        const answer = document.querySelector('input[name="q14"]:checked');
+        if (!answer) {
+            feedback.style("color", "#dc2626").text("❌ Please choose an answer.");
+            return;
+        }
+        if (answer.value === "a") {
+            feedback.style("color", "#16a34a").text("✅ Correct! P = 20 − 2Q is the inverse demand equation.");
+        } else {
+            feedback.style("color", "#dc2626").text("❌ Incorrect. The inverse demand equation has Price (P) by itself.");
+        }
+    });
+</script>
+
+</body>
+</html>

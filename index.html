@@ -261,11 +261,6 @@
             color: var(--primary-dark);
         }
 
-      /* Mobile Breakpoint Adjustments */
-/* Mobile Breakpoint Adjustments */
-       /* Mobile Breakpoint Adjustments */
-       /* Mobile Breakpoint Adjustments */
-        /* Mobile Breakpoint Adjustments */
         @media (max-width: 768px) {
             body {
                 overflow: auto; 
@@ -278,7 +273,7 @@
                 width: 100%;
             }
             .interactive-section {
-                position: relative; /* Changed from sticky to relative to allow normal scrolling */
+                position: relative;
                 top: 0;
                 z-index: 100;
                 height: auto;
@@ -290,9 +285,9 @@
             
             #chart-wrapper {
                 width: 100%;
-                height: 100vw; /* Restored to original large size */
+                height: 100vw;
                 min-height: 200px;
-                max-height: 390px; /* Restored to original max height */
+                max-height: 390px;
                 margin: 0 auto 10px auto;
             }
             
@@ -304,7 +299,6 @@
                 font-size: 1.05rem;
             }
             
-            /* Fits both inputs cleanly into a single unified row */
             .controls {
                 display: flex;
                 flex-direction: row;
@@ -332,18 +326,16 @@
                 font-size: 1.3rem;
             }
             
-            /* Keep sliders hidden on mobile */
             .slider-row {
                 display: none !important; 
             }
             .lesson-text-section {
                 overflow-y: visible;
                 height: auto;
-                padding: 15px 20px 250px 20px; /* Increased bottom padding so inputs can easily push past the keyboard layout */
+                padding: 15px 20px 250px 20px;
             }
         }
 
-        /* SVG Element Styling Rules */
         .axis-line { stroke: #000000; stroke-width: 4px; }
         .axis-text { font-size: 18px; font-weight: bold; fill: #64748b; }
         .axis-label { font-size: 20px; font-weight: 900; fill: #0f172a; }
@@ -496,167 +488,65 @@
 
 <li>
     <span class="task-title">Question 10: Final Challenge</span>
-
     Find the point on Graph where <strong>Price = $10</strong>, <strong>Quantity = 5</strong>, and <strong>Total Revenue = $50</strong>.
-
     <div class="task-check">
         <button id="submit-t10" class="check-btn">Check Answer</button>
         <span id="feedback-t10" class="check-feedback"></span>
     </div>
 </li>
 
-
-
 <li>
     <span class="task-title">Question 11: Use the Equation</span>
-
     Using the equation
-
-    <p style="text-align:center;font-weight:bold;color:#dc2626;font-size:1.15rem;">
-        P = 20 − 2Q
-    </p>
-
+    <p style="text-align:center;font-weight:bold;color:#dc2626;font-size:1.15rem;">P = 20 − 2Q</p>
     If <strong>Price (P) = 4</strong>, what is the value of <strong>Quantity (Q)</strong>?
-
     <div class="task-check">
-        <input type="number"
-               id="input-t11"
-               class="quiz-input"
-               placeholder="Q = ?"
-               step="0.1">
-
-        <button id="submit-t11"
-                class="check-btn">
-            Check Answer
-        </button>
-
-        <span id="feedback-t11"
-              class="check-feedback"></span>
+        <input type="number" id="input-t11" class="quiz-input" placeholder="Q = ?" step="0.1">
+        <button id="submit-t11" class="check-btn">Check Answer</button>
+        <span id="feedback-t11" class="check-feedback"></span>
     </div>
 </li>
 
 <li>
     <span class="task-title">Question 12: Use the Equation</span>
-
     Using the equation
-
-    <p style="text-align:center;font-weight:bold;color:#dc2626;font-size:1.15rem;">
-        P = 20 − 2Q
-    </p>
-
+    <p style="text-align:center;font-weight:bold;color:#dc2626;font-size:1.15rem;">P = 20 − 2Q</p>
     If <strong>Quantity (Q) = 6</strong>, what is the value of <strong>Price (P)</strong>?
-
     <div class="task-check">
-        <input type="number"
-               id="input-t12"
-               class="quiz-input"
-               placeholder="P = ?"
-               step="0.1">
-
-        <button id="submit-t12"
-                class="check-btn">
-            Check Answer
-        </button>
-
-        <span id="feedback-t12"
-              class="check-feedback"></span>
+        <input type="number" id="input-t12" class="quiz-input" placeholder="P = ?" step="0.1">
+        <button id="submit-t12" class="check-btn">Check Answer</button>
+        <span id="feedback-t12" class="check-feedback"></span>
     </div>
 </li>
 
 <li>
-
-    <span class="task-title">
-        Question 13: Direct Demand Equation
-    </span>
-
+    <span class="task-title">Question 13: Direct Demand Equation</span>
     The inverse demand equation is
-
-    <p style="text-align:center;font-weight:bold;color:#dc2626;font-size:1.15rem;">
-        P = 20 − 2Q
-    </p>
-
+    <p style="text-align:center;font-weight:bold;color:#dc2626;font-size:1.15rem;">P = 20 − 2Q</p>
     Which of the following is the <strong>Direct Demand Equation</strong>?
-
     <div class="task-check">
-
-        <label>
-            <input type="radio" name="q13" value="a">
-            Q = 20 − 2P
-        </label><br>
-
-        <label>
-            <input type="radio" name="q13" value="b">
-            Q = 10 − 0.5P
-        </label><br>
-
-        <label>
-            <input type="radio" name="q13" value="c">
-            Q = 20 + 2P
-        </label><br>
-
-        <label>
-            <input type="radio" name="q13" value="d">
-            Q = 2P − 20
-        </label><br><br>
-
-        <button id="submit-t13"
-                class="check-btn">
-            Check Answer
-        </button>
-
-        <span id="feedback-t13"
-              class="check-feedback"></span>
-
+        <label><input type="radio" name="q13" value="a"> Q = 20 − 2P</label><br>
+        <label><input type="radio" name="q13" value="b"> Q = 10 − 0.5P</label><br>
+        <label><input type="radio" name="q13" value="c"> Q = 20 + 2P</label><br>
+        <label><input type="radio" name="q13" value="d"> Q = 2P − 20</label><br><br>
+        <button id="submit-t13" class="check-btn">Check Answer</button>
+        <span id="feedback-t13" class="check-feedback"></span>
     </div>
-
 </li>
 
 <li>
-
-    <span class="task-title">
-        Question 14: Inverse Demand Equation
-    </span>
-
+    <span class="task-title">Question 14: Inverse Demand Equation</span>
     The direct demand equation is
-
-    <p style="text-align:center;font-weight:bold;color:#dc2626;font-size:1.15rem;">
-        Q = 10 − 0.5P
-    </p>
-
+    <p style="text-align:center;font-weight:bold;color:#dc2626;font-size:1.15rem;">Q = 10 − 0.5P</p>
     Which of the following is the <strong>Inverse Demand Equation</strong>?
-
     <div class="task-check">
-
-        <label>
-            <input type="radio" name="q14" value="a">
-            P = 20 − 2Q
-        </label><br>
-
-        <label>
-            <input type="radio" name="q14" value="b">
-            P = 10 − 0.5Q
-        </label><br>
-
-        <label>
-            <input type="radio" name="q14" value="c">
-            P = 2Q − 20
-        </label><br>
-
-        <label>
-            <input type="radio" name="q14" value="d">
-            P = 20 + 2Q
-        </label><br><br>
-
-        <button id="submit-t14"
-                class="check-btn">
-            Check Answer
-        </button>
-
-        <span id="feedback-t14"
-              class="check-feedback"></span>
-
+        <label><input type="radio" name="q14" value="a"> P = 20 − 2Q</label><br>
+        <label><input type="radio" name="q14" value="b"> P = 10 − 0.5Q</label><br>
+        <label><input type="radio" name="q14" value="c"> P = 2Q − 20</label><br>
+        <label><input type="radio" name="q14" value="d"> P = 20 + 2Q</label><br><br>
+        <button id="submit-t14" class="check-btn">Check Answer</button>
+        <span id="feedback-t14" class="check-feedback"></span>
     </div>
-
 </li>
 
 </ul>
@@ -667,19 +557,20 @@
 <script>
     const wrapper = d3.select("#chart-wrapper");
     const currentState = { price: 10, quantity: 5 };
+    
+    // Bridge variable to expose the active inner update function globally
+    let updateGraph;
 
     function renderChart() {
         wrapper.selectAll("*").remove();
 
         const width = wrapper.node().getBoundingClientRect().width;
         const isMobile = window.innerWidth <= 768;
-        
-        // Fix: Force a strict square dimension tracking rule on mobile devices
         const height = isMobile ? width : wrapper.node().getBoundingClientRect().height;
 
         let marginTop = 30;         
         let marginRight = 20;
-        let marginBottom = 40; // Slightly increased to protect axis labels on square grids     
+        let marginBottom = 40;     
         let marginLeft = isMobile ? 35 : 65; 
 
         const chartWidth = width - marginLeft - marginRight;
@@ -727,40 +618,40 @@
         const dot = g.append("circle").attr("class", "interactive-dot").attr("r", dotRadius);
 
         function updateAll(price, origin) {
-    price = Math.round(price * 10) / 10;
-    if (price < 0) price = 0;
-    if (price > 20) price = 20;
-    
-    let quantity = Math.round(getQ(price) * 20) / 20;
+            price = Math.round(price * 10) / 10;
+            if (price < 0) price = 0;
+            if (price > 20) price = 20;
+            
+            let quantity = Math.round(getQ(price) * 20) / 20;
 
-    let cx = xScale(quantity);
-    let cy = yScale(price);
+            let cx = xScale(quantity);
+            let cy = yScale(price);
 
-    // Forces the visual graph markers to move to the coordinate instantly
-    dot.attr("cx", cx).attr("cy", cy);
-    glow.attr("cx", cx).attr("cy", cy);
+            dot.attr("cx", cx).attr("cy", cy);
+            glow.attr("cx", cx).attr("cy", cy);
 
-    horizLine.attr("x1", 0).attr("y1", cy).attr("x2", cx).attr("y2", cy);
-    vertLine.attr("x1", cx).attr("y1", chartHeight).attr("x2", cx).attr("y2", cy);
+            horizLine.attr("x1", 0).attr("y1", cy).attr("x2", cx).attr("y2", cy);
+            vertLine.attr("x1", cx).attr("y1", chartHeight).attr("x2", cx).attr("y2", cy);
 
-    revenueBox.attr("x", 0).attr("y", cy).attr("width", cx).attr("height", chartHeight - cy);
+            revenueBox.attr("x", 0).attr("y", cy).attr("width", cx).attr("height", chartHeight - cy);
 
-    // Safely checks if sliders are available before syncing value properties
-    const pSlider = d3.select("#price-slider");
-    const qSlider = d3.select("#quant-slider");
-    if (!pSlider.empty() && origin !== 'price-slider') pSlider.property("value", price);
-    if (!qSlider.empty() && origin !== 'quant-slider') qSlider.property("value", quantity);
+            const pSlider = d3.select("#price-slider");
+            const qSlider = d3.select("#quant-slider");
+            if (!pSlider.empty() && origin !== 'price-slider') pSlider.property("value", price);
+            if (!qSlider.empty() && origin !== 'quant-slider') qSlider.property("value", quantity);
 
-    // Keeps user text inputs in sync without resetting cursors awkwardly while typing
-    if (origin !== 'price-input') d3.select("#price-input").property("value", price.toFixed(1));
-    if (origin !== 'quant-input') d3.select("#quant-input").property("value", parseFloat(quantity.toFixed(2)));
+            if (origin !== 'price-input') d3.select("#price-input").property("value", price.toFixed(1));
+            if (origin !== 'quant-input') d3.select("#quant-input").property("value", parseFloat(quantity.toFixed(2)));
 
-    currentState.price = price;
-    currentState.quantity = quantity;
-    
-    d3.select("#live-eq").text(`20 - 2(${quantity.toFixed(2)}) = ${price.toFixed(1)}`);
-    d3.select("#live-revenue").text(`$${(price * quantity).toFixed(2)}`);
-}
+            currentState.price = price;
+            currentState.quantity = quantity;
+            
+            d3.select("#live-eq").text(`20 - 2(${quantity.toFixed(2)}) = ${price.toFixed(1)}`);
+            d3.select("#live-revenue").text(`$${(price * quantity).toFixed(2)}`);
+        }
+
+        // Point the global pointer to this layout iteration's internal update function
+        updateGraph = updateAll;
 
         const dragBehavior = d3.drag()
             .on("drag", function(event) {
@@ -776,43 +667,24 @@
 
         d3.select("#price-slider").on("input", function() { updateAll(+(this.value), 'price-slider'); });
         d3.select("#quant-slider").on("input", function() { updateAll(getP(+(this.value)), 'quant-slider'); });
-        // Handles manual entries for the Price (P) input field
-// Handles manual entries for the Price (P) input field
-d3.select("#price-input").on("input", function() { 
-    let val = parseFloat(this.value);
-    if (!isNaN(val)) {
-        // If they type something over 20, cap it instantly
-        if (val > 20) {
-            val = 20;
-            this.value = val;
-        }
-        // If they type a negative sign or sub-zero, clamp it to 0
-        if (val < 0) {
-            val = 0;
-            this.value = val;
-        }
-        
-        updateAll(val, 'price-input'); 
-    } 
-});
 
-// Handles manual entries for the Quantity (Q) input field
-d3.select("#quant-input").on("input", function() { 
-    let val = parseFloat(this.value);
-    if (!isNaN(val)) {
-        // If they type something over 10, cap it instantly
-        if (val > 10) {
-            val = 10;
-            this.value = val;
-        }
-        if (val < 0) {
-            val = 0;
-            this.value = val;
-        }
-        
-        updateAll(getP(val), 'quant-input'); 
-    } 
-});
+        d3.select("#price-input").on("input", function() { 
+            let val = parseFloat(this.value);
+            if (!isNaN(val)) {
+                if (val > 20) { val = 20; this.value = val; }
+                if (val < 0) { val = 0; this.value = val; }
+                updateAll(val, 'price-input'); 
+            } 
+        });
+
+        d3.select("#quant-input").on("input", function() { 
+            let val = parseFloat(this.value);
+            if (!isNaN(val)) {
+                if (val > 10) { val = 10; this.value = val; }
+                if (val < 0) { val = 0; this.value = val; }
+                updateAll(getP(val), 'quant-input'); 
+            } 
+        });
 
         updateAll(currentState.price, 'init');
     }
@@ -823,399 +695,194 @@ d3.select("#quant-input").on("input", function() {
     // Dynamic Grading Rules
     const STEP_TOLERANCE = 0.15;
 
-
-d3.select("#submit-t1").on("click", function () {
-    task1Done = true;
-    d3.select("#feedback-t1")
-        .style("color", "#16a34a")
-        .text("✅ Great! Now let's start solving problems.");
-});
-
-// --------------------
-// Task 2
-// Price = 8
-// --------------------
-d3.select("#submit-t2").on("click", function () {
-
-    const feedback = d3.select("#feedback-t2");
-
-    if (Math.abs(currentState.price - 8) <= STEP_TOLERANCE) {
-
-        feedback
+    d3.select("#submit-t1").on("click", function () {
+        d3.select("#feedback-t1")
             .style("color", "#16a34a")
-            .text("✅ Correct! Price is $8 and Quantity is 6.");
+            .text("✅ Great! Now let's start solving problems.");
+    });
 
-    } else {
-
-        feedback
-            .style("color", "#dc2626")
-            .text("❌ Keep moving the point until Price = $8.");
-
-    }
-
-});
-
-// --------------------
-// Task 3
-// Price =14, Answer Q=3
-// --------------------
-// --------------------
-// Task 3: Price = 14, Answer Q = 3
-// --------------------
-d3.select("#submit-t3").on("click", function () {
-    const feedback = d3.select("#feedback-t3");
-    const answer = parseFloat(d3.select("#input-t3").property("value"));
-
-    if (isNaN(answer)) {
-        feedback.style("color", "#dc2626").text("❌ Please enter a number.");
-        return;
-    }
-
-    // Check if typed answer is correct first
-    if (Math.abs(answer - 3) <= STEP_TOLERANCE) {
-        // Automatically update the graph to mirror their correct input
-        updateAll(14, 'script');
-        feedback
-            .style("color", "#16a34a")
-            .text("✅ Correct! Quantity Demanded is 3.");
-    } else {
-        // If they get it wrong, check if they are even on the right track on the graph
-        if (Math.abs(currentState.price - 14) > STEP_TOLERANCE) {
-            feedback.style("color", "#dc2626").text("❌ Hint: Move the graph dot to Price = $14 to find the answer.");
+    d3.select("#submit-t2").on("click", function () {
+        const feedback = d3.select("#feedback-t2");
+        if (Math.abs(currentState.price - 8) <= STEP_TOLERANCE) {
+            feedback.style("color", "#16a34a").text("✅ Correct! Price is $8 and Quantity is 6.");
         } else {
-            feedback.style("color", "#dc2626").text("❌ Look closely at where the dashed line hits the bottom axis.");
+            feedback.style("color", "#dc2626").text("❌ Keep moving the point until Price = $8.");
         }
-    }
-});
+    });
 
-// --------------------
-// Task 4: Quantity = 7, Answer P = 6
-// --------------------
-d3.select("#submit-t4").on("click", function () {
-    const feedback = d3.select("#feedback-t4");
-    const answer = parseFloat(d3.select("#input-t4").property("value"));
+    d3.select("#submit-t3").on("click", function () {
+        const feedback = d3.select("#feedback-t3");
+        const answer = parseFloat(d3.select("#input-t3").property("value"));
 
-    if (isNaN(answer)) {
-        feedback.style("color", "#dc2626").text("❌ Please enter a number.");
-        return;
-    }
+        if (isNaN(answer)) {
+            feedback.style("color", "#dc2626").text("❌ Please enter a number.");
+            return;
+        }
 
-    if (Math.abs(answer - 6) <= STEP_TOLERANCE) {
-        updateAll(6, 'script'); // Snap graph to P=6, which automatically coordinates Q=7
-        feedback
-            .style("color", "#16a34a")
-            .text("✅ Correct! Price is $6.");
-    } else {
-        if (Math.abs(currentState.quantity - 7) > STEP_TOLERANCE) {
-            feedback.style("color", "#dc2626").text("❌ Hint: Move the graph dot sideways until Quantity = 7.");
+        if (Math.abs(answer - 3) <= STEP_TOLERANCE) {
+            updateGraph(14, 'script'); // Fixed: Uses the exposed global pointer
+            feedback.style("color", "#16a34a").text("✅ Correct! Quantity Demanded is 3.");
         } else {
-            feedback.style("color", "#dc2626").text("❌ Incorrect. Read the vertical axis value for that quantity.");
+            if (Math.abs(currentState.price - 14) > STEP_TOLERANCE) {
+                feedback.style("color", "#dc2626").text("❌ Hint: Move the graph dot to Price = $14 to find the answer.");
+            } else {
+                feedback.style("color", "#dc2626").text("❌ Look closely at where the dashed line hits the bottom axis.");
+            }
         }
-    }
-});
+    });
 
-// --------------------
-// Task 5
-// Highest Price
-// --------------------
-d3.select("#submit-t5").on("click", function () {
+    d3.select("#submit-t4").on("click", function () {
+        const feedback = d3.select("#feedback-t4");
+        const answer = parseFloat(d3.select("#input-t4").property("value"));
 
-    const feedback = d3.select("#feedback-t5");
+        if (isNaN(answer)) {
+            feedback.style("color", "#dc2626").text("❌ Please enter a number.");
+            return;
+        }
 
-    if (
-        Math.abs(currentState.price - 20) <= STEP_TOLERANCE &&
-        Math.abs(currentState.quantity) <= STEP_TOLERANCE
-    ) {
-
-        feedback
-            .style("color", "#16a34a")
-            .text("✅ Excellent! At the highest price ($20), Quantity Demanded is 0.");
-
-    } else {
-
-        feedback
-            .style("color", "#dc2626")
-            .text("❌ Move the point to the top of the demand curve.");
-
-    }
-
-});
-
-
-
-
-d3.select("#submit-t6").on("click", function () {
-    const feedback = d3.select("#feedback-t6");
-    const answer = parseFloat(d3.select("#input-t6").property("value"));
-
-    if (isNaN(answer)) {
-        feedback.style("color", "#dc2626").text("❌ Please enter a number.");
-        return;
-    }
-
-    if (Math.abs(answer - 10) <= STEP_TOLERANCE) {
-        updateAll(0, 'script'); // Snap graph to bottom baseline axis
-        feedback
-            .style("color", "#16a34a")
-            .text("✅ Correct! Quantity Demanded is 10.");
-    } else {
-        if (Math.abs(currentState.price) > STEP_TOLERANCE) {
-            feedback.style("color", "#dc2626").text("❌ Hint: Drag the dot all the way down to the bottom axis ($0 price).");
+        if (Math.abs(answer - 6) <= STEP_TOLERANCE) {
+            updateGraph(6, 'script'); // Fixed: Uses the exposed global pointer
+            feedback.style("color", "#16a34a").text("✅ Correct! Price is $6.");
         } else {
-            feedback.style("color", "#dc2626").text("❌ Not quite. Look at where the line hits the horizontal axis max point.");
+            if (Math.abs(currentState.quantity - 7) > STEP_TOLERANCE) {
+                feedback.style("color", "#dc2626").text("❌ Hint: Move the graph dot sideways until Quantity = 7.");
+            } else {
+                feedback.style("color", "#dc2626").text("❌ Incorrect. Read the vertical axis value for that quantity.");
+            }
         }
-    }
-});
-// --------------------
-// Task 7
-// Revenue =32
-// --------------------
-d3.select("#submit-t7").on("click", function () {
+    });
 
-    const feedback = d3.select("#feedback-t7");
-
-    const revenue = currentState.price * currentState.quantity;
-
-    if (Math.abs(revenue - 32) <= 0.5) {
-
-        feedback
-            .style("color", "#16a34a")
-            .text("✅ Great! Total Revenue is $32.");
-
-    } else {
-
-        feedback
-            .style("color", "#dc2626")
-            .text("❌ Current Revenue is $" + revenue.toFixed(2) + ". Keep trying.");
-
-    }
-
-});
-
-// --------------------
-// Task 8
-// Maximum Revenue
-// --------------------
-d3.select("#submit-t8").on("click", function () {
-
-    const feedback = d3.select("#feedback-t8");
-
-    const revenue = currentState.price * currentState.quantity;
-
-    if (Math.abs(revenue - 50) <= 0.5) {
-
-        feedback
-            .style("color", "#16a34a")
-            .text("✅ Excellent! You found the maximum Total Revenue.");
-
-    } else {
-
-        feedback
-            .style("color", "#dc2626")
-            .text("❌ Keep looking for the highest Total Revenue.");
-
-    }
-
-});
-
-// --------------------
-// Task 9
-// Multiple Choice
-// --------------------
-d3.select("#submit-t9").on("click", function () {
-
-    const feedback = d3.select("#feedback-t9");
-
-    const answer = document.querySelector('input[name="q9"]:checked');
-
-    if (!answer) {
-
-        feedback
-            .style("color", "#dc2626")
-            .text("❌ Please choose an answer.");
-
-        return;
-
-    }
-
-    if (answer.value === "b") {
-
-        feedback
-            .style("color", "#16a34a")
-            .text("✅ Correct! As price increases, quantity demanded decreases.");
-
-    } else {
-
-        feedback
-            .style("color", "#dc2626")
-            .text("❌ Not quite. Remember the Law of Demand.");
-
-    }
-
-});
-
-// --------------------
-// Task 10
-// Final Challenge
-// --------------------
-d3.select("#submit-t10").on("click", function () {
-
-    const feedback = d3.select("#feedback-t10");
-
-    const revenue = currentState.price * currentState.quantity;
-
-    if (
-        Math.abs(currentState.price - 10) <= STEP_TOLERANCE &&
-        Math.abs(currentState.quantity - 5) <= STEP_TOLERANCE &&
-        Math.abs(revenue - 50) <= 0.5
-    ) {
-
-        feedback
-            .style("color", "#16a34a")
-            .text("🏆 Correct!");
-
-    } else {
-
-        feedback
-            .style("color", "#dc2626")
-            .text("❌ One or more values are incorrect. Check Price, Quantity, and Total Revenue.");
-
-    }
-
-});
-
-
-// --------------------
-// Task 11
-// P = 4, Find Q
-// --------------------
-d3.select("#submit-t11").on("click", function () {
-    const feedback = d3.select("#feedback-t11");
-    const answer = parseFloat(d3.select("#input-t11").property("value"));
-
-    if (isNaN(answer)) {
-        feedback.style("color", "#dc2626").text("❌ Please enter a number.");
-        return;
-    }
-
-    if (Math.abs(answer - 8) <= STEP_TOLERANCE) {
-        feedback
-            .style("color", "#16a34a")
-            .text("✅ Correct! Q = 8 because 4 = 20 − 2Q.");
-    } else {
-        // Catch common algebraic slip-ups (e.g., student did 20 - 4 = 16, but forgot to divide by 2)
-        if (Math.abs(answer - 16) <= STEP_TOLERANCE) {
-            feedback
-                .style("color", "#dc2626")
-                .text("❌ You isolated 2Q = 16 correctly! Now divide by 2 to get Q.");
-        } else if (Math.abs(answer - 12) <= STEP_TOLERANCE) {
-            feedback
-                .style("color", "#dc2626")
-                .text("❌ Careful. Did you subtract 4 from 20 instead of setting up: 4 = 20 - 2Q?");
+    d3.select("#submit-t5").on("click", function () {
+        const feedback = d3.select("#feedback-t5");
+        if (Math.abs(currentState.price - 20) <= STEP_TOLERANCE && Math.abs(currentState.quantity) <= STEP_TOLERANCE) {
+            feedback.style("color", "#16a34a").text("✅ Excellent! At the highest price ($20), Quantity Demanded is 0.");
         } else {
-            feedback
-                .style("color", "#dc2626")
-                .text("❌ Step hint: Substitute P = 4 into the equation: 4 = 20 − 2Q. Then isolate Q.");
+            feedback.style("color", "#dc2626").text("❌ Move the point to the top of the demand curve.");
         }
-    }
-});
+    });
 
-// --------------------
-// Task 12
-// Q = 6, Find P
-// --------------------
-d3.select("#submit-t12").on("click", function () {
+    d3.select("#submit-t6").on("click", function () {
+        const feedback = d3.select("#feedback-t6");
+        const answer = parseFloat(d3.select("#input-t6").property("value"));
 
-    const feedback = d3.select("#feedback-t12");
-    const answer = parseFloat(d3.select("#input-t12").property("value"));
+        if (isNaN(answer)) {
+            feedback.style("color", "#dc2626").text("❌ Please enter a number.");
+            return;
+        }
 
-    if (Math.abs(answer - 8) <= STEP_TOLERANCE) {
+        if (Math.abs(answer - 10) <= STEP_TOLERANCE) {
+            updateGraph(0, 'script'); // Fixed: Uses the exposed global pointer
+            feedback.style("color", "#16a34a").text("✅ Correct! Quantity Demanded is 10.");
+        } else {
+            if (Math.abs(currentState.price) > STEP_TOLERANCE) {
+                feedback.style("color", "#dc2626").text("❌ Hint: Drag the dot all the way down to the bottom axis ($0 price).");
+            } else {
+                feedback.style("color", "#dc2626").text("❌ Not quite. Look at where the line hits the horizontal axis max point.");
+            }
+        }
+    });
 
-        feedback
-            .style("color", "#16a34a")
-            .text("✅ Correct! P = 8 because P = 20 − 2(6).");
+    d3.select("#submit-t7").on("click", function () {
+        const feedback = d3.select("#feedback-t7");
+        const revenue = currentState.price * currentState.quantity;
+        if (Math.abs(revenue - 32) <= 0.5) {
+            feedback.style("color", "#16a34a").text("✅ Great! Total Revenue is $32.");
+        } else {
+            feedback.style("color", "#dc2626").text("❌ Current Revenue is $" + revenue.toFixed(2) + ". Keep trying.");
+        }
+    });
 
-    } else {
+    d3.select("#submit-t8").on("click", function () {
+        const feedback = d3.select("#feedback-t8");
+        const revenue = currentState.price * currentState.quantity;
+        if (Math.abs(revenue - 50) <= 0.5) {
+            feedback.style("color", "#16a34a").text("✅ Excellent! You found the maximum Total Revenue.");
+        } else {
+            feedback.style("color", "#dc2626").text("❌ Keep looking for the highest Total Revenue.");
+        }
+    });
 
-        feedback
-            .style("color", "#dc2626")
-            .text("❌ Not correct. Substitute Q = 6 into the equation.");
+    d3.select("#submit-t9").on("click", function () {
+        const feedback = d3.select("#feedback-t9");
+        const answer = document.querySelector('input[name="q9"]:checked');
+        if (!answer) {
+            feedback.style("color", "#dc2626").text("❌ Please choose an answer.");
+            return;
+        }
+        if (answer.value === "b") {
+            feedback.style("color", "#16a34a").text("✅ Correct! As price increases, quantity demanded decreases.");
+        } else {
+            feedback.style("color", "#dc2626").text("❌ Not quite. Remember the Law of Demand.");
+        }
+    });
 
-    }
+    d3.select("#submit-t10").on("click", function () {
+        const feedback = d3.select("#feedback-t10");
+        const revenue = currentState.price * currentState.quantity;
+        if (Math.abs(currentState.price - 10) <= STEP_TOLERANCE && Math.abs(currentState.quantity - 5) <= STEP_TOLERANCE && Math.abs(revenue - 50) <= 0.5) {
+            feedback.style("color", "#16a34a").text("🏆 Correct!");
+        } else {
+            feedback.style("color", "#dc2626").text("❌ One or more values are incorrect. Check Price, Quantity, and Total Revenue.");
+        }
+    });
 
-});
+    d3.select("#submit-t11").on("click", function () {
+        const feedback = d3.select("#feedback-t11");
+        const answer = parseFloat(d3.select("#input-t11").property("value"));
+        if (isNaN(answer)) {
+            feedback.style("color", "#dc2626").text("❌ Please enter a number.");
+            return;
+        }
+        if (Math.abs(answer - 8) <= STEP_TOLERANCE) {
+            feedback.style("color", "#16a34a").text("✅ Correct! Q = 8 because 4 = 20 − 2Q.");
+        } else {
+            if (Math.abs(answer - 16) <= STEP_TOLERANCE) {
+                feedback.style("color", "#dc2626").text("❌ You isolated 2Q = 16 correctly! Now divide by 2 to get Q.");
+            } else if (Math.abs(answer - 12) <= STEP_TOLERANCE) {
+                feedback.style("color", "#dc2626").text("❌ Careful. Did you subtract 4 from 20 instead of setting up: 4 = 20 - 2Q?");
+            } else {
+                feedback.style("color", "#dc2626").text("❌ Step hint: Substitute P = 4 into the equation: 4 = 20 − 2Q. Then isolate Q.");
+            }
+        }
+    });
 
+    d3.select("#submit-t12").on("click", function () {
+        const feedback = d3.select("#feedback-t12");
+        const answer = parseFloat(d3.select("#input-t12").property("value"));
+        if (Math.abs(answer - 8) <= STEP_TOLERANCE) {
+            feedback.style("color", "#16a34a").text("✅ Correct! P = 8 because P = 20 − 2(6).");
+        } else {
+            feedback.style("color", "#dc2626").text("❌ Not correct. Substitute Q = 6 into the equation.");
+        }
+    });
 
-// --------------------
-// Task 13
-// Direct Demand Equation
-// --------------------
-d3.select("#submit-t13").on("click", function () {
+    d3.select("#submit-t13").on("click", function () {
+        const feedback = d3.select("#feedback-t13");
+        const answer = document.querySelector('input[name="q13"]:checked');
+        if (!answer) {
+            feedback.style("color", "#dc2626").text("❌ Please choose an answer.");
+            return;
+        }
+        if (answer.value === "b") {
+            feedback.style("color", "#16a34a").text("✅ Correct! Rearranging the equation gives Q = 10 − 0.5P.");
+        } else {
+            feedback.style("color", "#dc2626").text("❌ Incorrect. Rearrange the equation to make Q the subject.");
+        }
+    });
 
-    const feedback = d3.select("#feedback-t13");
-    const answer = document.querySelector('input[name="q13"]:checked');
-
-    if (!answer) {
-
-        feedback
-            .style("color", "#dc2626")
-            .text("❌ Please choose an answer.");
-
-        return;
-
-    }
-
-    if (answer.value === "b") {
-
-        feedback
-            .style("color", "#16a34a")
-            .text("✅ Correct! Rearranging the equation gives Q = 10 − 0.5P.");
-
-    } else {
-
-        feedback
-            .style("color", "#dc2626")
-            .text("❌ Incorrect. Rearrange the equation to make Q the subject.");
-
-    }
-
-});
-
-
-// --------------------
-// Task 14
-// Inverse Demand Equation
-// --------------------
-d3.select("#submit-t14").on("click", function () {
-
-    const feedback = d3.select("#feedback-t14");
-    const answer = document.querySelector('input[name="q14"]:checked');
-
-    if (!answer) {
-
-        feedback
-            .style("color", "#dc2626")
-            .text("❌ Please choose an answer.");
-
-        return;
-
-    }
-
-    if (answer.value === "a") {
-
-        feedback
-            .style("color", "#16a34a")
-            .text("✅ Correct! P = 20 − 2Q is the inverse demand equation.");
-
-    } else {
-
-        feedback
-            .style("color", "#dc2626")
-            .text("❌ Incorrect. The inverse demand equation has Price (P) by itself.");
-
-    }
-
-});
+    d3.select("#submit-t14").on("click", function () {
+        const feedback = d3.select("#feedback-t14");
+        const answer = document.querySelector('input[name="q14"]:checked');
+        if (!answer) {
+            feedback.style("color", "#dc2626").text("❌ Please choose an answer.");
+            return;
+        }
+        if (answer.value === "a") {
+            feedback.style("color", "#16a34a").text("✅ Correct! P = 20 − 2Q is the inverse demand equation.");
+        } else {
+            feedback.style("color", "#dc2626").text("❌ Incorrect. The inverse demand equation has Price (P) by itself.");
+        }
+    });
 </script>
 
 </body>

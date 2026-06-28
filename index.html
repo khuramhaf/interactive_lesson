@@ -22,68 +22,131 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 0;
             color: var(--text-main);
-            background-color: #fafafa;
+            background-color: #f8fafc;
+            height: 100vh;
+            overflow: hidden; /* Prevents whole-body scrolling on desktop */
         }
 
+        /* Responsive Layout Engine */
         .workspace-grid {
             display: grid;
-            grid-template-columns: 1.2fr 0.8fr; 
-            gap: 25px;
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
+            grid-template-columns: 0.9fr 0.9fr; 
+            width: 100vw;
+            height: 100vh;
             background: white;
-            padding: 24px;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
         }
 
+        /* Left Side: Stays fixed, holds graph and inputs */
         .interactive-section {
             display: flex;
             flex-direction: column;
-            width: 100%;
+            padding: 20px;
+            background: #ffffff;
+            border-right: 1px solid #e2e8f0;
+            justify-content: center;
+            height: 100%;
         }
 
+        /* Right Side: Scrollable lesson text & questions */
         .lesson-text-section {
             display: flex;
             flex-direction: column;
-            background-color: var(--bg-light);
-            padding: 24px;
-            border-left: 5px solid var(--primary);
-            border-radius: 6px;
-            height: fit-content;
+            background-color: #fafafa;
+            padding: 30px;
+            overflow-y: auto; /* Scroll questions independently */
+            height: 100%;
         }
 
         h1 {
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             margin-top: 0;
             color: #111827;
         }
 
         .lesson-text-section p, .lesson-text-section li {
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             line-height: 1.5;
             color: #374151;
         }
 
         .lesson-text-section ul {
-            padding-left: 20px;
-            margin-top: 5px;
+            padding-left: 0;
+            list-style: none;
+            margin-top: 15px;
         }
 
         .lesson-text-section li {
+            margin-bottom: 24px;
+            background: #ffffff;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+
+        .task-title {
+            font-weight: 700;
             margin-bottom: 8px;
+            display: block;
+            color: #0f172a;
+        }
+
+        .task-check {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .quiz-input {
+            width: 90px;
+            padding: 8px;
+            font-size: 1rem;
+            border: 2px solid #cbd5e1;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .quiz-input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        .check-btn {
+            padding: 8px 16px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #fff;
+            background: var(--primary);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.1s;
+        }
+
+        .check-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .check-feedback {
+            font-weight: 700;
+            font-size: 0.95rem;
+            width: 100%;
+            margin-top: 4px;
+            display: block;
         }
 
         #chart-wrapper {
             width: 100%;
-            min-height: 380px;
-            aspect-ratio: 1.45 / 1; 
+            height: 55%;
+            min-height: 280px;
             position: relative;
             touch-action: pan-y; 
-            margin-bottom: 5px;
+            margin-bottom: 30px;
         }
         
         #chart-wrapper svg {
@@ -91,43 +154,41 @@
         }
 
         .live-metrics {
-            margin: 5px 0 15px 0;
             background: #ffffff;
             border: 2px solid #e2e8f0;
             border-radius: 10px;
-            padding: 15px 20px;
+            padding: 12px 15px;
             display: flex;
             justify-content: space-between;
             gap: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            margin-bottom: 15px;
         }
 
         .metric-item {
             display: flex;
             flex-direction: column;
-            white-space: nowrap; 
         }
 
         .metric-item span:first-child {
-            font-size: 0.95rem;
+            font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            color: #475569;
-            margin-bottom: 4px;
+            color: #64748b;
+            margin-bottom: 2px;
             font-weight: 700;
         }
         
         .metric-value {
-            font-size: 1.5rem; 
+            font-size: 1.3rem; 
             font-weight: 800;
         }
 
         .controls {
             display: flex;
             flex-direction: column;
-            gap: 18px;
+            gap: 12px;
             background: #f8fafc;
-            padding: 18px;
+            padding: 14px;
             border: 1px solid #e2e8f0;
             border-radius: 10px;
         }
@@ -135,7 +196,7 @@
         .control-row {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 4px;
         }
 
         .control-header-line {
@@ -145,8 +206,8 @@
             width: 100%;
         }
 
-        .label-group label {
-            font-size: 1.2rem; 
+        .control-header-line label {
+            font-size: 1rem; 
             font-weight: 800;
             color: #0f172a;
         }
@@ -161,125 +222,134 @@
             width: 100%;
             -webkit-appearance: none;
             appearance: none;
-            height: 14px; 
-            border-radius: 7px;
+            height: 10px; 
+            border-radius: 50px;
             background: #cbd5e1;
             outline: none;
-            margin: 8px 0;
+            margin: 6px 0;
         }
 
         .thick-slider::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            width: 34px;
-            height: 34px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             background: var(--primary);
             cursor: pointer;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.25);
-            transition: background 0.1s;
-        }
-        .thick-slider::-webkit-slider-thumb:active {
-            background: var(--primary-dark);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
         .thick-slider::-moz-range-thumb {
-            width: 34px;
-            height: 34px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             background: var(--primary);
             cursor: pointer;
             border: none;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.25);
-            transition: background 0.1s;
-        }
-        .thick-slider::-moz-range-thumb:active {
-            background: var(--primary-dark);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
         .num-input {
-            width: 85px;
-            padding: 6px 4px;
-            font-size: 1.15rem; 
+            width: 75px;
+            padding: 4px;
+            font-size: 1.05rem; 
             border: 2px solid #94a3b8;
-            border-radius: 8px;
+            border-radius: 6px;
             text-align: center;
             font-weight: 800;
             color: var(--primary-dark);
-            background: #ffffff;
         }
 
-        .num-input:focus {
-            border-color: var(--primary);
-            outline: none;
-        }
-
+      /* Mobile Breakpoint Adjustments */
+/* Mobile Breakpoint Adjustments */
+       /* Mobile Breakpoint Adjustments */
         @media (max-width: 768px) {
-            body { 
-                padding: 0; 
+            body {
+                overflow: auto; 
+                height: auto;
             }
             .workspace-grid {
                 grid-template-columns: 1fr; 
-                padding: 0; 
-                border-radius: 0;
-                box-shadow: none;
-                gap: 15px;
+                height: auto;
+                width: 100%;
             }
-            .interactive-section { 
-                order: 1; 
-                padding: 0;
+            .interactive-section {
+                position: sticky;
+                top: 0;
+                z-index: 100;
+                height: auto;
+                padding: 10px;
+                border-right: none;
+                border-bottom: 2px solid #e2e8f0;
+                box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
             }
+            
             #chart-wrapper {
-                height: 44vh; 
-                min-height: 320px; 
-                aspect-ratio: auto;
-                margin-bottom: 0px;
-                background: #ffffff;
-            }
+    width: 100%;
+    /* Keep width 100% of the container, but scale the height down to 40% of the viewport width */
+    height: 100vw; 
+    min-height: 200px;
+    max-height: 390px; 
+    margin: 0 auto 10px auto;
+}
+            
             .live-metrics {
-                padding: 12px 14px;
-                margin: 5px 12px 12px 12px; 
-                gap: 8px;
-            }
-            .metric-item span:first-child {
-                font-size: 0.8rem; 
+                margin-bottom: 8px;
+                padding: 6px 10px;
             }
             .metric-value {
-                font-size: 1.18rem; 
+                font-size: 1.05rem;
             }
+            
+            /* Fits both inputs cleanly into a single unified row */
             .controls {
-                margin: 0 12px;
-                padding: 12px;
+                display: flex;
+                flex-direction: row;
                 gap: 15px;
+                padding: 8px;
+                justify-content: space-between;
             }
-            .label-group label {
-                font-size: 1.1rem;
+            .control-row {
+                flex: 1;
+                border-bottom: none;
+                padding-bottom: 0;
+            }
+            .control-header-line {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 8px;
+            }
+            .control-header-line label {
+                font-size: 1.3rem;
+            }
+            .num-input {
+                width: 100px;
+                padding: 4px;
+                font-size: 1.3rem;
+            }
+            
+            /* Keep sliders hidden on mobile */
+            .slider-row {
+                display: none !important; 
             }
             .lesson-text-section {
-                order: 2; 
-                border-left: none;
-                border-top: 5px solid var(--primary);
-                padding: 20px 15px;
-                margin: 10px 12px;
-                border-radius: 0 0 6px 6px;
+                overflow-y: visible;
+                height: auto;
+                padding: 15px 12px;
             }
         }
 
+        /* SVG Element Styling Rules */
         .axis-line { stroke: #000000; stroke-width: 4px; }
-        .axis-text { font-size: 15px; font-weight: bold; fill: #475569; }
-        .axis-label { font-size: 16px; font-weight: 900; fill: #0f172a; }
+        .axis-text { font-size: 18px; font-weight: bold; fill: #64748b; }
+        .axis-label { font-size: 20px; font-weight: 900; fill: #0f172a; }
         .demand-line { stroke: #dc2626; stroke-width: 5px; stroke-linecap: round; }
-        .projection-line { stroke: #64748b; stroke-width: 2.5px; stroke-dasharray: 6,6; }
+        .projection-line { stroke: #64748b; stroke-width: 3px; stroke-dasharray: 4,4; }
         .interactive-dot { fill: var(--primary); cursor: grab; touch-action: none; }
-        .interactive-dot:active { cursor: grabbing; }
-        .dot-glow { fill: var(--primary); fill-opacity: 0.15; cursor: grab; touch-action: none; }
-        
-        .revenue-box {
-            fill: var(--revenue-fill);
-            stroke: var(--revenue-stroke);
-            stroke-width: 2px;
-            stroke-dasharray: 4,4;
-        }
+        .dot-glow { fill: var(--primary); fill-opacity: 0.25; cursor: grab; touch-action: none; }
+        .revenue-box { fill: var(--revenue-fill); stroke: var(--revenue-stroke); stroke-width: 1.5px; stroke-dasharray: 4,4; }
     </style>
 </head>
 <body>
@@ -292,7 +362,7 @@
         <div class="live-metrics" aria-live="polite">
             <div class="metric-item">
                 <span>Active Equation</span>
-                <div id="live-eq" class="metric-value" style="color: #dc2626;">20 - 2(5.00) = 10.00</div>
+                <div id="live-eq" class="metric-value" style="color: #dc2626;">20 - 2(5.0) = 10.0</div>
             </div>
             <div class="metric-item" style="text-align: right;">
                 <span>Total Revenue (P × Q)</span>
@@ -303,25 +373,21 @@
         <div class="controls">
             <div class="control-row">
                 <div class="control-header-line">
-                    <div class="label-group">
-                        <label for="price-slider">Price (P)</label>
-                    </div>
-                    <input type="number" id="price-input" class="num-input" aria-label="Price value" min="0" max="20" step="0.1" value="10.0">
+                    <label for="price-input">P</label>
+                    <input type="number" id="price-input" class="num-input" min="0" max="20" step="0.1" value="10.0">
                 </div>
                 <div class="slider-row">
-                    <input type="range" id="price-slider" class="thick-slider" min="0" max="20" step="0.05" value="10">
+                    <input type="range" id="price-slider" class="thick-slider" min="0" max="20" step="0.1" value="10">
                 </div>
             </div>
 
             <div class="control-row">
                 <div class="control-header-line">
-                    <div class="label-group">
-                        <label for="quant-slider">Quantity (Q<sub>d</sub>)</label>
-                    </div>
-                    <input type="number" id="quant-input" class="num-input" aria-label="Quantity value" min="0" max="10" step="0.1" value="5.0">
+                    <label for="quant-input">Q</label>
+                    <input type="number" id="quant-input" class="num-input" min="0" max="10" step="0.1" value="5.0">
                 </div>
                 <div class="slider-row">
-                    <input type="range" id="quant-slider" class="thick-slider" min="0" max="10" step="0.025" value="5">
+                    <input type="range" id="quant-slider" class="thick-slider" min="0" max="10" step="0.1" value="5">
                 </div>
             </div>
         </div>
@@ -330,41 +396,289 @@
     <div class="lesson-text-section">
         <h1>Understanding the Demand Curve</h1>
         <p>This curve visualizes consumer behavior according to the linear function inverse:</p>
-        <p style="text-align: center; font-size: 1.4rem; font-weight: bold; color: #dc2626; margin: 10px 0;">P = 20 - 2Q<sub>d</sub></p>
+        <p style="text-align: center; font-size: 1.3rem; font-weight: bold; color: #dc2626; margin: 5px 0;">P = 20 - 2Q<sub>d</sub></p>
+        <p>Modify graph parameters to monitor total continuous changes to business expenditures below.</p>
         
-        <p>Notice how changing values visually changes the total area under the curve—this represented region equals total consumer expenditure or business revenue.</p>
+        <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 15px 0;">
         
-        <p style="margin-top: 15px;"><strong>Analysis Tasks:</strong></p>
-        <ul>
-            <li>Find the price point where <strong>Total Revenue</strong> reaches its absolute maximum size ($Q=5$).</li>
-            <li>Observe the <strong>Choke Price</strong> ($P=20$): At this price threshold, quantity drops exactly to zero.</li>
-        </ul>
+        <p><strong>Analysis Tasks:</strong></p>
+       <ul>
+
+<li>
+    <span class="task-title">Task 1: Explore the Graph</span>
+    Move the dot anywhere on the demand curve. Watch how <strong>Price</strong>, <strong>Quantity</strong>, and <strong>Total Revenue</strong> change.
+    <div class="task-check">
+        <button id="submit-t1" class="check-btn">Done</button>
+        <span id="feedback-t1" class="check-feedback"></span>
+    </div>
+</li>
+
+<li>
+    <span class="task-title">Task 2: Set the Price</span>
+    Move the graph until <strong>Price = $8</strong>.
+    <div class="task-check">
+        <button id="submit-t2" class="check-btn">Check Answer</button>
+        <span id="feedback-t2" class="check-feedback"></span>
+    </div>
+</li>
+
+<li>
+    <span class="task-title">Task 3: Find the Quantity</span>
+    Set <strong>Price = $14</strong>. What is the quantity demanded?
+    <div class="task-check">
+        <input type="number" id="input-t3" class="quiz-input" placeholder="Quantity">
+        <button id="submit-t3" class="check-btn">Check Answer</button>
+        <span id="feedback-t3" class="check-feedback"></span>
+    </div>
+</li>
+
+<li>
+    <span class="task-title">Task 4: Find the Price</span>
+    Set <strong>Quantity = 7</strong>. What is the price?
+    <div class="task-check">
+        <input type="number" id="input-t4" class="quiz-input" placeholder="Price">
+        <button id="submit-t4" class="check-btn">Check Answer</button>
+        <span id="feedback-t4" class="check-feedback"></span>
+    </div>
+</li>
+
+<li>
+    <span class="task-title">Task 5: Highest Price</span>
+    Find the highest possible price on the demand curve. What happens to quantity demanded?
+    <div class="task-check">
+        <button id="submit-t5" class="check-btn">Check Answer</button>
+        <span id="feedback-t5" class="check-feedback"></span>
+    </div>
+</li>
+
+<li>
+    <span class="task-title">Task 6: Lowest Price</span>
+    Move the graph until <strong>Price = $0</strong>. Enter the quantity demanded.
+    <div class="task-check">
+        <input type="number" id="input-t6" class="quiz-input" placeholder="Quantity">
+        <button id="submit-t6" class="check-btn">Check Answer</button>
+        <span id="feedback-t6" class="check-feedback"></span>
+    </div>
+</li>
+
+<li>
+    <span class="task-title">Task 7: Revenue Challenge</span>
+    Can you find a point where <strong>Total Revenue = $32</strong>?
+    <div class="task-check">
+        <button id="submit-t7" class="check-btn">Check Answer</button>
+        <span id="feedback-t7" class="check-feedback"></span>
+    </div>
+</li>
+
+<li>
+    <span class="task-title">Task 8: Maximum Revenue</span>
+    Move the graph until Total Revenue is as high as possible.
+    <div class="task-check">
+        <button id="submit-t8" class="check-btn">Check Answer</button>
+        <span id="feedback-t8" class="check-feedback"></span>
+    </div>
+</li>
+
+<li>
+    <span class="task-title">Task 9: Prediction</span>
+    Without moving the graph, answer this question:<br><br>
+    <strong>If price increases, what happens to quantity demanded?</strong>
+    <div class="task-check">
+        <label><input type="radio" name="q9" value="a"> Quantity increases</label><br>
+        <label><input type="radio" name="q9" value="b"> Quantity decreases</label><br>
+        <label><input type="radio" name="q9" value="c"> Quantity stays the same</label><br><br>
+        <button id="submit-t9" class="check-btn">Check Answer</button>
+        <span id="feedback-t9" class="check-feedback"></span>
+    </div>
+</li>
+
+<li>
+    <span class="task-title">Task 10: Final Challenge</span>
+
+    Find the point on Graph where <strong>Price = $10</strong>, <strong>Quantity = 5</strong>, and <strong>Total Revenue = $50</strong>.
+
+    <div class="task-check">
+        <button id="submit-t10" class="check-btn">Check Answer</button>
+        <span id="feedback-t10" class="check-feedback"></span>
+    </div>
+</li>
+
+
+
+<li>
+    <span class="task-title">Task 11: Use the Equation</span>
+
+    Using the equation
+
+    <p style="text-align:center;font-weight:bold;color:#dc2626;font-size:1.15rem;">
+        P = 20 − 2Q
+    </p>
+
+    If <strong>Price (P) = 4</strong>, what is the value of <strong>Quantity (Q)</strong>?
+
+    <div class="task-check">
+        <input type="number"
+               id="input-t11"
+               class="quiz-input"
+               placeholder="Q = ?"
+               step="0.1">
+
+        <button id="submit-t11"
+                class="check-btn">
+            Check Answer
+        </button>
+
+        <span id="feedback-t11"
+              class="check-feedback"></span>
+    </div>
+</li>
+
+<li>
+    <span class="task-title">Task 12: Use the Equation</span>
+
+    Using the equation
+
+    <p style="text-align:center;font-weight:bold;color:#dc2626;font-size:1.15rem;">
+        P = 20 − 2Q
+    </p>
+
+    If <strong>Quantity (Q) = 6</strong>, what is the value of <strong>Price (P)</strong>?
+
+    <div class="task-check">
+        <input type="number"
+               id="input-t12"
+               class="quiz-input"
+               placeholder="P = ?"
+               step="0.1">
+
+        <button id="submit-t12"
+                class="check-btn">
+            Check Answer
+        </button>
+
+        <span id="feedback-t12"
+              class="check-feedback"></span>
+    </div>
+</li>
+
+<li>
+
+    <span class="task-title">
+        Task 13: Direct Demand Equation
+    </span>
+
+    The inverse demand equation is
+
+    <p style="text-align:center;font-weight:bold;color:#dc2626;font-size:1.15rem;">
+        P = 20 − 2Q
+    </p>
+
+    Which of the following is the <strong>Direct Demand Equation</strong>?
+
+    <div class="task-check">
+
+        <label>
+            <input type="radio" name="q13" value="a">
+            Q = 20 − 2P
+        </label><br>
+
+        <label>
+            <input type="radio" name="q13" value="b">
+            Q = 10 − 0.5P
+        </label><br>
+
+        <label>
+            <input type="radio" name="q13" value="c">
+            Q = 20 + 2P
+        </label><br>
+
+        <label>
+            <input type="radio" name="q13" value="d">
+            Q = 2P − 20
+        </label><br><br>
+
+        <button id="submit-t13"
+                class="check-btn">
+            Check Answer
+        </button>
+
+        <span id="feedback-t13"
+              class="check-feedback"></span>
+
+    </div>
+
+</li>
+
+<li>
+
+    <span class="task-title">
+        Task 14: Inverse Demand Equation
+    </span>
+
+    The direct demand equation is
+
+    <p style="text-align:center;font-weight:bold;color:#dc2626;font-size:1.15rem;">
+        Q = 10 − 0.5P
+    </p>
+
+    Which of the following is the <strong>Inverse Demand Equation</strong>?
+
+    <div class="task-check">
+
+        <label>
+            <input type="radio" name="q14" value="a">
+            P = 20 − 2Q
+        </label><br>
+
+        <label>
+            <input type="radio" name="q14" value="b">
+            P = 10 − 0.5Q
+        </label><br>
+
+        <label>
+            <input type="radio" name="q14" value="c">
+            P = 2Q − 20
+        </label><br>
+
+        <label>
+            <input type="radio" name="q14" value="d">
+            P = 20 + 2Q
+        </label><br><br>
+
+        <button id="submit-t14"
+                class="check-btn">
+            Check Answer
+        </button>
+
+        <span id="feedback-t14"
+              class="check-feedback"></span>
+
+    </div>
+
+</li>
+
+</ul>
     </div>
 
 </div>
 
 <script>
     const wrapper = d3.select("#chart-wrapper");
-    
+    const currentState = { price: 10, quantity: 5 };
+
     function renderChart() {
         wrapper.selectAll("*").remove();
 
         const width = wrapper.node().getBoundingClientRect().width;
-        const height = wrapper.node().getBoundingClientRect().height;
         const isMobile = window.innerWidth <= 768;
+        
+        // Fix: Force a strict square dimension tracking rule on mobile devices
+        const height = isMobile ? width : wrapper.node().getBoundingClientRect().height;
 
-        // Margins leave room for axis ticks/labels; tighter on mobile (see below)
-        let marginTop = 35;
-        let marginRight = 50;
-        let marginBottom = 45;
-        let marginLeft = 55;
-
-        if (isMobile) {
-            marginTop = 35;
-            marginRight = 25;
-            marginBottom = 45;
-            marginLeft = 40;
-        }
+        let marginTop = 30;         
+        let marginRight = 20;
+        let marginBottom = 40; // Slightly increased to protect axis labels on square grids     
+        let marginLeft = isMobile ? 35 : 65; 
 
         const chartWidth = width - marginLeft - marginRight;
         const chartHeight = height - marginTop - marginBottom;
@@ -372,18 +686,14 @@
         const svg = wrapper.append("svg")
             .attr("width", "100%")
             .attr("height", "100%")
-            .attr("viewBox", "0 0 " + width + " " + height)
+            .attr("viewBox", `0 0 ${width} ${height}`)
             .attr("preserveAspectRatio", "xMidYMid meet");
 
         const g = svg.append("g")
-            .attr("transform", "translate(" + marginLeft + "," + marginTop + ")");
+            .attr("transform", `translate(${marginLeft},${marginTop})`);
 
-        function getQ(P) { 
-            return 10 - (P / 2); 
-        }
-        function getP(Q) { 
-            return 20 - (2 * Q); 
-        }
+        function getQ(P) { return Math.max(0, Math.min(10, 10 - (P / 2))); }
+        function getP(Q) { return Math.max(0, Math.min(20, 20 - (2 * Q))); }
 
         const xScale = d3.scaleLinear().domain([0, 10.5]).range([0, chartWidth]);
         const yScale = d3.scaleLinear().domain([0, 21]).range([chartHeight, 0]);
@@ -396,159 +706,514 @@
         const xTicks = d3.range(0, 11, 2);
         const yTicks = d3.range(0, 21, 4);
 
-        g.selectAll(".x-tick")
-            .data(xTicks)
-            .enter()
-            .append("text")
-            .attr("class", "axis-text")
-            .attr("x", function(d) { return xScale(d); })
-            .attr("y", chartHeight + 18) 
-            .attr("text-anchor", "middle")
-            .text(function(d) { return d; });
+        g.selectAll(".x-tick").data(xTicks).enter().append("text").attr("class", "axis-text")
+            .attr("x", d => xScale(d)).attr("y", chartHeight + 20).attr("text-anchor", "middle").text(d => d);
 
-        g.selectAll(".y-tick")
-            .data(yTicks)
-            .enter()
-            .append("text")
-            .attr("class", "axis-text")
-            .attr("x", -8)              
-            .attr("y", function(d) { return yScale(d) + 5; }) 
-            .attr("text-anchor", "end")
-            .text(function(d) { return d; });
+        g.selectAll(".y-tick").data(yTicks).enter().append("text").attr("class", "axis-text")
+            .attr("x", -6).attr("y", d => yScale(d) + 4).attr("text-anchor", "end").text(d => d);
 
-        g.append("text")
-            .attr("class", "axis-label")
-            .attr("x", chartWidth)
-            .attr("y", chartHeight + 34)
-            .attr("text-anchor", "end")
-            .text("Quantity (Q)");
+        g.append("text").attr("class", "axis-label").attr("x", chartWidth).attr("y", chartHeight + 40).attr("text-anchor", "end").text("Quantity(Q)");
+        g.append("text").attr("class", "axis-label").attr("x", 50).attr("y", -4).attr("text-anchor", "end").text("Price(P)");
 
-        g.append("text")
-            .attr("class", "axis-label")
-            .attr("x", 45)
-            .attr("y", -5)
-            .attr("text-anchor", "end")
-            .text("Price (P)");
-
-        g.append("line")
-            .attr("class", "demand-line")
-            .attr("x1", xScale(0))
-            .attr("y1", yScale(20)) 
-            .attr("x2", xScale(10))
-            .attr("y2", yScale(0));
-
-        g.append("text")
-            .attr("x", xScale(9.7))
-            .attr("y", yScale(0.8))
-            .attr("fill", "#dc2626")
-            .style("font-weight", "900")
-            .style("font-size", "16px")
-            .text("D");
+        g.append("line").attr("class", "demand-line").attr("x1", xScale(0)).attr("y1", yScale(20)).attr("x2", xScale(10)).attr("y2", yScale(0));
 
         const horizLine = g.append("line").attr("class", "projection-line");
         const vertLine = g.append("line").attr("class", "projection-line");
 
-        // Faint reference line at Q=5 — the revenue-maximizing quantity students
-        // are asked to find in the lesson text. Helps them self-check visually.
-        g.append("line")
-            .attr("x1", xScale(5)).attr("y1", 0)
-            .attr("x2", xScale(5)).attr("y2", chartHeight)
-            .attr("stroke", "#94a3b8")
-            .attr("stroke-width", 1.5)
-            .attr("stroke-dasharray", "2,4")
-            .attr("opacity", 0.5);
-        g.append("text")
-            .attr("x", xScale(5))
-            .attr("y", -8)
-            .attr("text-anchor", "middle")
-            .attr("fill", "#94a3b8")
-            .style("font-size", "11px")
-            .style("font-weight", "700")
-            .text("Q=5");
-
-        let calculatedRadius = xScale(0.15) - xScale(0);
-        if (calculatedRadius < 11) {
-            calculatedRadius = 11;
-        }
-        const dotRadius = calculatedRadius;
-        const glowRadius = dotRadius * 1.8; 
-
-        const glow = g.append("circle").attr("class", "dot-glow").attr("r", glowRadius);
+        const dotRadius = isMobile ? 11 : 8;
+        const glow = g.append("circle").attr("class", "dot-glow").attr("r", dotRadius * 2);
         const dot = g.append("circle").attr("class", "interactive-dot").attr("r", dotRadius);
 
         function updateAll(price, origin) {
-            if (price < 0) { price = 0; }
-            if (price > 20) { price = 20; }
-            
-            let quantity = getQ(price);
+    price = Math.round(price * 10) / 10;
+    if (price < 0) price = 0;
+    if (price > 20) price = 20;
+    
+    let quantity = Math.round(getQ(price) * 20) / 20;
 
-            let cx = xScale(quantity);
-            let cy = yScale(price);
+    let cx = xScale(quantity);
+    let cy = yScale(price);
 
-            dot.attr("cx", cx).attr("cy", cy);
-            glow.attr("cx", cx).attr("cy", cy);
+    // Forces the visual graph markers to move to the coordinate instantly
+    dot.attr("cx", cx).attr("cy", cy);
+    glow.attr("cx", cx).attr("cy", cy);
 
-            horizLine.attr("x1", 0).attr("y1", cy).attr("x2", cx).attr("y2", cy);
-            vertLine.attr("x1", cx).attr("y1", chartHeight).attr("x2", cx).attr("y2", cy);
+    horizLine.attr("x1", 0).attr("y1", cy).attr("x2", cx).attr("y2", cy);
+    vertLine.attr("x1", cx).attr("y1", chartHeight).attr("x2", cx).attr("y2", cy);
 
-            revenueBox
-                .attr("x", 0)
-                .attr("y", cy)
-                .attr("width", cx)
-                .attr("height", chartHeight - cy);
+    revenueBox.attr("x", 0).attr("y", cy).attr("width", cx).attr("height", chartHeight - cy);
 
-            d3.select("#price-slider").property("value", price);
-            d3.select("#quant-slider").property("value", quantity);
-            // Always sync the number inputs too, even the one that triggered this
-            // update — otherwise typing an out-of-range value leaves the box
-            // showing a number that disagrees with the chart/slider.
-            d3.select("#price-input").property("value", parseFloat(price.toFixed(2)));
-            d3.select("#quant-input").property("value", parseFloat(quantity.toFixed(2)));
+    // Safely checks if sliders are available before syncing value properties
+    const pSlider = d3.select("#price-slider");
+    const qSlider = d3.select("#quant-slider");
+    if (!pSlider.empty() && origin !== 'price-slider') pSlider.property("value", price);
+    if (!qSlider.empty() && origin !== 'quant-slider') qSlider.property("value", quantity);
 
-            const currentRevenue = price * quantity;
-            d3.select("#live-eq").text("20 - 2(" + quantity.toFixed(2) + ") = " + price.toFixed(2));
-            d3.select("#live-revenue").text("$" + currentRevenue.toFixed(2));
-        }
+    // Keeps user text inputs in sync without resetting cursors awkwardly while typing
+    if (origin !== 'price-input') d3.select("#price-input").property("value", price.toFixed(1));
+    if (origin !== 'quant-input') d3.select("#quant-input").property("value", parseFloat(quantity.toFixed(2)));
+
+    currentState.price = price;
+    currentState.quantity = quantity;
+    
+    d3.select("#live-eq").text(`20 - 2(${quantity.toFixed(2)}) = ${price.toFixed(1)}`);
+    d3.select("#live-revenue").text(`$${(price * quantity).toFixed(2)}`);
+}
 
         const dragBehavior = d3.drag()
             .on("drag", function(event) {
                 let currentQ = xScale.invert(event.x);
-                if (currentQ < 0) { currentQ = 0; }
-                if (currentQ > 10) { currentQ = 10; }
+                currentQ = Math.round(currentQ * 20) / 20;
+                if (currentQ < 0) currentQ = 0;
+                if (currentQ > 10) currentQ = 10;
                 updateAll(getP(currentQ), 'drag');
             });
             
         dot.call(dragBehavior);
         glow.call(dragBehavior);
 
-        d3.select("#price-slider").on("input", function() { 
-            updateAll(+(this.value), 'price-slider'); 
-        });
+        d3.select("#price-slider").on("input", function() { updateAll(+(this.value), 'price-slider'); });
+        d3.select("#quant-slider").on("input", function() { updateAll(getP(+(this.value)), 'quant-slider'); });
+        // Handles manual entries for the Price (P) input field
+// Handles manual entries for the Price (P) input field
+d3.select("#price-input").on("input", function() { 
+    let val = parseFloat(this.value);
+    if (!isNaN(val)) {
+        // If they type something over 20, cap it instantly
+        if (val > 20) {
+            val = 20;
+            this.value = val;
+        }
+        // If they type a negative sign or sub-zero, clamp it to 0
+        if (val < 0) {
+            val = 0;
+            this.value = val;
+        }
         
-        d3.select("#quant-slider").on("input", function() { 
-            updateAll(getP(+(this.value)), 'quant-slider'); 
-        });
+        updateAll(val, 'price-input'); 
+    } 
+});
 
-        d3.select("#price-input").on("input", function() {
-            let val = +(this.value); 
-            if (!isNaN(val)) {
-                updateAll(val, 'price-input');
-            }
-        });
+// Handles manual entries for the Quantity (Q) input field
+d3.select("#quant-input").on("input", function() { 
+    let val = parseFloat(this.value);
+    if (!isNaN(val)) {
+        // If they type something over 10, cap it instantly
+        if (val > 10) {
+            val = 10;
+            this.value = val;
+        }
+        if (val < 0) {
+            val = 0;
+            this.value = val;
+        }
+        
+        updateAll(getP(val), 'quant-input'); 
+    } 
+});
 
-        d3.select("#quant-input").on("input", function() {
-            let val = +(this.value); 
-            if (!isNaN(val)) {
-                updateAll(getP(val), 'quant-input');
-            }
-        });
-
-        const initialPrice = +(d3.select("#price-slider").property("value"));
-        updateAll(initialPrice, 'init');
+        updateAll(currentState.price, 'init');
     }
 
     renderChart();
     window.addEventListener("resize", renderChart);
+
+    // Dynamic Grading Rules
+    const STEP_TOLERANCE = 0.15;
+
+
+d3.select("#submit-t1").on("click", function () {
+    task1Done = true;
+    d3.select("#feedback-t1")
+        .style("color", "#16a34a")
+        .text("✅ Great! Now let's start solving problems.");
+});
+
+// --------------------
+// Task 2
+// Price = 8
+// --------------------
+d3.select("#submit-t2").on("click", function () {
+
+    const feedback = d3.select("#feedback-t2");
+
+    if (Math.abs(currentState.price - 8) <= STEP_TOLERANCE) {
+
+        feedback
+            .style("color", "#16a34a")
+            .text("✅ Correct! Price is $8 and Quantity is 6.");
+
+    } else {
+
+        feedback
+            .style("color", "#dc2626")
+            .text("❌ Keep moving the point until Price = $8.");
+
+    }
+
+});
+
+// --------------------
+// Task 3
+// Price =14, Answer Q=3
+// --------------------
+// --------------------
+// Task 3: Price = 14, Answer Q = 3
+// --------------------
+d3.select("#submit-t3").on("click", function () {
+    const feedback = d3.select("#feedback-t3");
+    const answer = parseFloat(d3.select("#input-t3").property("value"));
+
+    if (isNaN(answer)) {
+        feedback.style("color", "#dc2626").text("❌ Please enter a number.");
+        return;
+    }
+
+    // Check if typed answer is correct first
+    if (Math.abs(answer - 3) <= STEP_TOLERANCE) {
+        // Automatically update the graph to mirror their correct input
+        updateAll(14, 'script');
+        feedback
+            .style("color", "#16a34a")
+            .text("✅ Correct! Quantity Demanded is 3.");
+    } else {
+        // If they get it wrong, check if they are even on the right track on the graph
+        if (Math.abs(currentState.price - 14) > STEP_TOLERANCE) {
+            feedback.style("color", "#dc2626").text("❌ Hint: Move the graph dot to Price = $14 to find the answer.");
+        } else {
+            feedback.style("color", "#dc2626").text("❌ Look closely at where the dashed line hits the bottom axis.");
+        }
+    }
+});
+
+// --------------------
+// Task 4: Quantity = 7, Answer P = 6
+// --------------------
+d3.select("#submit-t4").on("click", function () {
+    const feedback = d3.select("#feedback-t4");
+    const answer = parseFloat(d3.select("#input-t4").property("value"));
+
+    if (isNaN(answer)) {
+        feedback.style("color", "#dc2626").text("❌ Please enter a number.");
+        return;
+    }
+
+    if (Math.abs(answer - 6) <= STEP_TOLERANCE) {
+        updateAll(6, 'script'); // Snap graph to P=6, which automatically coordinates Q=7
+        feedback
+            .style("color", "#16a34a")
+            .text("✅ Correct! Price is $6.");
+    } else {
+        if (Math.abs(currentState.quantity - 7) > STEP_TOLERANCE) {
+            feedback.style("color", "#dc2626").text("❌ Hint: Move the graph dot sideways until Quantity = 7.");
+        } else {
+            feedback.style("color", "#dc2626").text("❌ Incorrect. Read the vertical axis value for that quantity.");
+        }
+    }
+});
+
+// --------------------
+// Task 5
+// Highest Price
+// --------------------
+d3.select("#submit-t5").on("click", function () {
+
+    const feedback = d3.select("#feedback-t5");
+
+    if (
+        Math.abs(currentState.price - 20) <= STEP_TOLERANCE &&
+        Math.abs(currentState.quantity) <= STEP_TOLERANCE
+    ) {
+
+        feedback
+            .style("color", "#16a34a")
+            .text("✅ Excellent! At the highest price ($20), Quantity Demanded is 0.");
+
+    } else {
+
+        feedback
+            .style("color", "#dc2626")
+            .text("❌ Move the point to the top of the demand curve.");
+
+    }
+
+});
+
+
+
+
+d3.select("#submit-t6").on("click", function () {
+    const feedback = d3.select("#feedback-t6");
+    const answer = parseFloat(d3.select("#input-t6").property("value"));
+
+    if (isNaN(answer)) {
+        feedback.style("color", "#dc2626").text("❌ Please enter a number.");
+        return;
+    }
+
+    if (Math.abs(answer - 10) <= STEP_TOLERANCE) {
+        updateAll(0, 'script'); // Snap graph to bottom baseline axis
+        feedback
+            .style("color", "#16a34a")
+            .text("✅ Correct! Quantity Demanded is 10.");
+    } else {
+        if (Math.abs(currentState.price) > STEP_TOLERANCE) {
+            feedback.style("color", "#dc2626").text("❌ Hint: Drag the dot all the way down to the bottom axis ($0 price).");
+        } else {
+            feedback.style("color", "#dc2626").text("❌ Not quite. Look at where the line hits the horizontal axis max point.");
+        }
+    }
+});
+// --------------------
+// Task 7
+// Revenue =32
+// --------------------
+d3.select("#submit-t7").on("click", function () {
+
+    const feedback = d3.select("#feedback-t7");
+
+    const revenue = currentState.price * currentState.quantity;
+
+    if (Math.abs(revenue - 32) <= 0.5) {
+
+        feedback
+            .style("color", "#16a34a")
+            .text("✅ Great! Total Revenue is $32.");
+
+    } else {
+
+        feedback
+            .style("color", "#dc2626")
+            .text("❌ Current Revenue is $" + revenue.toFixed(2) + ". Keep trying.");
+
+    }
+
+});
+
+// --------------------
+// Task 8
+// Maximum Revenue
+// --------------------
+d3.select("#submit-t8").on("click", function () {
+
+    const feedback = d3.select("#feedback-t8");
+
+    const revenue = currentState.price * currentState.quantity;
+
+    if (Math.abs(revenue - 50) <= 0.5) {
+
+        feedback
+            .style("color", "#16a34a")
+            .text("✅ Excellent! You found the maximum Total Revenue.");
+
+    } else {
+
+        feedback
+            .style("color", "#dc2626")
+            .text("❌ Keep looking for the highest Total Revenue.");
+
+    }
+
+});
+
+// --------------------
+// Task 9
+// Multiple Choice
+// --------------------
+d3.select("#submit-t9").on("click", function () {
+
+    const feedback = d3.select("#feedback-t9");
+
+    const answer = document.querySelector('input[name="q9"]:checked');
+
+    if (!answer) {
+
+        feedback
+            .style("color", "#dc2626")
+            .text("❌ Please choose an answer.");
+
+        return;
+
+    }
+
+    if (answer.value === "b") {
+
+        feedback
+            .style("color", "#16a34a")
+            .text("✅ Correct! As price increases, quantity demanded decreases.");
+
+    } else {
+
+        feedback
+            .style("color", "#dc2626")
+            .text("❌ Not quite. Remember the Law of Demand.");
+
+    }
+
+});
+
+// --------------------
+// Task 10
+// Final Challenge
+// --------------------
+d3.select("#submit-t10").on("click", function () {
+
+    const feedback = d3.select("#feedback-t10");
+
+    const revenue = currentState.price * currentState.quantity;
+
+    if (
+        Math.abs(currentState.price - 10) <= STEP_TOLERANCE &&
+        Math.abs(currentState.quantity - 5) <= STEP_TOLERANCE &&
+        Math.abs(revenue - 50) <= 0.5
+    ) {
+
+        feedback
+            .style("color", "#16a34a")
+            .text("🏆 Correct!");
+
+    } else {
+
+        feedback
+            .style("color", "#dc2626")
+            .text("❌ One or more values are incorrect. Check Price, Quantity, and Total Revenue.");
+
+    }
+
+});
+
+
+// --------------------
+// Task 11
+// P = 4, Find Q
+// --------------------
+d3.select("#submit-t11").on("click", function () {
+    const feedback = d3.select("#feedback-t11");
+    const answer = parseFloat(d3.select("#input-t11").property("value"));
+
+    if (isNaN(answer)) {
+        feedback.style("color", "#dc2626").text("❌ Please enter a number.");
+        return;
+    }
+
+    if (Math.abs(answer - 8) <= STEP_TOLERANCE) {
+        feedback
+            .style("color", "#16a34a")
+            .text("✅ Correct! Q = 8 because 4 = 20 − 2Q.");
+    } else {
+        // Catch common algebraic slip-ups (e.g., student did 20 - 4 = 16, but forgot to divide by 2)
+        if (Math.abs(answer - 16) <= STEP_TOLERANCE) {
+            feedback
+                .style("color", "#dc2626")
+                .text("❌ You isolated 2Q = 16 correctly! Now divide by 2 to get Q.");
+        } else if (Math.abs(answer - 12) <= STEP_TOLERANCE) {
+            feedback
+                .style("color", "#dc2626")
+                .text("❌ Careful. Did you subtract 4 from 20 instead of setting up: 4 = 20 - 2Q?");
+        } else {
+            feedback
+                .style("color", "#dc2626")
+                .text("❌ Step hint: Substitute P = 4 into the equation: 4 = 20 − 2Q. Then isolate Q.");
+        }
+    }
+});
+
+// --------------------
+// Task 12
+// Q = 6, Find P
+// --------------------
+d3.select("#submit-t12").on("click", function () {
+
+    const feedback = d3.select("#feedback-t12");
+    const answer = parseFloat(d3.select("#input-t12").property("value"));
+
+    if (Math.abs(answer - 8) <= STEP_TOLERANCE) {
+
+        feedback
+            .style("color", "#16a34a")
+            .text("✅ Correct! P = 8 because P = 20 − 2(6).");
+
+    } else {
+
+        feedback
+            .style("color", "#dc2626")
+            .text("❌ Not correct. Substitute Q = 6 into the equation.");
+
+    }
+
+});
+
+
+// --------------------
+// Task 13
+// Direct Demand Equation
+// --------------------
+d3.select("#submit-t13").on("click", function () {
+
+    const feedback = d3.select("#feedback-t13");
+    const answer = document.querySelector('input[name="q13"]:checked');
+
+    if (!answer) {
+
+        feedback
+            .style("color", "#dc2626")
+            .text("❌ Please choose an answer.");
+
+        return;
+
+    }
+
+    if (answer.value === "b") {
+
+        feedback
+            .style("color", "#16a34a")
+            .text("✅ Correct! Rearranging the equation gives Q = 10 − 0.5P.");
+
+    } else {
+
+        feedback
+            .style("color", "#dc2626")
+            .text("❌ Incorrect. Rearrange the equation to make Q the subject.");
+
+    }
+
+});
+
+
+// --------------------
+// Task 14
+// Inverse Demand Equation
+// --------------------
+d3.select("#submit-t14").on("click", function () {
+
+    const feedback = d3.select("#feedback-t14");
+    const answer = document.querySelector('input[name="q14"]:checked');
+
+    if (!answer) {
+
+        feedback
+            .style("color", "#dc2626")
+            .text("❌ Please choose an answer.");
+
+        return;
+
+    }
+
+    if (answer.value === "a") {
+
+        feedback
+            .style("color", "#16a34a")
+            .text("✅ Correct! P = 20 − 2Q is the inverse demand equation.");
+
+    } else {
+
+        feedback
+            .style("color", "#dc2626")
+            .text("❌ Incorrect. The inverse demand equation has Price (P) by itself.");
+
+    }
+
+});
 </script>
 
 </body>

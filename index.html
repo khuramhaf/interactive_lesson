@@ -171,7 +171,7 @@
 
         #chart-wrapper {
             width: 100%;
-            height: 48%;
+            height: 60%;
             min-height: 260px;
             position: relative;
             touch-action: pan-y; 
@@ -440,7 +440,7 @@
 
         .axis-line { stroke: #000000; stroke-width: 4px; }
         .axis-text { font-size: 18px; font-weight: bold; fill: #64748b; }
-        .axis-label { font-size: 20px; font-weight: 900; fill: #0f172a; }
+        .axis-label { font-size: 18px; font-weight: 700; fill: #0f172a; }
         .demand-line { stroke: #dc2626; stroke-width: 5px; stroke-linecap: round; }
         .projection-line { stroke: #64748b; stroke-width: 3px; stroke-dasharray: 4,4; }
         .interactive-dot { fill: var(--primary); cursor: grab; touch-action: none; }
@@ -757,8 +757,8 @@
         g.selectAll(".y-tick").data(yTicks).enter().append("text").attr("class", "axis-text")
             .attr("x", -6).attr("y", d => yScale(d) + 4).attr("text-anchor", "end").text(d => d);
 
-        g.append("text").attr("class", "axis-label").attr("x", chartWidth).attr("y", chartHeight + 40).attr("text-anchor", "end").text("Q");
-        g.append("text").attr("class", "axis-label").attr("x", 30).attr("y", -4).attr("text-anchor", "end").text("P");
+        g.append("text").attr("class", "axis-label").attr("x", chartWidth).attr("y", chartHeight + 40).attr("text-anchor", "end").text("Quantity(Q)");
+        g.append("text").attr("class", "axis-label").attr("x", 30).attr("y", -4).attr("text-anchor", "end").text("Price(P)");
 
         g.append("line").attr("class", "demand-line").attr("x1", xScale(0)).attr("y1", yScale(20)).attr("x2", xScale(10)).attr("y2", yScale(0));
 

@@ -354,25 +354,32 @@
                 width: 100%;
             }
             .interactive-section {
-                position: sticky;
-                top: 0;
-                z-index: 1000;
+                /* Flows naturally above the lesson text instead of staying pinned/
+                   sticky — that sticky+z-index combo is what was causing the
+                   right-hand text to render behind the graph on mobile. A normal
+                   block keeps everything on one single page scroll where nothing
+                   ever overlaps. */
+                position: static;
                 height: auto;
-                max-height: 90vh; /* Keeps interface from eating up the whole viewport */
+                max-height: none;
                 padding: 10px;
                 border-right: none;
                 border-bottom: 2px solid #e2e8f0;
                 box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-                overflow-y: auto; /* Changed from visible to auto to allow inner scrolling */
-                -webkit-overflow-scrolling: touch; /* Butter-smooth momentum tracking */
+                overflow: visible;
+                flex-shrink: 0;
             }
             
             #chart-wrapper {
                 width: 100%;
-                height: 65vw; /* Slightly optimized height for short viewports */
-                min-height: 180px;
-                max-height: 260px;
+                /* Fixed aspect-ratio keeps the graph the exact same size on every
+                   question, regardless of how tall that question's content is. */
+                aspect-ratio: 3 / 2;
+                height: auto;
+                min-height: 200px;
+                max-height: 280px;
                 margin: 0 auto 5px auto;
+                flex-shrink: 0;
             }
             
             .live-metrics {
@@ -705,7 +712,7 @@
 
         const width = wrapper.node().getBoundingClientRect().width;
         const isMobile = window.innerWidth <= 768;
-        const height = isMobile ? width * 0.65 : wrapper.node().getBoundingClientRect().height;
+        const height = wrapper.node().getBoundingClientRect().height;
 
         let marginTop = 25;         
         let marginRight = 20;

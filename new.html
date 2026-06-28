@@ -102,19 +102,38 @@
             margin-top: 12px;
         }
 
-        .quiz-input {
-            width: 90px;
-            padding: 8px;
-            font-size: 1rem;
-            border: 2px solid #cbd5e1;
-            border-radius: 6px;
-            text-align: center;
-            font-weight: bold;
+        /* MC Option Container Blocks */
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            width: 100%;
+            margin-top: 8px;
         }
 
-        .quiz-input:focus {
-            border-color: var(--primary);
-            outline: none;
+        .options-grid label {
+            display: flex;
+            align-items: center;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            padding: 10px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: background 0.15s, border-color 0.15s;
+        }
+
+        .options-grid label:hover {
+            background: #f1f5f9;
+        }
+
+        .options-grid input[type="radio"] {
+            margin-right: 12px;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+            cursor: pointer;
         }
 
         .check-btn {
@@ -341,21 +360,6 @@
                 box-shadow: 0 4px 15px rgba(0,0,0,0.08);
                 overflow-y: visible;
             }
-
-            /* Scoped to .controls only — this previously applied to the whole
-               .interactive-section, which also wraps the mobile question deck.
-               That meant focusing a quiz answer input (e.g. Question 3) yanked
-               the sticky section into static position mid-tap, which is why
-               the mobile keyboard never opened for it. */
-            .controls:focus-within {
-        position: static !important;
-        box-shadow: none !important;
-    }
-    
-    /* Ensure the input itself behaves nicely when tapped */
-    .quiz-input {
-        font-size: 16px !important; /* Forces iOS/Android to not zoom in on focus */
-    }
             
             #chart-wrapper {
                 width: 100%;
@@ -513,8 +517,13 @@
 <li data-index="2">
     <span class="task-title">Question 3: Find the Quantity</span>
     Set <strong>Price = $14</strong>. What is the quantity demanded?
+    <div class="options-grid">
+        <label><input type="radio" name="q3" value="2"> 2</label>
+        <label><input type="radio" name="q3" value="3"> 3</label>
+        <label><input type="radio" name="q3" value="5"> 5</label>
+        <label><input type="radio" name="q3" value="6"> 6</label>
+    </div>
     <div class="task-check">
-        <input type="number" inputmode="decimal" id="input-t3" class="quiz-input" placeholder="Quantity">
         <button id="submit-t3" class="check-btn">Check Answer</button>
         <span id="feedback-t3" class="check-feedback"></span>
     </div>
@@ -523,8 +532,13 @@
 <li data-index="3">
     <span class="task-title">Question 4: Find the Price</span>
     Set <strong>Quantity = 7</strong>. What is the price?
+    <div class="options-grid">
+        <label><input type="radio" name="q4" value="4"> $4</label>
+        <label><input type="radio" name="q4" value="6"> $6</label>
+        <label><input type="radio" name="q4" value="8"> $8</label>
+        <label><input type="radio" name="q4" value="10"> $10</label>
+    </div>
     <div class="task-check">
-        <input type="number" inputmode="decimal" id="input-t4" class="quiz-input" placeholder="Price">
         <button id="submit-t4" class="check-btn">Check Answer</button>
         <span id="feedback-t4" class="check-feedback"></span>
     </div>
@@ -542,8 +556,13 @@
 <li data-index="5">
     <span class="task-title">Question 6: Lowest Price</span>
     Move the graph until <strong>Price = $0</strong>. Enter the quantity demanded.
+    <div class="options-grid">
+        <label><input type="radio" name="q6" value="0"> 0</label>
+        <label><input type="radio" name="q6" value="5"> 5</label>
+        <label><input type="radio" name="q6" value="8"> 8</label>
+        <label><input type="radio" name="q6" value="10"> 10</label>
+    </div>
     <div class="task-check">
-        <input type="number" inputmode="decimal" id="input-t6" class="quiz-input" placeholder="Quantity">
         <button id="submit-t6" class="check-btn">Check Answer</button>
         <span id="feedback-t6" class="check-feedback"></span>
     </div>
@@ -571,10 +590,12 @@
     <span class="task-title">Question 9: Prediction</span>
     Without moving the graph, answer this question:<br><br>
     <strong>If price increases, what happens to quantity demanded?</strong>
+    <div class="options-grid">
+        <label><input type="radio" name="q9" value="a"> Quantity increases</label>
+        <label><input type="radio" name="q9" value="b"> Quantity decreases</label>
+        <label><input type="radio" name="q9" value="c"> Quantity stays the same</label>
+    </div>
     <div class="task-check">
-        <label><input type="radio" name="q9" value="a"> Quantity increases</label><br>
-        <label><input type="radio" name="q9" value="b"> Quantity decreases</label><br>
-        <label><input type="radio" name="q9" value="c"> Quantity stays the same</label><br><br>
         <button id="submit-t9" class="check-btn">Check Answer</button>
         <span id="feedback-t9" class="check-feedback"></span>
     </div>
@@ -594,8 +615,13 @@
     Using the equation
     <p style="text-align:center;font-weight:bold;color:#dc2626;font-size:1.15rem;">P = 20 − 2Q</p>
     If <strong>Price (P) = 4</strong>, what is the value of <strong>Quantity (Q)</strong>?
+    <div class="options-grid">
+        <label><input type="radio" name="q11" value="4"> Q = 4</label>
+        <label><input type="radio" name="q11" value="6"> Q = 6</label>
+        <label><input type="radio" name="q11" value="8"> Q = 8</label>
+        <label><input type="radio" name="q11" value="12"> Q = 12</label>
+    </div>
     <div class="task-check">
-        <input type="number" inputmode="decimal" id="input-t11" class="quiz-input" placeholder="Q = ?" step="0.1">
         <button id="submit-t11" class="check-btn">Check Answer</button>
         <span id="feedback-t11" class="check-feedback"></span>
     </div>
@@ -606,8 +632,13 @@
     Using the equation
     <p style="text-align:center;font-weight:bold;color:#dc2626;font-size:1.15rem;">P = 20 − 2Q</p>
     If <strong>Quantity (Q) = 6</strong>, what is the value of <strong>Price (P)</strong>?
+    <div class="options-grid">
+        <label><input type="radio" name="q12" value="6"> P = $6</label>
+        <label><input type="radio" name="q12" value="8"> P = $8</label>
+        <label><input type="radio" name="q12" value="10"> P = $10</label>
+        <label><input type="radio" name="q12" value="12"> P = $12</label>
+    </div>
     <div class="task-check">
-        <input type="number" inputmode="decimal" id="input-t12" class="quiz-input" placeholder="P = ?" step="0.1">
         <button id="submit-t12" class="check-btn">Check Answer</button>
         <span id="feedback-t12" class="check-feedback"></span>
     </div>
@@ -618,11 +649,13 @@
     The inverse demand equation is
     <p style="text-align:center;font-weight:bold;color:#dc2626;font-size:1.15rem;">P = 20 − 2Q</p>
     Which of the following is the <strong>Direct Demand Equation</strong>?
+    <div class="options-grid">
+        <label><input type="radio" name="q13" value="a"> Q = 20 − 2P</label>
+        <label><input type="radio" name="q13" value="b"> Q = 10 − 0.5P</label>
+        <label><input type="radio" name="q13" value="c"> Q = 20 + 2P</label>
+        <label><input type="radio" name="q13" value="d"> Q = 2P − 20</label>
+    </div>
     <div class="task-check">
-        <label><input type="radio" name="q13" value="a"> Q = 20 − 2P</label><br>
-        <label><input type="radio" name="q13" value="b"> Q = 10 − 0.5P</label><br>
-        <label><input type="radio" name="q13" value="c"> Q = 20 + 2P</label><br>
-        <label><input type="radio" name="q13" value="d"> Q = 2P − 20</label><br><br>
         <button id="submit-t13" class="check-btn">Check Answer</button>
         <span id="feedback-t13" class="check-feedback"></span>
     </div>
@@ -633,11 +666,13 @@
     The direct demand equation is
     <p style="text-align:center;font-weight:bold;color:#dc2626;font-size:1.15rem;">Q = 10 − 0.5P</p>
     Which of the following is the <strong>Inverse Demand Equation</strong>?
+    <div class="options-grid">
+        <label><input type="radio" name="q14" value="a"> P = 20 − 2Q</label>
+        <label><input type="radio" name="q14" value="b"> P = 10 − 0.5Q</label>
+        <label><input type="radio" name="q14" value="c"> P = 2Q − 20</label>
+        <label><input type="radio" name="q14" value="d"> P = 20 + 2Q</label>
+    </div>
     <div class="task-check">
-        <label><input type="radio" name="q14" value="a"> P = 20 − 2Q</label><br>
-        <label><input type="radio" name="q14" value="b"> P = 10 − 0.5Q</label><br>
-        <label><input type="radio" name="q14" value="c"> P = 2Q − 20</label><br>
-        <label><input type="radio" name="q14" value="d"> P = 20 + 2Q</label><br><br>
         <button id="submit-t14" class="check-btn">Check Answer</button>
         <span id="feedback-t14" class="check-feedback"></span>
     </div>
@@ -802,29 +837,28 @@
     }
 
     function syncLayoutState() {
-    const isMobile = window.innerWidth <= 768;
-    const targetContainer = document.getElementById("deck-content-target");
-    const masterList = document.getElementById("master-question-list");
+        const isMobile = window.innerWidth <= 768;
+        const targetContainer = document.getElementById("deck-content-target");
+        const masterList = document.getElementById("master-question-list");
 
-    if (isMobile) {
-        // Append the active question node inside the mobile card slot
-        if(questionsArray.length > 0 && targetContainer) {
-            targetContainer.innerHTML = "";
-            targetContainer.appendChild(questionsArray[currentQuestionIndex]);
-            
-            // Update UI counter tags
-            document.getElementById("deck-counter-label").innerText = `Question ${currentQuestionIndex + 1} of ${questionsArray.length}`;
-            document.getElementById("deck-prev-btn").disabled = (currentQuestionIndex === 0);
-            document.getElementById("deck-next-btn").disabled = (currentQuestionIndex === questionsArray.length - 1);
-        }
-    } else {
-        // Desktop view: Return all question items back to the main layout list container
-        if (masterList && questionsArray.length > 0) {
-            // FIXED: Removed the stray $ sign from the parameter list
-            questionsArray.forEach((node) => masterList.appendChild(node));
+        if (isMobile) {
+            // Append the active question node inside the mobile card slot
+            if(questionsArray.length > 0 && targetContainer) {
+                targetContainer.innerHTML = "";
+                targetContainer.appendChild(questionsArray[currentQuestionIndex]);
+                
+                // Update UI counter tags
+                document.getElementById("deck-counter-label").innerText = `Question ${currentQuestionIndex + 1} of ${questionsArray.length}`;
+                document.getElementById("deck-prev-btn").disabled = (currentQuestionIndex === 0);
+                document.getElementById("deck-next-btn").disabled = (currentQuestionIndex === questionsArray.length - 1);
+            }
+        } else {
+            // Desktop view: Return all question items back to the main layout list container
+            if (masterList && questionsArray.length > 0) {
+                questionsArray.forEach((node) => masterList.appendChild(node));
+            }
         }
     }
-}
 
     // Set up click events for deck navigation buttons
     d3.select("#deck-prev-btn").on("click", function() {
@@ -871,13 +905,14 @@
 
     d3.select("#submit-t3").on("click", function () {
         const feedback = d3.select("#feedback-t3").classed("muted-feedback", false);
-        const answer = parseFloat(d3.select("#input-t3").property("value"));
+        const checkedOption = document.querySelector('input[name="q3"]:checked');
 
-        if (isNaN(answer)) {
-            feedback.style("color", "#dc2626").text("❌ Please enter a number.");
+        if (!checkedOption) {
+            feedback.style("color", "#dc2626").text("❌ Please select an option.");
             return;
         }
 
+        const answer = parseFloat(checkedOption.value);
         if (Math.abs(answer - 3) <= STEP_TOLERANCE) {
             updateGraph(14, 'script');
             feedback.style("color", "#16a34a").text("✅ Correct! Quantity Demanded is 3.");
@@ -892,13 +927,14 @@
 
     d3.select("#submit-t4").on("click", function () {
         const feedback = d3.select("#feedback-t4").classed("muted-feedback", false);
-        const answer = parseFloat(d3.select("#input-t4").property("value"));
+        const checkedOption = document.querySelector('input[name="q4"]:checked');
 
-        if (isNaN(answer)) {
-            feedback.style("color", "#dc2626").text("❌ Please enter a number.");
+        if (!checkedOption) {
+            feedback.style("color", "#dc2626").text("❌ Please select an option.");
             return;
         }
 
+        const answer = parseFloat(checkedOption.value);
         if (Math.abs(answer - 6) <= STEP_TOLERANCE) {
             updateGraph(6, 'script');
             feedback.style("color", "#16a34a").text("✅ Correct! Price is $6.");
@@ -922,13 +958,14 @@
 
     d3.select("#submit-t6").on("click", function () {
         const feedback = d3.select("#feedback-t6").classed("muted-feedback", false);
-        const answer = parseFloat(d3.select("#input-t6").property("value"));
+        const checkedOption = document.querySelector('input[name="q6"]:checked');
 
-        if (isNaN(answer)) {
-            feedback.style("color", "#dc2626").text("❌ Please enter a number.");
+        if (!checkedOption) {
+            feedback.style("color", "#dc2626").text("❌ Please select an option.");
             return;
         }
 
+        const answer = parseFloat(checkedOption.value);
         if (Math.abs(answer - 10) <= STEP_TOLERANCE) {
             updateGraph(0, 'script');
             feedback.style("color", "#16a34a").text("✅ Correct! Quantity Demanded is 10.");
@@ -987,31 +1024,35 @@
 
     d3.select("#submit-t11").on("click", function () {
         const feedback = d3.select("#feedback-t11").classed("muted-feedback", false);
-        const answer = parseFloat(d3.select("#input-t11").property("value"));
-        if (isNaN(answer)) {
-            feedback.style("color", "#dc2626").text("❌ Please enter a number.");
+        const checkedOption = document.querySelector('input[name="q11"]:checked');
+
+        if (!checkedOption) {
+            feedback.style("color", "#dc2626").text("❌ Please select an option.");
             return;
         }
+
+        const answer = parseFloat(checkedOption.value);
         if (Math.abs(answer - 8) <= STEP_TOLERANCE) {
             feedback.style("color", "#16a34a").text("✅ Correct! Q = 8 because 4 = 20 − 2Q.");
         } else {
-            if (Math.abs(answer - 16) <= STEP_TOLERANCE) {
-                feedback.style("color", "#dc2626").text("❌ You isolated 2Q = 16 correctly! Now divide by 2 to get Q.");
-            } else if (Math.abs(answer - 12) <= STEP_TOLERANCE) {
-                feedback.style("color", "#dc2626").text("❌ Careful. Did you subtract 4 from 20 instead of setting up: 4 = 20 - 2Q?");
-            } else {
-                feedback.style("color", "#dc2626").text("❌ Step hint: Substitute P = 4 into the equation: 4 = 20 − 2Q. Then isolate Q.");
-            }
+            feedback.style("color", "#dc2626").text("❌ Step hint: Substitute P = 4 into the equation: 4 = 20 − 2Q. Rearranging it leaves 2Q = 16.");
         }
     });
 
     d3.select("#submit-t12").on("click", function () {
         const feedback = d3.select("#feedback-t12").classed("muted-feedback", false);
-        const answer = parseFloat(d3.select("#input-t12").property("value"));
+        const checkedOption = document.querySelector('input[name="q12"]:checked');
+
+        if (!checkedOption) {
+            feedback.style("color", "#dc2626").text("❌ Please select an option.");
+            return;
+        }
+
+        const answer = parseFloat(checkedOption.value);
         if (Math.abs(answer - 8) <= STEP_TOLERANCE) {
             feedback.style("color", "#16a34a").text("✅ Correct! P = 8 because P = 20 − 2(6).");
         } else {
-            feedback.style("color", "#dc2626").text("❌ Not correct. Substitute Q = 6 into the equation.");
+            feedback.style("color", "#dc2626").text("❌ Not correct. Substitute Q = 6 directly into the formula.");
         }
     });
 

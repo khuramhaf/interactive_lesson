@@ -27,6 +27,7 @@
             background-color: #f8fafc;
             height: 100vh;
             overflow: hidden; /* Prevents whole-body scrolling on desktop */
+            scroll-behavior: smooth;
         }
 
         /* Responsive Layout Engine */
@@ -48,6 +49,7 @@
             justify-content: flex-start;
             height: 100%;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         /* Right Side: Scrollable lesson text & questions */
@@ -58,6 +60,7 @@
             padding: 30px;
             overflow-y: auto; /* Scroll questions independently */
             height: 100%;
+            -webkit-overflow-scrolling: touch;
         }
 
         h1 {
@@ -296,6 +299,7 @@
             border-radius: 12px;
             padding: 14px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 10px;
         }
 
         .deck-navigation {
@@ -354,18 +358,20 @@
                 top: 0;
                 z-index: 1000;
                 height: auto;
+                max-height: 90vh; /* Keeps interface from eating up the whole viewport */
                 padding: 10px;
                 border-right: none;
                 border-bottom: 2px solid #e2e8f0;
                 box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-                overflow-y: visible;
+                overflow-y: auto; /* Changed from visible to auto to allow inner scrolling */
+                -webkit-overflow-scrolling: touch; /* Butter-smooth momentum tracking */
             }
             
             #chart-wrapper {
                 width: 100%;
-                height: 80vw;
-                min-height: 200px;
-                max-height: 320px;
+                height: 65vw; /* Slightly optimized height for short viewports */
+                min-height: 180px;
+                max-height: 260px;
                 margin: 0 auto 5px auto;
             }
             
@@ -699,7 +705,7 @@
 
         const width = wrapper.node().getBoundingClientRect().width;
         const isMobile = window.innerWidth <= 768;
-        const height = isMobile ? width * 0.78 : wrapper.node().getBoundingClientRect().height;
+        const height = isMobile ? width * 0.65 : wrapper.node().getBoundingClientRect().height;
 
         let marginTop = 25;         
         let marginRight = 20;

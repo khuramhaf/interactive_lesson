@@ -38,15 +38,16 @@
             background: white;
         }
 
-        /* Left Side: Stays fixed, holds graph and inputs */
+        /* Left Side: Stays fixed, holds graph, inputs and floating card */
         .interactive-section {
             display: flex;
             flex-direction: column;
             padding: 20px;
             background: #ffffff;
             border-right: 1px solid #e2e8f0;
-            justify-content: center;
+            justify-content: flex-start;
             height: 100%;
+            overflow-y: auto;
         }
 
         /* Right Side: Scrollable lesson text & questions */
@@ -140,13 +141,19 @@
             display: block;
         }
 
+        .muted-feedback {
+            opacity: 0.35;
+            filter: grayscale(0.8);
+            transition: opacity 0.2s ease;
+        }
+
         #chart-wrapper {
             width: 100%;
-            height: 55%;
-            min-height: 280px;
+            height: 48%;
+            min-height: 260px;
             position: relative;
             touch-action: pan-y; 
-            margin-bottom: 30px;
+            margin-bottom: 15px;
         }
         
         #chart-wrapper svg {
@@ -191,6 +198,7 @@
             padding: 14px;
             border: 1px solid #e2e8f0;
             border-radius: 10px;
+            margin-bottom: 15px;
         }
 
         .control-row {
@@ -261,6 +269,56 @@
             color: var(--primary-dark);
         }
 
+        /* Floating Panel Component */
+        .mobile-question-deck {
+            display: none;
+            background: #f1f5f9;
+            border: 2px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 14px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .deck-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            border-bottom: 1px solid #cbd5e1;
+            padding-bottom: 8px;
+        }
+
+        .deck-title {
+            font-weight: 800;
+            color: #1e293b;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+        }
+
+        .deck-btn {
+            background: #ffffff;
+            border: 1px solid #94a3b8;
+            padding: 6px 12px;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            color: #334155;
+        }
+
+        .deck-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        #deck-content-target li {
+            list-style: none;
+            background: transparent;
+            border: none;
+            padding: 0;
+            margin: 0;
+            box-shadow: none;
+        }
+
         @media (max-width: 768px) {
             body {
                 overflow: auto; 
@@ -273,22 +331,23 @@
                 width: 100%;
             }
             .interactive-section {
-                position: relative;
+                position: sticky;
                 top: 0;
-                z-index: 100;
+                z-index: 1000;
                 height: auto;
                 padding: 10px;
                 border-right: none;
                 border-bottom: 2px solid #e2e8f0;
-                box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+                box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+                overflow-y: visible;
             }
             
             #chart-wrapper {
                 width: 100%;
-                height: 100vw;
+                height: 80vw;
                 min-height: 200px;
-                max-height: 390px;
-                margin: 0 auto 10px auto;
+                max-height: 320px;
+                margin: 0 auto 5px auto;
             }
             
             .live-metrics {
@@ -305,6 +364,7 @@
                 gap: 15px;
                 padding: 8px;
                 justify-content: space-between;
+                margin-bottom: 10px;
             }
             .control-row {
                 flex: 1;
@@ -318,21 +378,31 @@
                 gap: 8px;
             }
             .control-header-line label {
-                font-size: 1.3rem;
+                font-size: 1.1rem;
             }
             .num-input {
-                width: 100px;
+                width: 75px;
                 padding: 4px;
-                font-size: 1.3rem;
+                font-size: 1.1rem;
             }
             
             .slider-row {
                 display: none !important; 
             }
+
+            .mobile-question-deck {
+                display: block; /* Visible on mobile */
+            }
+
             .lesson-text-section {
                 overflow-y: visible;
                 height: auto;
-                padding: 15px 20px 250px 20px;
+                padding: 15px 20px 80px 20px;
+            }
+
+            /* Hide the original static list elements on mobile to prevent redundancy */
+            #master-question-list {
+                display: none;
             }
         }
 
@@ -385,6 +455,15 @@
                 </div>
             </div>
         </div>
+
+        <div class="mobile-question-deck">
+            <div class="deck-navigation">
+                <button class="deck-btn" id="deck-prev-btn">◀ Prev</button>
+                <span class="deck-title" id="deck-counter-label">Question 1 of 14</span>
+                <button class="deck-btn" id="deck-next-btn">Next ▶</button>
+            </div>
+            <div id="deck-content-target"></div>
+        </div>
     </div>
 
     <div class="lesson-text-section">
@@ -396,9 +475,9 @@
         <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 15px 0;">
         
         <p><strong>Practice Questions:</strong></p>
-       <ul>
+       <ul id="master-question-list">
 
-<li>
+<li data-index="0">
     <span class="task-title">Question 1: Explore the Graph</span>
     Move the dot anywhere on the demand curve. Watch how <strong>Price</strong>, <strong>Quantity</strong>, and <strong>Total Revenue</strong> change.
     <div class="task-check">
@@ -407,7 +486,7 @@
     </div>
 </li>
 
-<li>
+<li data-index="1">
     <span class="task-title">Question 2: Set the Price</span>
     Move the graph until <strong>Price = $8</strong>.
     <div class="task-check">
@@ -416,7 +495,7 @@
     </div>
 </li>
 
-<li>
+<li data-index="2">
     <span class="task-title">Question 3: Find the Quantity</span>
     Set <strong>Price = $14</strong>. What is the quantity demanded?
     <div class="task-check">
@@ -426,7 +505,7 @@
     </div>
 </li>
 
-<li>
+<li data-index="3">
     <span class="task-title">Question 4: Find the Price</span>
     Set <strong>Quantity = 7</strong>. What is the price?
     <div class="task-check">
@@ -436,7 +515,7 @@
     </div>
 </li>
 
-<li>
+<li data-index="4">
     <span class="task-title">Question 5: Highest Price</span>
     Find the highest possible price on the demand curve. What happens to quantity demanded?
     <div class="task-check">
@@ -445,7 +524,7 @@
     </div>
 </li>
 
-<li>
+<li data-index="5">
     <span class="task-title">Question 6: Lowest Price</span>
     Move the graph until <strong>Price = $0</strong>. Enter the quantity demanded.
     <div class="task-check">
@@ -455,7 +534,7 @@
     </div>
 </li>
 
-<li>
+<li data-index="6">
     <span class="task-title">Question 7: Revenue Challenge</span>
     Can you find a point where <strong>Total Revenue = $32</strong>?
     <div class="task-check">
@@ -464,7 +543,7 @@
     </div>
 </li>
 
-<li>
+<li data-index="7">
     <span class="task-title">Question 8: Maximum Revenue</span>
     Move the graph until Total Revenue is as high as possible.
     <div class="task-check">
@@ -473,7 +552,7 @@
     </div>
 </li>
 
-<li>
+<li data-index="8">
     <span class="task-title">Question 9: Prediction</span>
     Without moving the graph, answer this question:<br><br>
     <strong>If price increases, what happens to quantity demanded?</strong>
@@ -486,7 +565,7 @@
     </div>
 </li>
 
-<li>
+<li data-index="9">
     <span class="task-title">Question 10: Final Challenge</span>
     Find the point on Graph where <strong>Price = $10</strong>, <strong>Quantity = 5</strong>, and <strong>Total Revenue = $50</strong>.
     <div class="task-check">
@@ -495,7 +574,7 @@
     </div>
 </li>
 
-<li>
+<li data-index="10">
     <span class="task-title">Question 11: Use the Equation</span>
     Using the equation
     <p style="text-align:center;font-weight:bold;color:#dc2626;font-size:1.15rem;">P = 20 − 2Q</p>
@@ -507,7 +586,7 @@
     </div>
 </li>
 
-<li>
+<li data-index="11">
     <span class="task-title">Question 12: Use the Equation</span>
     Using the equation
     <p style="text-align:center;font-weight:bold;color:#dc2626;font-size:1.15rem;">P = 20 − 2Q</p>
@@ -519,7 +598,7 @@
     </div>
 </li>
 
-<li>
+<li data-index="12">
     <span class="task-title">Question 13: Direct Demand Equation</span>
     The inverse demand equation is
     <p style="text-align:center;font-weight:bold;color:#dc2626;font-size:1.15rem;">P = 20 − 2Q</p>
@@ -534,7 +613,7 @@
     </div>
 </li>
 
-<li>
+<li data-index="13">
     <span class="task-title">Question 14: Inverse Demand Equation</span>
     The direct demand equation is
     <p style="text-align:center;font-weight:bold;color:#dc2626;font-size:1.15rem;">Q = 10 − 0.5P</p>
@@ -558,20 +637,24 @@
     const wrapper = d3.select("#chart-wrapper");
     const currentState = { price: 10, quantity: 5 };
     
-    // Bridge variable to expose the active inner update function globally
+    // Bridge variable to expose active internal updates globally
     let updateGraph;
+
+    // Array tracking all list node components to slide inside active mobile card deck
+    let questionsArray = [];
+    let currentQuestionIndex = 0;
 
     function renderChart() {
         wrapper.selectAll("*").remove();
 
         const width = wrapper.node().getBoundingClientRect().width;
         const isMobile = window.innerWidth <= 768;
-        const height = isMobile ? width : wrapper.node().getBoundingClientRect().height;
+        const height = isMobile ? width * 0.78 : wrapper.node().getBoundingClientRect().height;
 
-        let marginTop = 30;         
+        let marginTop = 25;         
         let marginRight = 20;
         let marginBottom = 40;     
-        let marginLeft = isMobile ? 35 : 65; 
+        let marginLeft = isMobile ? 40 : 65; 
 
         const chartWidth = width - marginLeft - marginRight;
         const chartHeight = height - marginTop - marginBottom;
@@ -605,8 +688,8 @@
         g.selectAll(".y-tick").data(yTicks).enter().append("text").attr("class", "axis-text")
             .attr("x", -6).attr("y", d => yScale(d) + 4).attr("text-anchor", "end").text(d => d);
 
-        g.append("text").attr("class", "axis-label").attr("x", chartWidth).attr("y", chartHeight + 40).attr("text-anchor", "end").text("Quantity(Q)");
-        g.append("text").attr("class", "axis-label").attr("x", 50).attr("y", -4).attr("text-anchor", "end").text("Price(P)");
+        g.append("text").attr("class", "axis-label").attr("x", chartWidth).attr("y", chartHeight + 40).attr("text-anchor", "end").text("Q");
+        g.append("text").attr("class", "axis-label").attr("x", 30).attr("y", -4).attr("text-anchor", "end").text("P");
 
         g.append("line").attr("class", "demand-line").attr("x1", xScale(0)).attr("y1", yScale(20)).attr("x2", xScale(10)).attr("y2", yScale(0));
 
@@ -648,9 +731,14 @@
             
             d3.select("#live-eq").text(`20 - 2(${quantity.toFixed(2)}) = ${price.toFixed(1)}`);
             d3.select("#live-revenue").text(`$${(price * quantity).toFixed(2)}`);
+
+            // Mute active feedback when student modifies graph values manually
+            if (origin === 'drag' || origin === 'price-slider' || origin === 'quant-slider' || origin === 'price-input' || origin === 'quant-input') {
+                d3.selectAll("#feedback-t1, #feedback-t2, #feedback-t3, #feedback-t4, #feedback-t5, #feedback-t6, #feedback-t7, #feedback-t8, #feedback-t10")
+                  .classed("muted-feedback", true);
+            }
         }
 
-        // Point the global pointer to this layout iteration's internal update function
         updateGraph = updateAll;
 
         const dragBehavior = d3.drag()
@@ -689,20 +777,76 @@
         updateAll(currentState.price, 'init');
     }
 
-    renderChart();
-    window.addEventListener("resize", renderChart);
+    // Dynamic Mobile Deck System Controller Engine
+    function initMobileDeckSystem() {
+        // Collect references to each original question list item node
+        questionsArray = d3.selectAll("#master-question-list li").nodes();
+        
+        // Render target active layout position depending on screen state
+        syncLayoutState();
+    }
 
-    // Dynamic Grading Rules
+    function syncLayoutState() {
+    const isMobile = window.innerWidth <= 768;
+    const targetContainer = document.getElementById("deck-content-target");
+    const masterList = document.getElementById("master-question-list");
+
+    if (isMobile) {
+        // Append the active question node inside the mobile card slot
+        if(questionsArray.length > 0 && targetContainer) {
+            targetContainer.innerHTML = "";
+            targetContainer.appendChild(questionsArray[currentQuestionIndex]);
+            
+            // Update UI counter tags
+            document.getElementById("deck-counter-label").innerText = `Question ${currentQuestionIndex + 1} of ${questionsArray.length}`;
+            document.getElementById("deck-prev-btn").disabled = (currentQuestionIndex === 0);
+            document.getElementById("deck-next-btn").disabled = (currentQuestionIndex === questionsArray.length - 1);
+        }
+    } else {
+        // Desktop view: Return all question items back to the main layout list container
+        if (masterList && questionsArray.length > 0) {
+            // FIXED: Removed the stray $ sign from the parameter list
+            questionsArray.forEach((node) => masterList.appendChild(node));
+        }
+    }
+}
+
+    // Set up click events for deck navigation buttons
+    d3.select("#deck-prev-btn").on("click", function() {
+        if (currentQuestionIndex > 0) {
+            currentQuestionIndex--;
+            syncLayoutState();
+        }
+    });
+
+    d3.select("#deck-next-btn").on("click", function() {
+        if (currentQuestionIndex < questionsArray.length - 1) {
+            currentQuestionIndex++;
+            syncLayoutState();
+        }
+    });
+
+    // Run app initializers
+    renderChart();
+    initMobileDeckSystem();
+
+    window.addEventListener("resize", function() {
+        renderChart();
+        syncLayoutState();
+    });
+
+    // Dynamic Quiz Grading Engine
     const STEP_TOLERANCE = 0.15;
 
     d3.select("#submit-t1").on("click", function () {
         d3.select("#feedback-t1")
+            .classed("muted-feedback", false)
             .style("color", "#16a34a")
             .text("✅ Great! Now let's start solving problems.");
     });
 
     d3.select("#submit-t2").on("click", function () {
-        const feedback = d3.select("#feedback-t2");
+        const feedback = d3.select("#feedback-t2").classed("muted-feedback", false);
         if (Math.abs(currentState.price - 8) <= STEP_TOLERANCE) {
             feedback.style("color", "#16a34a").text("✅ Correct! Price is $8 and Quantity is 6.");
         } else {
@@ -711,7 +855,7 @@
     });
 
     d3.select("#submit-t3").on("click", function () {
-        const feedback = d3.select("#feedback-t3");
+        const feedback = d3.select("#feedback-t3").classed("muted-feedback", false);
         const answer = parseFloat(d3.select("#input-t3").property("value"));
 
         if (isNaN(answer)) {
@@ -720,7 +864,7 @@
         }
 
         if (Math.abs(answer - 3) <= STEP_TOLERANCE) {
-            updateGraph(14, 'script'); // Fixed: Uses the exposed global pointer
+            updateGraph(14, 'script');
             feedback.style("color", "#16a34a").text("✅ Correct! Quantity Demanded is 3.");
         } else {
             if (Math.abs(currentState.price - 14) > STEP_TOLERANCE) {
@@ -732,7 +876,7 @@
     });
 
     d3.select("#submit-t4").on("click", function () {
-        const feedback = d3.select("#feedback-t4");
+        const feedback = d3.select("#feedback-t4").classed("muted-feedback", false);
         const answer = parseFloat(d3.select("#input-t4").property("value"));
 
         if (isNaN(answer)) {
@@ -741,7 +885,7 @@
         }
 
         if (Math.abs(answer - 6) <= STEP_TOLERANCE) {
-            updateGraph(6, 'script'); // Fixed: Uses the exposed global pointer
+            updateGraph(6, 'script');
             feedback.style("color", "#16a34a").text("✅ Correct! Price is $6.");
         } else {
             if (Math.abs(currentState.quantity - 7) > STEP_TOLERANCE) {
@@ -753,7 +897,7 @@
     });
 
     d3.select("#submit-t5").on("click", function () {
-        const feedback = d3.select("#feedback-t5");
+        const feedback = d3.select("#feedback-t5").classed("muted-feedback", false);
         if (Math.abs(currentState.price - 20) <= STEP_TOLERANCE && Math.abs(currentState.quantity) <= STEP_TOLERANCE) {
             feedback.style("color", "#16a34a").text("✅ Excellent! At the highest price ($20), Quantity Demanded is 0.");
         } else {
@@ -762,7 +906,7 @@
     });
 
     d3.select("#submit-t6").on("click", function () {
-        const feedback = d3.select("#feedback-t6");
+        const feedback = d3.select("#feedback-t6").classed("muted-feedback", false);
         const answer = parseFloat(d3.select("#input-t6").property("value"));
 
         if (isNaN(answer)) {
@@ -771,7 +915,7 @@
         }
 
         if (Math.abs(answer - 10) <= STEP_TOLERANCE) {
-            updateGraph(0, 'script'); // Fixed: Uses the exposed global pointer
+            updateGraph(0, 'script');
             feedback.style("color", "#16a34a").text("✅ Correct! Quantity Demanded is 10.");
         } else {
             if (Math.abs(currentState.price) > STEP_TOLERANCE) {
@@ -783,7 +927,7 @@
     });
 
     d3.select("#submit-t7").on("click", function () {
-        const feedback = d3.select("#feedback-t7");
+        const feedback = d3.select("#feedback-t7").classed("muted-feedback", false);
         const revenue = currentState.price * currentState.quantity;
         if (Math.abs(revenue - 32) <= 0.5) {
             feedback.style("color", "#16a34a").text("✅ Great! Total Revenue is $32.");
@@ -793,7 +937,7 @@
     });
 
     d3.select("#submit-t8").on("click", function () {
-        const feedback = d3.select("#feedback-t8");
+        const feedback = d3.select("#feedback-t8").classed("muted-feedback", false);
         const revenue = currentState.price * currentState.quantity;
         if (Math.abs(revenue - 50) <= 0.5) {
             feedback.style("color", "#16a34a").text("✅ Excellent! You found the maximum Total Revenue.");
@@ -803,7 +947,7 @@
     });
 
     d3.select("#submit-t9").on("click", function () {
-        const feedback = d3.select("#feedback-t9");
+        const feedback = d3.select("#feedback-t9").classed("muted-feedback", false);
         const answer = document.querySelector('input[name="q9"]:checked');
         if (!answer) {
             feedback.style("color", "#dc2626").text("❌ Please choose an answer.");
@@ -817,7 +961,7 @@
     });
 
     d3.select("#submit-t10").on("click", function () {
-        const feedback = d3.select("#feedback-t10");
+        const feedback = d3.select("#feedback-t10").classed("muted-feedback", false);
         const revenue = currentState.price * currentState.quantity;
         if (Math.abs(currentState.price - 10) <= STEP_TOLERANCE && Math.abs(currentState.quantity - 5) <= STEP_TOLERANCE && Math.abs(revenue - 50) <= 0.5) {
             feedback.style("color", "#16a34a").text("🏆 Correct!");
@@ -827,7 +971,7 @@
     });
 
     d3.select("#submit-t11").on("click", function () {
-        const feedback = d3.select("#feedback-t11");
+        const feedback = d3.select("#feedback-t11").classed("muted-feedback", false);
         const answer = parseFloat(d3.select("#input-t11").property("value"));
         if (isNaN(answer)) {
             feedback.style("color", "#dc2626").text("❌ Please enter a number.");
@@ -847,7 +991,7 @@
     });
 
     d3.select("#submit-t12").on("click", function () {
-        const feedback = d3.select("#feedback-t12");
+        const feedback = d3.select("#feedback-t12").classed("muted-feedback", false);
         const answer = parseFloat(d3.select("#input-t12").property("value"));
         if (Math.abs(answer - 8) <= STEP_TOLERANCE) {
             feedback.style("color", "#16a34a").text("✅ Correct! P = 8 because P = 20 − 2(6).");
@@ -857,7 +1001,7 @@
     });
 
     d3.select("#submit-t13").on("click", function () {
-        const feedback = d3.select("#feedback-t13");
+        const feedback = d3.select("#feedback-t13").classed("muted-feedback", false);
         const answer = document.querySelector('input[name="q13"]:checked');
         if (!answer) {
             feedback.style("color", "#dc2626").text("❌ Please choose an answer.");
@@ -871,7 +1015,7 @@
     });
 
     d3.select("#submit-t14").on("click", function () {
-        const feedback = d3.select("#feedback-t14");
+        const feedback = d3.select("#feedback-t14").classed("muted-feedback", false);
         const answer = document.querySelector('input[name="q14"]:checked');
         if (!answer) {
             feedback.style("color", "#dc2626").text("❌ Please choose an answer.");

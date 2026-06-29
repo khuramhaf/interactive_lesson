@@ -26,7 +26,7 @@
             color: var(--text-main);
             background-color: #f8fafc;
             height: 100vh;
-            overflow: hidden; /* Prevents whole-body scrolling on desktop */
+            overflow: hidden; 
             scroll-behavior: smooth;
         }
 
@@ -39,7 +39,7 @@
             background: white;
         }
 
-        /* Left Side: Stays fixed, holds graph, inputs and floating card */
+        /* Left Side: Graph and inputs */
         .interactive-section {
             display: flex;
             flex-direction: column;
@@ -52,15 +52,19 @@
             -webkit-overflow-scrolling: touch;
         }
 
-        /* Right Side: Scrollable lesson text & questions */
+        /* Right Side: Holds layout text content and question deck */
         .lesson-text-section {
             display: flex;
             flex-direction: column;
             background-color: #fafafa;
             padding: 30px;
-            overflow-y: auto; /* Scroll questions independently */
+            overflow-y: auto; 
             height: 100%;
             -webkit-overflow-scrolling: touch;
+        }
+
+        .lesson-paragraphs {
+            order: 2; /* Sits below the question cards on desktop layout */
         }
 
         h1 {
@@ -69,30 +73,74 @@
             color: #111827;
         }
 
-        .lesson-text-section p, .lesson-text-section li {
+        .lesson-text-section p {
             font-size: 1.05rem;
             line-height: 1.5;
             color: #374151;
         }
 
-        .lesson-text-section ul {
-            padding-left: 0;
-            list-style: none;
+        /* Question Deck Styling - Kept completely intact */
+        .question-deck {
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
             margin-top: 15px;
+            margin-bottom: 20px;
+            order: 1; /* Sits above paragraphs */
         }
 
-        .lesson-text-section li {
-            margin-bottom: 24px;
+        .deck-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 12px;
+        }
+
+        .deck-title {
+            font-weight: 800;
+            color: #1e293b;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .deck-btn {
             background: #ffffff;
-            padding: 16px;
-            border-radius: 8px;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+            border: 1px solid #94a3b8;
+            padding: 8px 16px;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            color: #334155;
+            transition: background 0.15s;
+        }
+
+        .deck-btn:hover:not(:disabled) {
+            background: #f1f5f9;
+        }
+
+        .deck-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        #deck-content-target li {
+            list-style: none;
+            background: transparent;
+            border: none;
+            padding: 0;
+            margin: 0;
+            box-shadow: none;
         }
 
         .task-title {
             font-weight: 700;
-            margin-bottom: 8px;
+            font-size: 1.1rem;
+            margin-bottom: 12px;
             display: block;
             color: #0f172a;
         }
@@ -102,16 +150,15 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 10px;
-            margin-top: 12px;
+            margin-top: 16px;
         }
 
-        /* MC Option Container Blocks */
         .options-grid {
             display: flex;
             flex-direction: column;
             gap: 8px;
             width: 100%;
-            margin-top: 8px;
+            margin-top: 12px;
         }
 
         .options-grid label {
@@ -176,11 +223,15 @@
             position: relative;
             touch-action: pan-y; 
             margin-bottom: 15px;
+            order: 1;
         }
         
         #chart-wrapper svg {
             overflow: visible !important;
         }
+
+        .minor-gridline { stroke: #e2e8f0; stroke-width: 1px; }
+
 
         .live-metrics {
             background: #ffffff;
@@ -191,6 +242,7 @@
             justify-content: space-between;
             gap: 10px;
             margin-bottom: 15px;
+            order: 2;
         }
 
         .metric-item {
@@ -221,6 +273,7 @@
             border: 1px solid #e2e8f0;
             border-radius: 10px;
             margin-bottom: 15px;
+            order: 3;
         }
 
         .control-row {
@@ -291,57 +344,11 @@
             color: var(--primary-dark);
         }
 
-        /* Floating Panel Component */
-        .mobile-question-deck {
+        #master-question-list {
             display: none;
-            background: #f1f5f9;
-            border: 2px solid #cbd5e1;
-            border-radius: 12px;
-            padding: 14px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            margin-bottom: 10px;
         }
 
-        .deck-navigation {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-            border-bottom: 1px solid #cbd5e1;
-            padding-bottom: 8px;
-        }
-
-        .deck-title {
-            font-weight: 800;
-            color: #1e293b;
-            font-size: 0.95rem;
-            text-transform: uppercase;
-        }
-
-        .deck-btn {
-            background: #ffffff;
-            border: 1px solid #94a3b8;
-            padding: 6px 12px;
-            font-weight: 700;
-            border-radius: 6px;
-            cursor: pointer;
-            color: #334155;
-        }
-
-        .deck-btn:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
-
-        #deck-content-target li {
-            list-style: none;
-            background: transparent;
-            border: none;
-            padding: 0;
-            margin: 0;
-            box-shadow: none;
-        }
-
+        /* Mobile View Restructure Logic */
         @media (max-width: 768px) {
             body {
                 overflow: auto; 
@@ -353,12 +360,10 @@
                 height: auto;
                 width: 100%;
             }
+            
+            /* Order positioning items in the main stream stack */
             .interactive-section {
-                /* Flows naturally above the lesson text instead of staying pinned/
-                   sticky — that sticky+z-index combo is what was causing the
-                   right-hand text to render behind the graph on mobile. A normal
-                   block keeps everything on one single page scroll where nothing
-                   ever overlaps. */
+                order: 1; /* Graph Section is absolute top */
                 position: static;
                 height: auto;
                 max-height: none;
@@ -369,11 +374,18 @@
                 overflow: visible;
                 flex-shrink: 0;
             }
-            
+
+            .lesson-text-section {
+                order: 2; /* Contains Question Deck followed by text paragraphs */
+                overflow-y: visible;
+                height: auto;
+                padding: 15px 20px 80px 20px;
+            }
+
+            /* Sub-ordering structural logic elements inside Interactive Section */
             #chart-wrapper {
+                order: 1; /* 1. Graph */
                 width: 100%;
-                /* Fixed aspect-ratio keeps the graph the exact same size on every
-                   question, regardless of how tall that question's content is. */
                 aspect-ratio: 3 / 2;
                 height: auto;
                 min-height: 200px;
@@ -383,6 +395,7 @@
             }
             
             .live-metrics {
+                order: 2; /* 2. Equation & Metrics */
                 margin-bottom: 8px;
                 padding: 6px 10px;
             }
@@ -391,6 +404,7 @@
             }
             
             .controls {
+                order: 3; /* 3. Input text fields */
                 display: flex;
                 flex-direction: row;
                 gap: 15px;
@@ -422,25 +436,36 @@
                 display: none !important; 
             }
 
-            .mobile-question-deck {
-                display: block; /* Visible on mobile */
+            .question-deck {
+                order: 1;
+                padding: 14px;
             }
 
-            .lesson-text-section {
-                overflow-y: visible;
-                height: auto;
-                padding: 15px 20px 80px 20px;
+            .deck-navigation {
+                gap: 8px;
             }
 
-            /* Hide the original static list elements on mobile to prevent redundancy */
-            #master-question-list {
-                display: none;
+            .deck-title {
+                font-size: 0.75rem;
+                white-space: nowrap;
+                letter-spacing: 0.02em;
+            }
+
+            .deck-btn {
+                padding: 8px 10px;
+                font-size: 0.85rem;
+                white-space: nowrap;
+                flex-shrink: 0;
+            }
+
+            .lesson-paragraphs {
+                order: 2; /* 5. Paragraph text layout stays below questions */
             }
         }
 
         .axis-line { stroke: #000000; stroke-width: 4px; }
         .axis-text { font-size: 18px; font-weight: bold; fill: #64748b; }
-        .axis-label { font-size: 18px; font-weight: 700; fill: #0f172a; }
+        .axis-label { font-size: 18px; font-weight:bold; fill: #0f172a; }
         .demand-line { stroke: #dc2626; stroke-width: 5px; stroke-linecap: round; }
         .projection-line { stroke: #64748b; stroke-width: 3px; stroke-dasharray: 4,4; }
         .interactive-dot { fill: var(--primary); cursor: grab; touch-action: none; }
@@ -470,10 +495,10 @@
             <div class="control-row">
                 <div class="control-header-line">
                     <label for="price-input">P</label>
-                    <input type="number" id="price-input" class="num-input" min="0" max="20" step="0.1" value="10.0">
+                    <input type="number" id="price-input" class="num-input" min="0" max="20" step="0.2" value="10.0">
                 </div>
                 <div class="slider-row">
-                    <input type="range" id="price-slider" class="thick-slider" min="0" max="20" step="0.1" value="10">
+                    <input type="range" id="price-slider" class="thick-slider" min="0" max="20" step="0.2" value="10">
                 </div>
             </div>
 
@@ -487,8 +512,10 @@
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="mobile-question-deck">
+    <div class="lesson-text-section">
+        <div class="question-deck">
             <div class="deck-navigation">
                 <button class="deck-btn" id="deck-prev-btn">◀ Prev</button>
                 <span class="deck-title" id="deck-counter-label">Question 1 of 14</span>
@@ -496,220 +523,215 @@
             </div>
             <div id="deck-content-target"></div>
         </div>
-    </div>
 
-    <div class="lesson-text-section">
-        <h1>Understanding the Demand Curve</h1>
-        <p>In this interactive lesson, you will explore how <strong>price</strong> and
-        <strong>quantity demanded</strong> are related using the demand curve
-        <strong style="font-size: 22px; font-weight: bold;">P = 20 − 2Q<sub>d</sub></strong>. Instead of only reading about the
-        concept, you will learn by interacting with the graph.</p>
-        
-        <p> Drag the point on the demand curve or use the controls to change the price and
-        quantity. Observe how the equation, total revenue, and graph change in real time.
-        Then complete the practice questions to test your understanding of the law of
-        demand, demand equations, and total revenue.</p>
-        
-        <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 15px 0;">
-        
-        <p><strong>Practice Questions:</strong></p>
-       <ul id="master-question-list">
-
-<li data-index="0">
-    <span class="task-title">Question 1: Explore the Graph</span>
-    Move the dot anywhere on the demand curve. Watch how <strong>Price</strong>, <strong>Quantity</strong>, and <strong>Total Revenue</strong> change.
-    <div class="task-check">
-        <button id="submit-t1" class="check-btn">Done</button>
-        <span id="feedback-t1" class="check-feedback"></span>
-    </div>
-</li>
-
-<li data-index="1">
-    <span class="task-title">Question 2: Set the Price</span>
-    Move the graph until <strong>Price = $8</strong>.
-    <div class="task-check">
-        <button id="submit-t2" class="check-btn">Check Answer</button>
-        <span id="feedback-t2" class="check-feedback"></span>
-    </div>
-</li>
-
-<li data-index="2">
-    <span class="task-title">Question 3: Find the Quantity</span>
-    Set <strong>Price = $14</strong>. What is the quantity demanded?
-    <div class="options-grid">
-        <label><input type="radio" name="q3" value="2"> 2</label>
-        <label><input type="radio" name="q3" value="3"> 3</label>
-        <label><input type="radio" name="q3" value="5"> 5</label>
-        <label><input type="radio" name="q3" value="6"> 6</label>
-    </div>
-    <div class="task-check">
-        <button id="submit-t3" class="check-btn">Check Answer</button>
-        <span id="feedback-t3" class="check-feedback"></span>
-    </div>
-</li>
-
-<li data-index="3">
-    <span class="task-title">Question 4: Find the Price</span>
-    Set <strong>Quantity = 7</strong>. What is the price?
-    <div class="options-grid">
-        <label><input type="radio" name="q4" value="4"> $4</label>
-        <label><input type="radio" name="q4" value="6"> $6</label>
-        <label><input type="radio" name="q4" value="8"> $8</label>
-        <label><input type="radio" name="q4" value="10"> $10</label>
-    </div>
-    <div class="task-check">
-        <button id="submit-t4" class="check-btn">Check Answer</button>
-        <span id="feedback-t4" class="check-feedback"></span>
-    </div>
-</li>
-
-<li data-index="4">
-    <span class="task-title">Question 5: Highest Price</span>
-    Find the highest possible price on the demand curve. What happens to quantity demanded?
-    <div class="task-check">
-        <button id="submit-t5" class="check-btn">Check Answer</button>
-        <span id="feedback-t5" class="check-feedback"></span>
-    </div>
-</li>
-
-<li data-index="5">
-    <span class="task-title">Question 6: Lowest Price</span>
-    Move the graph until <strong>Price = $0</strong>. Enter the quantity demanded.
-    <div class="options-grid">
-        <label><input type="radio" name="q6" value="0"> 0</label>
-        <label><input type="radio" name="q6" value="5"> 5</label>
-        <label><input type="radio" name="q6" value="8"> 8</label>
-        <label><input type="radio" name="q6" value="10"> 10</label>
-    </div>
-    <div class="task-check">
-        <button id="submit-t6" class="check-btn">Check Answer</button>
-        <span id="feedback-t6" class="check-feedback"></span>
-    </div>
-</li>
-
-<li data-index="6">
-    <span class="task-title">Question 7: Revenue Challenge</span>
-    Can you find a point where <strong>Total Revenue = $32</strong>?
-    <div class="task-check">
-        <button id="submit-t7" class="check-btn">Check Answer</button>
-        <span id="feedback-t7" class="check-feedback"></span>
-    </div>
-</li>
-
-<li data-index="7">
-    <span class="task-title">Question 8: Maximum Revenue</span>
-    Move the graph until Total Revenue is as high as possible.
-    <div class="task-check">
-        <button id="submit-t8" class="check-btn">Check Answer</button>
-        <span id="feedback-t8" class="check-feedback"></span>
-    </div>
-</li>
-
-<li data-index="8">
-    <span class="task-title">Question 9: Prediction</span>
-    Without moving the graph, answer this question:<br><br>
-    <strong>If price increases, what happens to quantity demanded?</strong>
-    <div class="options-grid">
-        <label><input type="radio" name="q9" value="a"> Quantity increases</label>
-        <label><input type="radio" name="q9" value="b"> Quantity decreases</label>
-        <label><input type="radio" name="q9" value="c"> Quantity stays the same</label>
-    </div>
-    <div class="task-check">
-        <button id="submit-t9" class="check-btn">Check Answer</button>
-        <span id="feedback-t9" class="check-feedback"></span>
-    </div>
-</li>
-
-<li data-index="9">
-    <span class="task-title">Question 10: Final Challenge</span>
-    Find the point on Graph where <strong>Price = $10</strong>, <strong>Quantity = 5</strong>, and <strong>Total Revenue = $50</strong>.
-    <div class="task-check">
-        <button id="submit-t10" class="check-btn">Check Answer</button>
-        <span id="feedback-t10" class="check-feedback"></span>
-    </div>
-</li>
-
-<li data-index="10">
-    <span class="task-title">Question 11: Use the Equation</span>
-    Using the equation
-    <p style="text-align:center;font-weight:bold;color:#dc2626;font-size:1.15rem;">P = 20 − 2Q</p>
-    If <strong>Price (P) = 4</strong>, what is the value of <strong>Quantity (Q)</strong>?
-    <div class="options-grid">
-        <label><input type="radio" name="q11" value="4"> Q = 4</label>
-        <label><input type="radio" name="q11" value="6"> Q = 6</label>
-        <label><input type="radio" name="q11" value="8"> Q = 8</label>
-        <label><input type="radio" name="q11" value="12"> Q = 12</label>
-    </div>
-    <div class="task-check">
-        <button id="submit-t11" class="check-btn">Check Answer</button>
-        <span id="feedback-t11" class="check-feedback"></span>
-    </div>
-</li>
-
-<li data-index="11">
-    <span class="task-title">Question 12: Use the Equation</span>
-    Using the equation
-    <p style="text-align:center;font-weight:bold;color:#dc2626;font-size:1.15rem;">P = 20 − 2Q</p>
-    If <strong>Quantity (Q) = 6</strong>, what is the value of <strong>Price (P)</strong>?
-    <div class="options-grid">
-        <label><input type="radio" name="q12" value="6"> P = $6</label>
-        <label><input type="radio" name="q12" value="8"> P = $8</label>
-        <label><input type="radio" name="q12" value="10"> P = $10</label>
-        <label><input type="radio" name="q12" value="12"> P = $12</label>
-    </div>
-    <div class="task-check">
-        <button id="submit-t12" class="check-btn">Check Answer</button>
-        <span id="feedback-t12" class="check-feedback"></span>
-    </div>
-</li>
-
-<li data-index="12">
-    <span class="task-title">Question 13: Direct Demand Equation</span>
-    The inverse demand equation is
-    <p style="text-align:center;font-weight:bold;color:#dc2626;font-size:1.15rem;">P = 20 − 2Q</p>
-    Which of the following is the <strong>Direct Demand Equation</strong>?
-    <div class="options-grid">
-        <label><input type="radio" name="q13" value="a"> Q = 20 − 2P</label>
-        <label><input type="radio" name="q13" value="b"> Q = 10 − 0.5P</label>
-        <label><input type="radio" name="q13" value="c"> Q = 20 + 2P</label>
-        <label><input type="radio" name="q13" value="d"> Q = 2P − 20</label>
-    </div>
-    <div class="task-check">
-        <button id="submit-t13" class="check-btn">Check Answer</button>
-        <span id="feedback-t13" class="check-feedback"></span>
-    </div>
-</li>
-
-<li data-index="13">
-    <span class="task-title">Question 14: Inverse Demand Equation</span>
-    The direct demand equation is
-    <p style="text-align:center;font-weight:bold;color:#dc2626;font-size:1.15rem;">Q = 10 − 0.5P</p>
-    Which of the following is the <strong>Inverse Demand Equation</strong>?
-    <div class="options-grid">
-        <label><input type="radio" name="q14" value="a"> P = 20 − 2Q</label>
-        <label><input type="radio" name="q14" value="b"> P = 10 − 0.5Q</label>
-        <label><input type="radio" name="q14" value="c"> P = 2Q − 20</label>
-        <label><input type="radio" name="q14" value="d"> P = 20 + 2Q</label>
-    </div>
-    <div class="task-check">
-        <button id="submit-t14" class="check-btn">Check Answer</button>
-        <span id="feedback-t14" class="check-feedback"></span>
-    </div>
-</li>
-
-</ul>
+        <div class="lesson-paragraphs">
+            <h1>Understanding the Demand Curve</h1>
+            <p>In this interactive lesson, you will explore how <strong>price</strong> and
+            <strong>quantity demanded</strong> are related using the demand curve
+            <strong style="font-size: 22px; font-weight: bold;">P = 20 − 2Q<sub>d</sub></strong>. Instead of only reading about the
+            concept, you will learn by interacting with the graph.</p>
+            
+            <p> Drag the point on the demand curve or use the controls to change the price and
+            quantity. Observe how the equation, total revenue, and graph change in real time.
+            Then complete the practice questions to test your understanding of the law of
+            demand, demand equations, and total revenue.</p>
+        </div>
     </div>
 
 </div>
+
+<ul id="master-question-list">
+    <li data-index="0">
+        <span class="task-title">Question 1: Explore the Graph</span>
+        Move the dot anywhere on the demand curve. Watch how <strong>Price</strong>, <strong>Quantity</strong>, and <strong>Total Revenue</strong> change.
+        <div class="task-check">
+            <button id="submit-t1" class="check-btn">Done</button>
+            <span id="feedback-t1" class="check-feedback"></span>
+        </div>
+    </li>
+
+    <li data-index="1">
+        <span class="task-title">Question 2: Set the Price</span>
+        Move the graph until <strong>Price = $8</strong>.
+        <div class="task-check">
+            <button id="submit-t2" class="check-btn">Check Answer</button>
+            <span id="feedback-t2" class="check-feedback"></span>
+        </div>
+    </li>
+
+    <li data-index="2">
+        <span class="task-title">Question 3: Find the Quantity</span>
+        Set <strong>Price = $14</strong>. What is the quantity demanded?
+        <div class="options-grid">
+            <label><input type="radio" name="q3" value="2"> 2</label>
+            <label><input type="radio" name="q3" value="3"> 3</label>
+            <label><input type="radio" name="q3" value="5"> 5</label>
+            <label><input type="radio" name="q3" value="6"> 6</label>
+        </div>
+        <div class="task-check">
+            <button id="submit-t3" class="check-btn">Check Answer</button>
+            <span id="feedback-t3" class="check-feedback"></span>
+        </div>
+    </li>
+
+    <li data-index="3">
+        <span class="task-title">Question 4: Find the Price</span>
+        Set <strong>Quantity = 7</strong>. What is the price?
+        <div class="options-grid">
+            <label><input type="radio" name="q4" value="4"> $4</label>
+            <label><input type="radio" name="q4" value="6"> $6</label>
+            <label><input type="radio" name="q4" value="8"> $8</label>
+            <label><input type="radio" name="q4" value="10"> $10</label>
+        </div>
+        <div class="task-check">
+            <button id="submit-t4" class="check-btn">Check Answer</button>
+            <span id="feedback-t4" class="check-feedback"></span>
+        </div>
+    </li>
+
+    <li data-index="4">
+        <span class="task-title">Question 5: Highest Price</span>
+        Find the highest possible price on the demand curve. What happens to quantity demanded?
+        <div class="task-check">
+            <button id="submit-t5" class="check-btn">Check Answer</button>
+            <span id="feedback-t5" class="check-feedback"></span>
+        </div>
+    </li>
+
+    <li data-index="5">
+        <span class="task-title">Question 6: Lowest Price</span>
+        Move the graph until <strong>Price = $0</strong>. Enter the quantity demanded.
+        <div class="options-grid">
+            <label><input type="radio" name="q6" value="0"> 0</label>
+            <label><input type="radio" name="q6" value="5"> 5</label>
+            <label><input type="radio" name="q6" value="8"> 8</label>
+            <label><input type="radio" name="q6" value="10"> 10</label>
+        </div>
+        <div class="task-check">
+            <button id="submit-t6" class="check-btn">Check Answer</button>
+            <span id="feedback-t6" class="check-feedback"></span>
+        </div>
+    </li>
+
+    <li data-index="6">
+        <span class="task-title">Question 7: Revenue Challenge</span>
+        Can you find a point where <strong>Total Revenue = $32</strong>?
+        <div class="task-check">
+            <button id="submit-t7" class="check-btn">Check Answer</button>
+            <span id="feedback-t7" class="check-feedback"></span>
+        </div>
+    </li>
+
+    <li data-index="7">
+        <span class="task-title">Question 8: Maximum Revenue</span>
+        Move the graph until Total Revenue is as high as possible.
+        <div class="task-check">
+            <button id="submit-t8" class="check-btn">Check Answer</button>
+            <span id="feedback-t8" class="check-feedback"></span>
+        </div>
+    </li>
+
+    <li data-index="8">
+        <span class="task-title">Question 9: Prediction</span>
+        Without moving the graph, answer this question:<br><br>
+        <strong>If price increases, what happens to quantity demanded?</strong>
+        <div class="options-grid">
+            <label><input type="radio" name="q9" value="a"> Quantity increases</label>
+            <label><input type="radio" name="q9" value="b"> Quantity decreases</label>
+            <label><input type="radio" name="q9" value="c"> Quantity stays the same</label>
+        </div>
+        <div class="task-check">
+            <button id="submit-t9" class="check-btn">Check Answer</button>
+            <span id="feedback-t9" class="check-feedback"></span>
+        </div>
+    </li>
+
+    <li data-index="9">
+        <span class="task-title">Question 10: Find the Point</span>
+        Find the point on Graph where <strong>Price = $10</strong>, <strong>Quantity = 5</strong>, and <strong>Total Revenue = $50</strong>.
+        <div class="task-check">
+            <button id="submit-t10" class="check-btn">Check Answer</button>
+            <span id="feedback-t10" class="check-feedback"></span>
+        </div>
+    </li>
+
+    <li data-index="10">
+        <span class="task-title">Question 11: Use the Equation</span>
+        Using the equation
+        <p style="text-align:center;font-weight:bold;color:#dc2626;font-size:1.15rem;">P = 20 − 2Q</p>
+        If <strong>Price (P) = 4</strong>, what is the value of <strong>Quantity (Q)</strong>?
+        <div class="options-grid">
+            <label><input type="radio" name="q11" value="4"> Q = 4</label>
+            <label><input type="radio" name="q11" value="6"> Q = 6</label>
+            <label><input type="radio" name="q11" value="8"> Q = 8</label>
+            <label><input type="radio" name="q11" value="12"> Q = 12</label>
+        </div>
+        <div class="task-check">
+            <button id="submit-t11" class="check-btn">Check Answer</button>
+            <span id="feedback-t11" class="check-feedback"></span>
+        </div>
+    </li>
+
+    <li data-index="11">
+        <span class="task-title">Question 12: Use the Equation</span>
+        Using the equation
+        <p style="text-align:center;font-weight:bold;color:#dc2626;font-size:1.15rem;">P = 20 − 2Q</p>
+        If <strong>Quantity (Q) = 6</strong>, what is the value of <strong>Price (P)</strong>?
+        <div class="options-grid">
+            <label><input type="radio" name="q12" value="6"> P = $6</label>
+            <label><input type="radio" name="q12" value="8"> P = $8</label>
+            <label><input type="radio" name="q12" value="10"> P = $10</label>
+            <label><input type="radio" name="q12" value="12"> P = $12</label>
+        </div>
+        <div class="task-check">
+            <button id="submit-t12" class="check-btn">Check Answer</button>
+            <span id="feedback-t12" class="check-feedback"></span>
+        </div>
+    </li>
+
+    <li data-index="12">
+        <span class="task-title">Question 13: Direct Demand Equation</span>
+        The inverse demand equation is
+        <p style="text-align:center;font-weight:bold;color:#dc2626;font-size:1.15rem;">P = 20 − 2Q</p>
+        Which of the following is the <strong>Direct Demand Equation</strong>?
+        <div class="options-grid">
+            <label><input type="radio" name="q13" value="a"> Q = 20 − 2P</label>
+            <label><input type="radio" name="q13" value="b"> Q = 10 − 0.5P</label>
+            <label><input type="radio" name="q13" value="c"> Q = 20 + 2P</label>
+            <label><input type="radio" name="q13" value="d"> Q = 2P − 20</label>
+        </div>
+        <div class="task-check">
+            <button id="submit-t13" class="check-btn">Check Answer</button>
+            <span id="feedback-t13" class="check-feedback"></span>
+        </div>
+    </li>
+
+    <li data-index="13">
+        <span class="task-title">Question 14: Inverse Demand Equation</span>
+        The direct demand equation is
+        <p style="text-align:center;font-weight:bold;color:#dc2626;font-size:1.15rem;">Q = 10 − 0.5P</p>
+        Which of the following is the <strong>Inverse Demand Equation</strong>?
+        <div class="options-grid">
+            <label><input type="radio" name="q14" value="a"> P = 20 − 2Q</label>
+            <label><input type="radio" name="q14" value="b"> P = 10 − 0.5Q</label>
+            <label><input type="radio" name="q14" value="c"> P = 2Q − 20</label>
+            <label><input type="radio" name="q14" value="d"> P = 20 + 2Q</label>
+        </div>
+        <div class="task-check">
+            <button id="submit-t14" class="check-btn">Check Answer</button>
+            <span id="feedback-t14" class="check-feedback"></span>
+        </div>
+    </li>
+</ul>
 
 <script>
     const wrapper = d3.select("#chart-wrapper");
     const currentState = { price: 10, quantity: 5 };
     
-    // Bridge variable to expose active internal updates globally
-    let updateGraph;
+    // Global reset state constant
+    const INITIAL_PRICE = 10;
 
-    // Array tracking all list node components to slide inside active mobile card deck
+    let updateGraph;
     let questionsArray = [];
     let currentQuestionIndex = 0;
 
@@ -743,6 +765,20 @@
         const xScale = d3.scaleLinear().domain([0, 10.5]).range([0, chartWidth]);
         const yScale = d3.scaleLinear().domain([0, 21]).range([chartHeight, 0]);
 
+
+        const xMinorTicks = d3.range(0, 11, 1);   // every 1 unit on Quantity axis (0–10)
+const yMinorTicks = d3.range(0, 21, 1);   // every 1 unit on Price axis (0–20)
+
+g.selectAll(".x-gridline").data(xMinorTicks).enter().append("line")
+    .attr("class", "minor-gridline")
+    .attr("x1", d => xScale(d)).attr("x2", d => xScale(d))
+    .attr("y1", 0).attr("y2", chartHeight);
+
+g.selectAll(".y-gridline").data(yMinorTicks).enter().append("line")
+    .attr("class", "minor-gridline")
+    .attr("x1", 0).attr("x2", chartWidth)
+    .attr("y1", d => yScale(d)).attr("y2", d => yScale(d));
+
         const revenueBox = g.append("rect").attr("class", "revenue-box");
 
         g.append("line").attr("class", "axis-line").attr("x1", 0).attr("y1", chartHeight).attr("x2", chartWidth).attr("y2", chartHeight);
@@ -770,7 +806,7 @@
         const dot = g.append("circle").attr("class", "interactive-dot").attr("r", dotRadius);
 
         function updateAll(price, origin) {
-            price = Math.round(price * 10) / 10;
+            price = Math.round(price * 5) / 5;
             if (price < 0) price = 0;
             if (price > 20) price = 20;
             
@@ -801,8 +837,7 @@
             d3.select("#live-eq").text(`20 - 2(${quantity.toFixed(2)}) = ${price.toFixed(1)}`);
             d3.select("#live-revenue").text(`$${(price * quantity).toFixed(2)}`);
 
-            // Mute active feedback when student modifies graph values manually
-            if (origin === 'drag' || origin === 'price-slider' || origin === 'quant-slider' || origin === 'price-input' || origin === 'quant-input') {
+            if (['drag', 'price-slider', 'quant-slider', 'price-input', 'quant-input'].includes(origin)) {
                 d3.selectAll("#feedback-t1, #feedback-t2, #feedback-t3, #feedback-t4, #feedback-t5, #feedback-t6, #feedback-t7, #feedback-t8, #feedback-t10")
                   .classed("muted-feedback", true);
             }
@@ -846,64 +881,53 @@
         updateAll(currentState.price, 'init');
     }
 
-    // Dynamic Mobile Deck System Controller Engine
-    function initMobileDeckSystem() {
-        // Collect references to each original question list item node
+    function initCardDeckSystem() {
         questionsArray = d3.selectAll("#master-question-list li").nodes();
-        
-        // Render target active layout position depending on screen state
-        syncLayoutState();
+        syncDeckLayout();
     }
 
-    function syncLayoutState() {
-        const isMobile = window.innerWidth <= 768;
+    function syncDeckLayout() {
         const targetContainer = document.getElementById("deck-content-target");
-        const masterList = document.getElementById("master-question-list");
-
-        if (isMobile) {
-            // Append the active question node inside the mobile card slot
-            if(questionsArray.length > 0 && targetContainer) {
-                targetContainer.innerHTML = "";
-                targetContainer.appendChild(questionsArray[currentQuestionIndex]);
-                
-                // Update UI counter tags
-                document.getElementById("deck-counter-label").innerText = `Question ${currentQuestionIndex + 1} of ${questionsArray.length}`;
-                document.getElementById("deck-prev-btn").disabled = (currentQuestionIndex === 0);
-                document.getElementById("deck-next-btn").disabled = (currentQuestionIndex === questionsArray.length - 1);
-            }
-        } else {
-            // Desktop view: Return all question items back to the main layout list container
-            if (masterList && questionsArray.length > 0) {
-                questionsArray.forEach((node) => masterList.appendChild(node));
-            }
+        if(questionsArray.length > 0 && targetContainer) {
+            targetContainer.innerHTML = "";
+            targetContainer.appendChild(questionsArray[currentQuestionIndex]);
+            
+            document.getElementById("deck-counter-label").innerText = `Question ${currentQuestionIndex + 1} of ${questionsArray.length}`;
+            document.getElementById("deck-prev-btn").disabled = (currentQuestionIndex === 0);
+            document.getElementById("deck-next-btn").disabled = (currentQuestionIndex === questionsArray.length - 1);
         }
     }
 
-    // Set up click events for deck navigation buttons
-    d3.select("#deck-prev-btn").on("click", function() {
-        if (currentQuestionIndex > 0) {
-            currentQuestionIndex--;
-            syncLayoutState();
-        }
-    });
+    // Handles slide navigation and restores global initial chart states instantly
+    function handleNavigation(direction) {
+    if (direction === 'prev' && currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+    } else if (direction === 'next' && currentQuestionIndex < questionsArray.length - 1) {
+        currentQuestionIndex++;
+    } else {
+        return; 
+    }
+    
+    syncDeckLayout();
+    
+    if (updateGraph) {
+        // Question 10 (index 9) starts at a different state so it isn't pre-solved
+        const resetPrice = (currentQuestionIndex === 9) ? 14 : INITIAL_PRICE;
+        updateGraph(resetPrice, 'init');
+    }
+}
 
-    d3.select("#deck-next-btn").on("click", function() {
-        if (currentQuestionIndex < questionsArray.length - 1) {
-            currentQuestionIndex++;
-            syncLayoutState();
-        }
-    });
+    d3.select("#deck-prev-btn").on("click", () => handleNavigation('prev'));
+    d3.select("#deck-next-btn").on("click", () => handleNavigation('next'));
 
-    // Run app initializers
     renderChart();
-    initMobileDeckSystem();
+    initCardDeckSystem();
 
     window.addEventListener("resize", function() {
         renderChart();
-        syncLayoutState();
+        syncDeckLayout();
     });
 
-    // Dynamic Quiz Grading Engine
     const STEP_TOLERANCE = 0.15;
 
     d3.select("#submit-t1").on("click", function () {
@@ -923,48 +947,56 @@
     });
 
     d3.select("#submit-t3").on("click", function () {
-        const feedback = d3.select("#feedback-t3").classed("muted-feedback", false);
-        const checkedOption = document.querySelector('input[name="q3"]:checked');
+    const feedback = d3.select("#feedback-t3").classed("muted-feedback", false);
 
-        if (!checkedOption) {
-            feedback.style("color", "#dc2626").text("❌ Please select an option.");
-            return;
-        }
+    const priceIsSet = Math.abs(currentState.price - 14) <= STEP_TOLERANCE;
 
-        const answer = parseFloat(checkedOption.value);
-        if (Math.abs(answer - 3) <= STEP_TOLERANCE) {
-            updateGraph(14, 'script');
-            feedback.style("color", "#16a34a").text("✅ Correct! Quantity Demanded is 3.");
-        } else {
-            if (Math.abs(currentState.price - 14) > STEP_TOLERANCE) {
-                feedback.style("color", "#dc2626").text("❌ Hint: Move the graph dot to Price = $14 to find the answer.");
-            } else {
-                feedback.style("color", "#dc2626").text("❌ Look closely at where the dashed line hits the bottom axis.");
-            }
-        }
-    });
+    if (!priceIsSet) {
+        feedback.style("color", "#dc2626").text("❌ Hint: Follow the dashed line across to the Price axis, find the closest labeled number, then count the gridlines from there.");
+        return;
+    }
+
+    const checkedOption = document.querySelector('input[name="q3"]:checked');
+    if (!checkedOption) {
+        feedback.style("color", "#dc2626").text("❌ Please select an option.");
+        return;
+    }
+
+    const answer = parseFloat(checkedOption.value);
+    const answerIsRight = Math.abs(answer - 3) <= STEP_TOLERANCE;
+
+    if (answerIsRight) {
+        feedback.style("color", "#16a34a").text("✅ Correct! Quantity Demanded is 3.");
+    } else {
+        feedback.style("color", "#dc2626").text("❌ Hint: Follow the dashed line down to the Quantity axis, find the closest labeled number, then count the gridlines from there.");
+    }
+});
 
     d3.select("#submit-t4").on("click", function () {
-        const feedback = d3.select("#feedback-t4").classed("muted-feedback", false);
-        const checkedOption = document.querySelector('input[name="q4"]:checked');
+    const feedback = d3.select("#feedback-t4").classed("muted-feedback", false);
 
-        if (!checkedOption) {
-            feedback.style("color", "#dc2626").text("❌ Please select an option.");
-            return;
-        }
+    const quantityIsSet = Math.abs(currentState.quantity - 7) <= STEP_TOLERANCE;
 
-        const answer = parseFloat(checkedOption.value);
-        if (Math.abs(answer - 6) <= STEP_TOLERANCE) {
-            updateGraph(6, 'script');
-            feedback.style("color", "#16a34a").text("✅ Correct! Price is $6.");
-        } else {
-            if (Math.abs(currentState.quantity - 7) > STEP_TOLERANCE) {
-                feedback.style("color", "#dc2626").text("❌ Hint: Move the graph dot sideways until Quantity = 7.");
-            } else {
-                feedback.style("color", "#dc2626").text("❌ Incorrect. Read the vertical axis value for that quantity.");
-            }
-        }
-    });
+    if (!quantityIsSet) {
+        feedback.style("color", "#dc2626").text("❌ Hint: Follow the dashed line down to the Quantity axis, find the closest labeled number, then count the gridlines from there.");
+        return;
+    }
+
+    const checkedOption = document.querySelector('input[name="q4"]:checked');
+    if (!checkedOption) {
+        feedback.style("color", "#dc2626").text("❌ Please select an option.");
+        return;
+    }
+
+    const answer = parseFloat(checkedOption.value);
+    const answerIsRight = Math.abs(answer - 6) <= STEP_TOLERANCE;
+
+    if (answerIsRight) {
+        feedback.style("color", "#16a34a").text("✅ Correct! Price is $6.");
+    } else {
+        feedback.style("color", "#dc2626").text("❌ Hint: Follow the dashed line across to the Price axis, find the closest labeled number, then count the gridlines from there.");
+    }
+});
 
     d3.select("#submit-t5").on("click", function () {
         const feedback = d3.select("#feedback-t5").classed("muted-feedback", false);
@@ -976,26 +1008,30 @@
     });
 
     d3.select("#submit-t6").on("click", function () {
-        const feedback = d3.select("#feedback-t6").classed("muted-feedback", false);
-        const checkedOption = document.querySelector('input[name="q6"]:checked');
+    const feedback = d3.select("#feedback-t6").classed("muted-feedback", false);
 
-        if (!checkedOption) {
-            feedback.style("color", "#dc2626").text("❌ Please select an option.");
-            return;
-        }
+    const priceIsSet = Math.abs(currentState.price) <= STEP_TOLERANCE;
 
-        const answer = parseFloat(checkedOption.value);
-        if (Math.abs(answer - 10) <= STEP_TOLERANCE) {
-            updateGraph(0, 'script');
-            feedback.style("color", "#16a34a").text("✅ Correct! Quantity Demanded is 10.");
-        } else {
-            if (Math.abs(currentState.price) > STEP_TOLERANCE) {
-                feedback.style("color", "#dc2626").text("❌ Hint: Drag the dot all the way down to the bottom axis ($0 price).");
-            } else {
-                feedback.style("color", "#dc2626").text("❌ Not quite. Look at where the line hits the horizontal axis max point.");
-            }
-        }
-    });
+    if (!priceIsSet) {
+        feedback.style("color", "#dc2626").text("❌ Hint: Drag the dot all the way down to the bottom axis ($0 price) first.");
+        return;
+    }
+
+    const checkedOption = document.querySelector('input[name="q6"]:checked');
+    if (!checkedOption) {
+        feedback.style("color", "#dc2626").text("❌ Please select an option.");
+        return;
+    }
+
+    const answer = parseFloat(checkedOption.value);
+    const answerIsRight = Math.abs(answer - 10) <= STEP_TOLERANCE;
+
+    if (answerIsRight) {
+        feedback.style("color", "#16a34a").text("✅ Correct! Quantity Demanded is 10.");
+    } else {
+        feedback.style("color", "#dc2626").text("❌ Not quite. Look at where the line hits the horizontal axis max point.");
+    }
+});
 
     d3.select("#submit-t7").on("click", function () {
         const feedback = d3.select("#feedback-t7").classed("muted-feedback", false);

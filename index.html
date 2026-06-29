@@ -35,7 +35,7 @@
                 user-select: none;              /* Non-prefixed version, currently supported by Chrome, Opera and Firefox */
                 touch-action: none;             /* Prevents default browser panning/zooming while dragging */
             }
-            
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
@@ -1115,7 +1115,7 @@
         const feedback = d3.select("#feedback-t10").classed("muted-feedback", false);
         const revenue = currentState.price * currentState.quantity;
         if (Math.abs(currentState.price - 10) <= STEP_TOLERANCE && Math.abs(currentState.quantity - 5) <= STEP_TOLERANCE && Math.abs(revenue - 50) <= 0.5) {
-            feedback.style("color", "#16a34a").text("🏆 Correct!");
+            feedback.style("color", "#16a34a").text("✅ Correct!");
         } else {
             feedback.style("color", "#dc2626").text("❌ One or more values are incorrect. Check Price, Quantity, and Total Revenue.");
         }

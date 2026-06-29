@@ -406,7 +406,7 @@
             .controls {
                 order: 3; /* 3. Input text fields */
                 display: flex;
-                flex-direction: row;
+                flex-direction: column;
                 gap: 15px;
                 padding: 8px;
                 justify-content: space-between;
@@ -419,7 +419,7 @@
             }
             .control-header-line {
                 display: flex;
-                justify-content: center;
+                justify-content: space-between; /* Adjusted alignment back to space-between for mobile symmetry */
                 align-items: center;
                 gap: 8px;
             }
@@ -432,10 +432,6 @@
                 font-size: 1.1rem;
             }
             
-            .slider-row {
-                display: none !important; 
-            }
-
             .question-deck {
                 order: 1;
                 padding: 14px;
@@ -494,8 +490,8 @@
         <div class="controls">
             <div class="control-row">
                 <div class="control-header-line">
-                    <label for="price-input">P</label>
-                    <input type="number" id="price-input" class="num-input" min="0" max="20" step="0.2" value="10.0">
+                    <label for="price-input">Price (P)</label>
+                    <input type="number" id="price-input" class="num-input" min="0" max="20" step="0.2" value="10.0" inputmode="decimal">
                 </div>
                 <div class="slider-row">
                     <input type="range" id="price-slider" class="thick-slider" min="0" max="20" step="0.2" value="10">
@@ -504,8 +500,8 @@
 
             <div class="control-row">
                 <div class="control-header-line">
-                    <label for="quant-input">Q</label>
-                    <input type="number" id="quant-input" class="num-input" min="0" max="10" step="0.1" value="5.0">
+                    <label for="quant-input">Quantity (Q)</label>
+                    <input type="number" id="quant-input" class="num-input" min="0" max="10" step="0.1" value="5.0" inputmode="decimal">
                 </div>
                 <div class="slider-row">
                     <input type="range" id="quant-slider" class="thick-slider" min="0" max="10" step="0.1" value="5">
@@ -518,7 +514,7 @@
         <div class="question-deck">
             <div class="deck-navigation">
                 <button class="deck-btn" id="deck-prev-btn">◀ Prev</button>
-                <span class="deck-title" id="deck-counter-label">Question 1 of 14</span>
+                <span class="deck-title" id="deck-counter-label">Question 1 of 15</span>
                 <button class="deck-btn" id="deck-next-btn">Next ▶</button>
             </div>
             <div id="deck-content-target"></div>
@@ -645,9 +641,8 @@
         </div>
     </li>
 
-
-    <li data-index="15">
-        <span class="task-title">Question 9: Prediction</span>
+    <li data-index="9">
+        <span class="task-title">Question 10: Prediction</span>
         <strong>If price decreases, what happens to quantity demanded?</strong>
         <div class="options-grid">
             <label><input type="radio" name="q15" value="a"> Quantity increases</label>
@@ -660,8 +655,8 @@
         </div>
     </li>
 
-    <li data-index="9">
-        <span class="task-title">Question 10: Find the Point</span>
+    <li data-index="10">
+        <span class="task-title">Question 11: Find the Point</span>
         Find the point on Graph where <strong>Price = $10</strong>, <strong>Quantity = 5</strong>, and <strong>Total Revenue = $50</strong>.
         <div class="task-check">
             <button id="submit-t10" class="check-btn">Check Answer</button>
@@ -669,8 +664,8 @@
         </div>
     </li>
 
-    <li data-index="10">
-        <span class="task-title">Question 11: Use the Equation</span>
+    <li data-index="11">
+        <span class="task-title">Question 12: Use the Equation</span>
         Using the equation
         <p style="text-align:center;font-weight:bold;color:#dc2626;font-size:1.15rem;">P = 20 − 2Q</p>
         If <strong>Price (P) = 4</strong>, what is the value of <strong>Quantity (Q)</strong>?
@@ -686,8 +681,8 @@
         </div>
     </li>
 
-    <li data-index="11">
-        <span class="task-title">Question 12: Use the Equation</span>
+    <li data-index="12">
+        <span class="task-title">Question 13: Use the Equation</span>
         Using the equation
         <p style="text-align:center;font-weight:bold;color:#dc2626;font-size:1.15rem;">P = 20 − 2Q</p>
         If <strong>Quantity (Q) = 6</strong>, what is the value of <strong>Price (P)</strong>?
@@ -703,8 +698,8 @@
         </div>
     </li>
 
-    <li data-index="12">
-        <span class="task-title">Question 13: Direct Demand Equation</span>
+    <li data-index="13">
+        <span class="task-title">Question 14: Direct Demand Equation</span>
         The inverse demand equation is
         <p style="text-align:center;font-weight:bold;color:#dc2626;font-size:1.15rem;">P = 20 − 2Q</p>
         Which of the following is the <strong>Direct Demand Equation</strong>?
@@ -720,8 +715,8 @@
         </div>
     </li>
 
-    <li data-index="13">
-        <span class="task-title">Question 14: Inverse Demand Equation</span>
+    <li data-index="14">
+        <span class="task-title">Question 15: Inverse Demand Equation</span>
         The direct demand equation is
         <p style="text-align:center;font-weight:bold;color:#dc2626;font-size:1.15rem;">Q = 10 − 0.5P</p>
         Which of the following is the <strong>Inverse Demand Equation</strong>?
@@ -781,17 +776,17 @@
 
 
         const xMinorTicks = d3.range(0, 11, 1);   // every 1 unit on Quantity axis (0–10)
-const yMinorTicks = d3.range(0, 21, 1);   // every 1 unit on Price axis (0–20)
+        const yMinorTicks = d3.range(0, 21, 1);   // every 1 unit on Price axis (0–20)
 
-g.selectAll(".x-gridline").data(xMinorTicks).enter().append("line")
-    .attr("class", "minor-gridline")
-    .attr("x1", d => xScale(d)).attr("x2", d => xScale(d))
-    .attr("y1", 0).attr("y2", chartHeight);
+        g.selectAll(".x-gridline").data(xMinorTicks).enter().append("line")
+            .attr("class", "minor-gridline")
+            .attr("x1", d => xScale(d)).attr("x2", d => xScale(d))
+            .attr("y1", 0).attr("y2", chartHeight);
 
-g.selectAll(".y-gridline").data(yMinorTicks).enter().append("line")
-    .attr("class", "minor-gridline")
-    .attr("x1", 0).attr("x2", chartWidth)
-    .attr("y1", d => yScale(d)).attr("y2", d => yScale(d));
+        g.selectAll(".y-gridline").data(yMinorTicks).enter().append("line")
+            .attr("class", "minor-gridline")
+            .attr("x1", 0).attr("x2", chartWidth)
+            .attr("y1", d => yScale(d)).attr("y2", d => yScale(d));
 
         const revenueBox = g.append("rect").attr("class", "revenue-box");
 
@@ -862,7 +857,7 @@ g.selectAll(".y-gridline").data(yMinorTicks).enter().append("line")
         const dragBehavior = d3.drag()
             .on("drag", function(event) {
                 let currentQ = xScale.invert(event.x);
-                currentQ = Math.round(currentQ * 20) / 20;
+                currentQ = Math.round(currentQ * 10) / 10;
                 if (currentQ < 0) currentQ = 0;
                 if (currentQ > 10) currentQ = 10;
                 updateAll(getP(currentQ), 'drag');
@@ -914,22 +909,24 @@ g.selectAll(".y-gridline").data(yMinorTicks).enter().append("line")
 
     // Handles slide navigation and restores global initial chart states instantly
     function handleNavigation(direction) {
-    if (direction === 'prev' && currentQuestionIndex > 0) {
-        currentQuestionIndex--;
-    } else if (direction === 'next' && currentQuestionIndex < questionsArray.length - 1) {
-        currentQuestionIndex++;
-    } else {
-        return; 
+        if (direction === 'prev' && currentQuestionIndex > 0) {
+            currentQuestionIndex--;
+        } else if (direction === 'next' && currentQuestionIndex < questionsArray.length - 1) {
+            currentQuestionIndex++;
+        } else {
+            return; 
+        }
+        
+        syncDeckLayout();
+        
+        if (updateGraph) {
+            // "Find the Point" (data-index="10" now) starts at a different state so it isn't pre-solved,
+            // since its target (P=10, Q=5, Rev=50) is identical to the default state.
+            const activeQuestion = questionsArray[currentQuestionIndex];
+            const resetPrice = (activeQuestion && activeQuestion.dataset.index === '10') ? 14 : INITIAL_PRICE;
+            updateGraph(resetPrice, 'init');
+        }
     }
-    
-    syncDeckLayout();
-    
-    if (updateGraph) {
-        // Question 10 (index 9) starts at a different state so it isn't pre-solved
-        const resetPrice = (currentQuestionIndex === 10) ? 14 : INITIAL_PRICE;
-        updateGraph(resetPrice, 'init');
-    }
-}
 
     d3.select("#deck-prev-btn").on("click", () => handleNavigation('prev'));
     d3.select("#deck-next-btn").on("click", () => handleNavigation('next'));
@@ -937,9 +934,13 @@ g.selectAll(".y-gridline").data(yMinorTicks).enter().append("line")
     renderChart();
     initCardDeckSystem();
 
+    let resizeTimeout;
     window.addEventListener("resize", function() {
-        renderChart();
-        syncDeckLayout();
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(function() {
+            renderChart();
+            syncDeckLayout();
+        }, 150);
     });
 
     const STEP_TOLERANCE = 0.15;
@@ -961,56 +962,54 @@ g.selectAll(".y-gridline").data(yMinorTicks).enter().append("line")
     });
 
     d3.select("#submit-t3").on("click", function () {
-    const feedback = d3.select("#feedback-t3").classed("muted-feedback", false);
+        const feedback = d3.select("#feedback-t3").classed("muted-feedback", false);
+        const priceIsSet = Math.abs(currentState.price - 14) <= STEP_TOLERANCE;
 
-    const priceIsSet = Math.abs(currentState.price - 14) <= STEP_TOLERANCE;
+        if (!priceIsSet) {
+            feedback.style("color", "#dc2626").text("❌ Hint: Follow the dashed line across to the Price axis, find the closest labeled number, then count the gridlines from there.");
+            return;
+        }
 
-    if (!priceIsSet) {
-        feedback.style("color", "#dc2626").text("❌ Hint: Follow the dashed line across to the Price axis, find the closest labeled number, then count the gridlines from there.");
-        return;
-    }
+        const checkedOption = document.querySelector('input[name="q3"]:checked');
+        if (!checkedOption) {
+            feedback.style("color", "#dc2626").text("❌ Please select an option.");
+            return;
+        }
 
-    const checkedOption = document.querySelector('input[name="q3"]:checked');
-    if (!checkedOption) {
-        feedback.style("color", "#dc2626").text("❌ Please select an option.");
-        return;
-    }
+        const answer = parseFloat(checkedOption.value);
+        const answerIsRight = Math.abs(answer - 3) <= STEP_TOLERANCE;
 
-    const answer = parseFloat(checkedOption.value);
-    const answerIsRight = Math.abs(answer - 3) <= STEP_TOLERANCE;
-
-    if (answerIsRight) {
-        feedback.style("color", "#16a34a").text("✅ Correct! Quantity Demanded is 3.");
-    } else {
-        feedback.style("color", "#dc2626").text("❌ Hint: Follow the dashed line down to the Quantity axis, find the closest labeled number, then count the gridlines from there.");
-    }
-});
+        if (answerIsRight) {
+            feedback.style("color", "#16a34a").text("✅ Correct! Quantity Demanded is 3.");
+        } else {
+            feedback.style("color", "#dc2626").text("❌ Hint: Follow the dashed line down to the Quantity axis, find the closest labeled number, then count the gridlines from there.");
+        }
+    });
 
     d3.select("#submit-t4").on("click", function () {
-    const feedback = d3.select("#feedback-t4").classed("muted-feedback", false);
+        const feedback = d3.select("#feedback-t4").classed("muted-feedback", false);
+        const quantityIsSet = Math.abs(currentState.quantity - 7) <= STEP_TOLERANCE;
 
-    const quantityIsSet = Math.abs(currentState.quantity - 7) <= STEP_TOLERANCE;
+        if (!quantityIsSet) {
+            feedback.style("color", "#dc2626").text("❌ Hint: Follow the dashed line down to the Quantity axis, find the closest labeled number, then count the gridlines from there.");
+            return;
+        }
 
-    if (!quantityIsSet) {
-        feedback.style("color", "#dc2626").text("❌ Hint: Follow the dashed line down to the Quantity axis, find the closest labeled number, then count the gridlines from there.");
-        return;
-    }
+        const checkedOption = document.querySelector('input[name="q4"]:checked');
+        if (!checkedOption) {
+            feedback.style("color", "#dc2626").text("❌ Please select an option.");
+            return;
+        }
 
-    const checkedOption = document.querySelector('input[name="q4"]:checked');
-    if (!checkedOption) {
-        feedback.style("color", "#dc2626").text("❌ Please select an option.");
-        return;
-    }
+        const answer = parseFloat(checkedOption.value);
+        const answerIsRight = Math.abs(answer - 6) <= STEP_TOLERANCE;
 
-    const answer = parseFloat(checkedOption.value);
-    const answerIsRight = Math.abs(answer - 6) <= STEP_TOLERANCE;
-
-    if (answerIsRight) {
-        feedback.style("color", "#16a34a").text("✅ Correct! Price is $6.");
-    } else {
-        feedback.style("color", "#dc2626").text("❌ Hint: Follow the dashed line across to the Price axis, find the closest labeled number, then count the gridlines from there.");
-    }
-});
+        if (answerIsRight) {
+            feedback.style("color", "#16a34a").text("✅ Correct! Price is $6.");
+        } else {
+            feedback.style("color", "#dc2626").text("❌ Hint: Follow the dashed line across to the Price axis, find the closest labeled number, then count the gridlines from there.");
+        }
+    });
 
     d3.select("#submit-t5").on("click", function () {
         const feedback = d3.select("#feedback-t5").classed("muted-feedback", false);
@@ -1022,30 +1021,29 @@ g.selectAll(".y-gridline").data(yMinorTicks).enter().append("line")
     });
 
     d3.select("#submit-t6").on("click", function () {
-    const feedback = d3.select("#feedback-t6").classed("muted-feedback", false);
+        const feedback = d3.select("#feedback-t6").classed("muted-feedback", false);
+        const priceIsSet = Math.abs(currentState.price) <= STEP_TOLERANCE;
 
-    const priceIsSet = Math.abs(currentState.price) <= STEP_TOLERANCE;
+        if (!priceIsSet) {
+            feedback.style("color", "#dc2626").text("❌ Hint: Drag the dot all the way down to the bottom axis ($0 price) first.");
+            return;
+        }
 
-    if (!priceIsSet) {
-        feedback.style("color", "#dc2626").text("❌ Hint: Drag the dot all the way down to the bottom axis ($0 price) first.");
-        return;
-    }
+        const checkedOption = document.querySelector('input[name="q6"]:checked');
+        if (!checkedOption) {
+            feedback.style("color", "#dc2626").text("❌ Please select an option.");
+            return;
+        }
 
-    const checkedOption = document.querySelector('input[name="q6"]:checked');
-    if (!checkedOption) {
-        feedback.style("color", "#dc2626").text("❌ Please select an option.");
-        return;
-    }
+        const answer = parseFloat(checkedOption.value);
+        const answerIsRight = Math.abs(answer - 10) <= STEP_TOLERANCE;
 
-    const answer = parseFloat(checkedOption.value);
-    const answerIsRight = Math.abs(answer - 10) <= STEP_TOLERANCE;
-
-    if (answerIsRight) {
-        feedback.style("color", "#16a34a").text("✅ Correct! Quantity Demanded is 10.");
-    } else {
-        feedback.style("color", "#dc2626").text("❌ Not quite. Look at where the line hits the horizontal axis max point.");
-    }
-});
+        if (answerIsRight) {
+            feedback.style("color", "#16a34a").text("✅ Correct! Quantity Demanded is 10.");
+        } else {
+            feedback.style("color", "#dc2626").text("❌ Not quite. Look at where the line hits the horizontal axis max point.");
+        }
+    });
 
     d3.select("#submit-t7").on("click", function () {
         const feedback = d3.select("#feedback-t7").classed("muted-feedback", false);
@@ -1090,7 +1088,7 @@ g.selectAll(".y-gridline").data(yMinorTicks).enter().append("line")
             return;
         }
         if (answer.value === "a") {
-            feedback.style("color", "#16a34a").text("✅ Correct! As price increases, quantity demanded decreases.");
+            feedback.style("color", "#16a34a").text("✅ Correct! As price decreases, quantity demanded increases.");
         } else {
             feedback.style("color", "#dc2626").text("❌ Not quite. Remember the Law of Demand.");
         }

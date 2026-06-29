@@ -1270,9 +1270,59 @@
             slider.style.pointerEvents = 'auto';
         });
     });
+
+    // Bulletproof Mobile Slider Protection: Prevents value drift during vertical scrolling
+    document.querySelectorAll('.thick-slider').forEach(slider => {
+        let startY = 0;
+        let startX = 0;
+        let initialValue = "";
+        let isVerticalScroll = false;
+
+        slider.addEventListener('touchstart', function(e) {
+            startY = e.touches[0].clientY;
+            startX = e.touches[0].clientX;
+            initialValue = this.value; // Remember the exact value when touched
+            isVerticalScroll = false;
+        }, { passive: true });
+
+        slider.addEventListener('touchmove', function(e) {
+            const currentY = e.touches[0].clientY;
+            const currentX = e.touches[0].clientX;
+            
+            const deltaY = Math.abs(currentY - startY);
+            const deltaX = Math.abs(currentX - startX);
+
+            // If the user moves more vertically than horizontally, lock it down as a scroll
+            if (!isVerticalScroll && deltaY > deltaX && deltaY > 5) {
+                isVerticalScroll = true;
+            }
+
+            if (isVerticalScroll) {
+                // Instantly force the slider value to freeze at its starting position
+                this.value = initialValue;
+                
+                // Trigger input event programmatically to keep the graph and inputs synchronized 
+                // without letting the point jump away
+                this.dispatchEvent(new Event('input'));
+                
+                // Temporarily disable interactions so it slides naturally into a page scroll
+                this.style.pointerEvents = 'none';
+            }
+        }, { passive: true });
+        
+        slider.addEventListener('touchend', function() {
+            this.style.pointerEvents = 'auto';
+            isVerticalScroll = false;
+        });
+
+        slider.addEventListener('touchcancel', function() {
+            this.style.pointerEvents = 'auto';
+            isVerticalScroll = false;
+        });
+    });
 </script>
 
-<p>Update 8</p>
+<p>Update 20</p>
 
 
 

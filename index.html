@@ -1224,48 +1224,55 @@
     });
 
     // Flawless mobile slider handling: Differentiates vertical scrolling from horizontal dragging
-    document.querySelectorAll('.thick-slider').forEach(slider => {
-        let touchStartX = 0;
-        let touchStartY = 0;
-        let isScrolling = false;
-        let isDraggingSlider = false;
+    // Ultimate mobile scroll protection: Locks sliders instantly when scrolling is detected
+    const lessonSection = document.querySelector('.lesson-text-section');
+    const interactiveSection = document.querySelector('.interactive-section');
+    let scrollLockTimeout;
 
+    function lockSlidersOnScroll() {
+        // Find all sliders and completely deactivate their pointer interactions
+        document.querySelectorAll('.thick-slider').forEach(slider => {
+            slider.style.pointerEvents = 'none';
+        });
+        
+        // Clear the timeout and wait until scrolling has completely stopped
+        clearTimeout(scrollLockTimeout);
+        scrollLockTimeout = setTimeout(() => {
+            // Re-enable sliders immediately after scrolling ends
+            document.querySelectorAll('.thick-slider').forEach(slider => {
+                slider.style.pointerEvents = 'auto';
+            });
+        }, 100); // 100ms responsiveness ensures it feels instant when they stop scrolling
+    }
+
+    // Capture scrolling on the window and both layout columns
+    window.addEventListener('scroll', lockSlidersOnScroll, { passive: true });
+    if (lessonSection) lessonSection.addEventListener('scroll', lockSlidersOnScroll, { passive: true });
+    if (interactiveSection) interactiveSection.addEventListener('scroll', lockSlidersOnScroll, { passive: true });
+
+    // Double check: If a user touches a slider and immediately shifts vertically, clear focus
+    document.querySelectorAll('.thick-slider').forEach(slider => {
+        let startY = 0;
+        
         slider.addEventListener('touchstart', function(e) {
-            const touch = e.touches[0];
-            touchStartX = touch.clientX;
-            touchStartY = touch.clientY;
-            isScrolling = false;
-            isDraggingSlider = false;
+            startY = e.touches[0].clientY;
         }, { passive: true });
 
         slider.addEventListener('touchmove', function(e) {
-            if (isScrolling) return; // If already scrolling, ignore changes completely
-
-            const touch = e.touches[0];
-            const deltaX = Math.abs(touch.clientX - touchStartX);
-            const deltaY = Math.abs(touch.clientY - touchStartY);
-
-            // Determine intent on the first few pixels of movement
-            if (!isDraggingSlider && !isScrolling) {
-                if (deltaY > deltaX && deltaY > 5) {
-                    // User is swiping vertically to scroll the page down
-                    isScrolling = true;
-                    return;
-                } else if (deltaX > deltaY && deltaX > 5) {
-                    // User is intentionally dragging the slider horizontally
-                    isDraggingSlider = true;
-                }
+            const currentY = e.touches[0].clientY;
+            // If moving vertically by more than 4 pixels, it's a scroll, shut down slider response
+            if (Math.abs(currentY - startY) > 4) {
+                slider.style.pointerEvents = 'none';
             }
-
-            // If the user's intent was to scroll, intercept and stop the slider from jumping
-            if (isScrolling) {
-                e.preventDefault(); 
-            }
-        }, { passive: false }); // Note: passive must be false here so we can protect the slider state safely
+        }, { passive: true });
+        
+        slider.addEventListener('touchend', function() {
+            slider.style.pointerEvents = 'auto';
+        });
     });
 </script>
 
-<p>Update 5</p>
+<p>Update 8</p>
 
 
 

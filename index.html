@@ -602,9 +602,15 @@
         </div>
     </li>
 
-    <li data-index="4">
+  <li data-index="4">
         <span class="task-title">Question 5: Highest Price</span>
-        Find the highest possible price on the demand curve. What happens to quantity demanded?
+        Find the price intercept (highest possible price) on the demand curve. What is the quantity demanded at this point?
+        
+        <div style="margin: 14px 0; display: flex; align-items: center; gap: 10px;">
+            <label for="q5-input" style="font-weight: 800; font-size: 1rem; color: #0f172a;">Your Answer:</label>
+            <input type="number" id="q5-input" class="num-input" min="0" max="10" step="1" placeholder="?" inputmode="decimal">
+        </div>
+
         <div class="task-check">
             <button id="submit-t5" class="check-btn">Check Answer</button>
             <span id="feedback-t5" class="check-feedback"></span>
@@ -1030,10 +1036,24 @@
 
     d3.select("#submit-t5").on("click", function () {
         const feedback = d3.select("#feedback-t5").classed("muted-feedback", false);
-        if (Math.abs(currentState.price - 20) <= STEP_TOLERANCE && Math.abs(currentState.quantity) <= STEP_TOLERANCE) {
-            feedback.style("color", "#16a34a").text("✅ Excellent! At the highest price ($20), Quantity Demanded is 0.");
+        const graphIsCorrect = Math.abs(currentState.price - 20) <= STEP_TOLERANCE && Math.abs(currentState.quantity) <= STEP_TOLERANCE;
+        const userInput = d3.select("#q5-input").property("value").trim();
+
+        // STEP 1: Check the graph interaction first
+        if (!graphIsCorrect) {
+            feedback.style("color", "#dc2626").text("❌ Move the point to the top of the demand curve ($20 intercept) first.");
+            return;
+        }
+        
+
+        // STEP 3: Validate the numerical value typed
+        const numericAnswer = parseFloat(userInput);
+        const valueIsCorrect = Math.abs(numericAnswer - 0) <= STEP_TOLERANCE;
+
+        if (isNaN(numericAnswer) || !valueIsCorrect) {
+            feedback.style("color", "#dc2626").text("❌ Look closely at the graph. What is the exact horizontal (Q) position when price is $20?");
         } else {
-            feedback.style("color", "#dc2626").text("❌ Move the point to the top of the demand curve.");
+            feedback.style("color", "#16a34a").text("✅ Excellent! At the highest price ($20), Quantity Demanded is 0.");
         }
     });
 

@@ -86,7 +86,7 @@
             border-radius: 12px;
             padding: 20px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
-            margin-top: 15px;
+            margin-top: 0px;
             margin-bottom: 20px;
             order: 1; /* Sits above paragraphs */
         }
@@ -379,7 +379,7 @@
                 order: 2; /* Contains Question Deck followed by text paragraphs */
                 overflow-y: visible;
                 height: auto;
-                padding: 15px 20px 80px 20px;
+                padding: 8px 20px 80px 20px;
             }
 
             /* Sub-ordering structural logic elements inside Interactive Section */
@@ -410,7 +410,7 @@
                 gap: 15px;
                 padding: 8px;
                 justify-content: space-between;
-                margin-bottom: 10px;
+                margin-bottom: 5px;
             }
             .control-row {
                 flex: 1;
@@ -446,7 +446,7 @@
             }
 
             .deck-title {
-                font-size: 0.75rem;
+                font-size: 0.9rem;
                 white-space: nowrap;
                 letter-spacing: 0.02em;
             }
@@ -633,7 +633,6 @@
 
     <li data-index="8">
         <span class="task-title">Question 9: Prediction</span>
-        Without moving the graph, answer this question:<br><br>
         <strong>If price increases, what happens to quantity demanded?</strong>
         <div class="options-grid">
             <label><input type="radio" name="q9" value="a"> Quantity increases</label>
@@ -643,6 +642,21 @@
         <div class="task-check">
             <button id="submit-t9" class="check-btn">Check Answer</button>
             <span id="feedback-t9" class="check-feedback"></span>
+        </div>
+    </li>
+
+
+    <li data-index="15">
+        <span class="task-title">Question 9: Prediction</span>
+        <strong>If price decreases, what happens to quantity demanded?</strong>
+        <div class="options-grid">
+            <label><input type="radio" name="q15" value="a"> Quantity increases</label>
+            <label><input type="radio" name="q15" value="b"> Quantity decreases</label>
+            <label><input type="radio" name="q15" value="c"> Quantity stays the same</label>
+        </div>
+        <div class="task-check">
+            <button id="submit-t15" class="check-btn">Check Answer</button>
+            <span id="feedback-t15" class="check-feedback"></span>
         </div>
     </li>
 
@@ -912,7 +926,7 @@ g.selectAll(".y-gridline").data(yMinorTicks).enter().append("line")
     
     if (updateGraph) {
         // Question 10 (index 9) starts at a different state so it isn't pre-solved
-        const resetPrice = (currentQuestionIndex === 9) ? 14 : INITIAL_PRICE;
+        const resetPrice = (currentQuestionIndex === 10) ? 14 : INITIAL_PRICE;
         updateGraph(resetPrice, 'init');
     }
 }
@@ -1061,6 +1075,21 @@ g.selectAll(".y-gridline").data(yMinorTicks).enter().append("line")
             return;
         }
         if (answer.value === "b") {
+            feedback.style("color", "#16a34a").text("✅ Correct! As price increases, quantity demanded decreases.");
+        } else {
+            feedback.style("color", "#dc2626").text("❌ Not quite. Remember the Law of Demand.");
+        }
+    });
+
+
+    d3.select("#submit-t15").on("click", function () {
+        const feedback = d3.select("#feedback-t15").classed("muted-feedback", false);
+        const answer = document.querySelector('input[name="q15"]:checked');
+        if (!answer) {
+            feedback.style("color", "#dc2626").text("❌ Please choose an answer.");
+            return;
+        }
+        if (answer.value === "a") {
             feedback.style("color", "#16a34a").text("✅ Correct! As price increases, quantity demanded decreases.");
         } else {
             feedback.style("color", "#dc2626").text("❌ Not quite. Remember the Law of Demand.");

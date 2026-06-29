@@ -378,6 +378,9 @@
             display: none;
         }
 
+
+      
+
         /* Mobile View Restructure Logic */
         @media (max-width: 768px) {
             body {
@@ -770,7 +773,7 @@
     </li>
 </ul>
 
-<p>Updated</p>
+<p>Updated 1</p>
     
 
 <script>
@@ -1310,6 +1313,48 @@
         } else {
             feedback.style("color", "#dc2626").text("❌ Incorrect. The inverse demand equation has Price (P) by itself.");
         }
+    });
+
+
+    // Flawless mobile slider handling: Differentiates vertical scrolling from horizontal dragging
+    document.querySelectorAll('.thick-slider').forEach(slider => {
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let isScrolling = false;
+        let isDraggingSlider = false;
+
+        slider.addEventListener('touchstart', function(e) {
+            const touch = e.touches[0];
+            touchStartX = touch.clientX;
+            touchStartY = touch.clientY;
+            isScrolling = false;
+            isDraggingSlider = false;
+        }, { passive: true });
+
+        slider.addEventListener('touchmove', function(e) {
+            if (isScrolling) return; // If already scrolling, ignore changes completely
+
+            const touch = e.touches[0];
+            const deltaX = Math.abs(touch.clientX - touchStartX);
+            const deltaY = Math.abs(touch.clientY - touchStartY);
+
+            // Determine intent on the first few pixels of movement
+            if (!isDraggingSlider && !isScrolling) {
+                if (deltaY > deltaX && deltaY > 5) {
+                    // User is swiping vertically to scroll the page down
+                    isScrolling = true;
+                    return;
+                } else if (deltaX > deltaY && deltaX > 5) {
+                    // User is intentionally dragging the slider horizontally
+                    isDraggingSlider = true;
+                }
+            }
+
+            // If the user's intent was to scroll, intercept and stop the slider from jumping
+            if (isScrolling) {
+                e.preventDefault(); 
+            }
+        }, { passive: false }); // Note: passive must be false here so we can protect the slider state safely
     });
 </script>
 

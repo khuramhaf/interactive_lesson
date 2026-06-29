@@ -23,19 +23,29 @@
          
         }
 
-           .interactive-dot, 
-            .dot-glow, 
-            .thick-slider, 
-            #chart-wrapper svg {
-                -webkit-touch-callout: none;    /* Disables the default callout/popover menu on iOS */
-                -webkit-user-select: none;      /* Safari */
-                -khtml-user-select: none;       /* Konqueror HTML */
-                -moz-user-select: none;         /* Old versions of Firefox */
-                -ms-user-select: none;          /* Internet Explorer/Edge */
-                user-select: none;              /* Non-prefixed version, currently supported by Chrome, Opera and Firefox */
-                touch-action: none;             /* Prevents default browser panning/zooming while dragging */
-            }
+           /* Keep touch-action none ONLY on the graph canvas/dot to preserve smooth dragging */
+.interactive-dot, 
+.dot-glow, 
+#chart-wrapper svg {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    touch-action: none; 
+}
 
+/* Allow vertical page scrolling when interacting with sliders */
+.thick-slider {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    touch-action: pan-y; 
+}
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
@@ -958,14 +968,24 @@
     initCardDeckSystem();
 
     let resizeTimeout;
+    // Track the initial screen width
+    let lastWidth = window.innerWidth;
+
     window.addEventListener("resize", function() {
+        // If the width hasn't changed (meaning only height changed via keyboard pop-up), do nothing
+        if (window.innerWidth === lastWidth) {
+            return; 
+        }
+        
+        // Update stored width if an actual layout shift happened
+        lastWidth = window.innerWidth;
+
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(function() {
             renderChart();
             syncDeckLayout();
         }, 150);
     });
-
     const STEP_TOLERANCE = 0.15;
 
     d3.select("#submit-t1").on("click", function () {

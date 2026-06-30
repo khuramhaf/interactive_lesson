@@ -19,7 +19,6 @@
             box-sizing: border-box;
 
 
-            /* Prevent long-press selection, context menus, and vibrations on interactive elements */
          
         }
 
@@ -1011,9 +1010,13 @@
         if (updateGraph) {
             // "Find the Point" (data-index="10" now) starts at a different state so it isn't pre-solved,
             // since its target (P=10, Q=5, Rev=50) is identical to the default state.
-            const activeQuestion = questionsArray[currentQuestionIndex];
-            const resetPrice = (activeQuestion && activeQuestion.dataset.index === '10') ? 14 : INITIAL_PRICE;
-            updateGraph(resetPrice, 'init');
+           const activeQuestion = questionsArray[currentQuestionIndex];
+const dataIndex = activeQuestion ? activeQuestion.dataset.index : null;
+const resetPrice =
+    dataIndex === '10' ? 14 :   // Q11: avoid pre-solved P=10,Q=5,Rev=50
+    dataIndex === '7'  ? 6  :   // Q8: avoid pre-solved max revenue at default state
+    INITIAL_PRICE;
+updateGraph(resetPrice, 'init');
         }
     }
 

@@ -912,7 +912,7 @@
             const priceLabelY = cy < 14 ? cy + 16 : cy - labelOffset;
             priceLabel.attr("x", 6).attr("y", priceLabelY).text(price.toFixed(1));
 
-            const labelGap = 10;
+            const labelGap = 5;
             const quantityLabelNearEdge = cx > chartWidth - 40;
             quantityLabel
                 .attr("text-anchor", quantityLabelNearEdge ? "end" : "start")
@@ -1027,8 +1027,8 @@
     function setupStepperButtons() {
         const PRICE_STEP = 0.2;
         const QUANTITY_STEP = 0.1;
-        const REPEAT_INTERVAL_MS = 100; // 10 steps per second
-        const INITIAL_HOLD_DELAY_MS = 350;
+        const REPEAT_INTERVAL_MS = 50; // 10 steps per second
+        const INITIAL_HOLD_DELAY_MS = 250;
 
         document.querySelectorAll('.step-btn').forEach(btn => {
             let holdTimeout = null;
@@ -1127,7 +1127,7 @@
         const priceIsSet = Math.abs(currentState.price - 14) <= STEP_TOLERANCE;
 
         if (!priceIsSet) {
-            feedback.style("color", "#dc2626").text("❌ Hint: Follow the dashed line across to the Price axis.");
+            feedback.style("color", "#dc2626").text("❌ Hint: Move the dot to reach the Price = 14.");
             return;
         }
 
@@ -1152,7 +1152,7 @@
         const quantityIsSet = Math.abs(currentState.quantity - 7) <= STEP_TOLERANCE;
 
         if (!quantityIsSet) {
-            feedback.style("color", "#dc2626").text("❌ Hint: Follow the dashed line down to the Quantity axis");
+            feedback.style("color", "#dc2626").text("❌ Hint: Move the dot to reach the Quantity = 7.");
             return;
         }
 

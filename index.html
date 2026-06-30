@@ -1341,106 +1341,10 @@
         }
     });
 
-    // Flawless mobile slider handling: Differentiates vertical scrolling from horizontal dragging
-    // Ultimate mobile scroll protection: Locks sliders instantly when scrolling is detected
-    const lessonSection = document.querySelector('.lesson-text-section');
-    const interactiveSection = document.querySelector('.interactive-section');
-    let scrollLockTimeout;
-
-    function lockSlidersOnScroll() {
-        // Find all sliders and completely deactivate their pointer interactions
-        document.querySelectorAll('.thick-slider').forEach(slider => {
-            slider.style.pointerEvents = 'none';
-        });
-        
-        // Clear the timeout and wait until scrolling has completely stopped
-        clearTimeout(scrollLockTimeout);
-        scrollLockTimeout = setTimeout(() => {
-            // Re-enable sliders immediately after scrolling ends
-            document.querySelectorAll('.thick-slider').forEach(slider => {
-                slider.style.pointerEvents = 'auto';
-            });
-        }, 100); // 100ms responsiveness ensures it feels instant when they stop scrolling
-    }
-
-    // Capture scrolling on the window and both layout columns
-    window.addEventListener('scroll', lockSlidersOnScroll, { passive: true });
-    if (lessonSection) lessonSection.addEventListener('scroll', lockSlidersOnScroll, { passive: true });
-    if (interactiveSection) interactiveSection.addEventListener('scroll', lockSlidersOnScroll, { passive: true });
-
-    // Double check: If a user touches a slider and immediately shifts vertically, clear focus
-    document.querySelectorAll('.thick-slider').forEach(slider => {
-        let startY = 0;
-        
-        slider.addEventListener('touchstart', function(e) {
-            startY = e.touches[0].clientY;
-        }, { passive: true });
-
-        slider.addEventListener('touchmove', function(e) {
-            const currentY = e.touches[0].clientY;
-            // If moving vertically by more than 4 pixels, it's a scroll, shut down slider response
-            if (Math.abs(currentY - startY) > 4) {
-                slider.style.pointerEvents = 'none';
-            }
-        }, { passive: true });
-        
-        slider.addEventListener('touchend', function() {
-            slider.style.pointerEvents = 'auto';
-        });
-    });
-
-    // Bulletproof Mobile Slider Protection: Prevents value drift during vertical scrolling
-    document.querySelectorAll('.thick-slider').forEach(slider => {
-        let startY = 0;
-        let startX = 0;
-        let initialValue = "";
-        let isVerticalScroll = false;
-
-        slider.addEventListener('touchstart', function(e) {
-            startY = e.touches[0].clientY;
-            startX = e.touches[0].clientX;
-            initialValue = this.value; // Remember the exact value when touched
-            isVerticalScroll = false;
-        }, { passive: true });
-
-        slider.addEventListener('touchmove', function(e) {
-            const currentY = e.touches[0].clientY;
-            const currentX = e.touches[0].clientX;
-            
-            const deltaY = Math.abs(currentY - startY);
-            const deltaX = Math.abs(currentX - startX);
-
-            // If the user moves more vertically than horizontally, lock it down as a scroll
-            if (!isVerticalScroll && deltaY > deltaX && deltaY > 5) {
-                isVerticalScroll = true;
-            }
-
-            if (isVerticalScroll) {
-                // Instantly force the slider value to freeze at its starting position
-                this.value = initialValue;
-                
-                // Trigger input event programmatically to keep the graph and inputs synchronized 
-                // without letting the point jump away
-                this.dispatchEvent(new Event('input'));
-                
-                // Temporarily disable interactions so it slides naturally into a page scroll
-                this.style.pointerEvents = 'none';
-            }
-        }, { passive: true });
-        
-        slider.addEventListener('touchend', function() {
-            this.style.pointerEvents = 'auto';
-            isVerticalScroll = false;
-        });
-
-        slider.addEventListener('touchcancel', function() {
-            this.style.pointerEvents = 'auto';
-            isVerticalScroll = false;
-        });
-    });
+   
 </script>
 
-<p>Update 50</p>
+<p>Update 70</p>
 
 
 

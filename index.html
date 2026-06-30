@@ -934,7 +934,7 @@
             d3.select("#live-eq").text(`20 - 2(${quantity.toFixed(2)}) = ${price.toFixed(1)}`);
             d3.select("#live-revenue").text(`$${(price * quantity).toFixed(2)}`);
 
-            if (['drag', 'price-slider', 'quant-slider', 'price-input', 'quant-input'].includes(origin)) {
+            if (['drag', 'price-slider', 'quant-slider', 'price-input', 'quant-input', 'q5-input'].includes(origin)) {
     d3.selectAll("#feedback-t1, #feedback-t2, #feedback-t3, #feedback-t4, #feedback-t5, #feedback-t6, #feedback-t7, #feedback-t8, #feedback-t9, #feedback-t10, #feedback-t11")
       .classed("muted-feedback", true);
 }
@@ -957,23 +957,49 @@
         d3.select("#price-slider").on("input", function() { updateAll(+(this.value), 'price-slider'); });
         d3.select("#quant-slider").on("input", function() { updateAll(getP(+(this.value)), 'quant-slider'); });
 
-        d3.select("#price-input").on("input", function() { 
-            let val = parseFloat(this.value);
-            if (!isNaN(val)) {
-                if (val > 20) { val = 20; this.value = val; }
-                if (val < 0) { val = 0; this.value = val; }
-                updateAll(val, 'price-input'); 
-            } 
-        });
+        // Line 495: dot.call(dragBehavior); glow.call(dragBehavior);
+// Line 496: d3.select("#price-slider").on("input", function() { updateAll(+(this.value), 'price-slider'); });
+// Line 497: d3.select("#quant-slider").on("input", function() { updateAll(getP(+(this.value)), 'quant-slider'); });
 
-        d3.select("#quant-input").on("input", function() { 
-            let val = parseFloat(this.value);
-            if (!isNaN(val)) {
-                if (val > 10) { val = 10; this.value = val; }
-                if (val < 0) { val = 0; this.value = val; }
-                updateAll(getP(val), 'quant-input'); 
-            } 
-        });
+d3.select("#price-input").on("input", function() { 
+    let val = parseFloat(this.value);
+    if (!isNaN(val)) {
+        if (val > 20) { val = 20; this.value = val; }
+        if (val < 0) { val = 0; this.value = val; }
+        updateAll(val, 'price-input'); 
+    } else if (this.value === "") {
+        // Fallback or treat as 0 temporarily so it doesn't break math states
+        updateAll(0, 'price-input');
+    }
+});
+
+// Line 508: d3.select("#quant-input").on("input", function() { ...
+d3.select("#quant-input").on("input", function() { 
+    let val = parseFloat(this.value);
+    if (!isNaN(val)) {
+        if (val > 10) { val = 10; this.value = val; }
+        if (val < 0) { val = 0; this.value = val; }
+        updateAll(getP(val), 'quant-input'); 
+    } else if (this.value === "") {
+        // Fallback or treat as 0 temporarily so it doesn't break math states
+        updateAll(getP(0), 'quant-input');
+    }
+});
+
+
+d3.select("#q5-input").on("input", function() {
+    let val = parseFloat(this.value);
+    if (!isNaN(val)) {
+        if (val > 10) { val = 10; this.value = val; }
+        if (val < 0) { val = 0; this.value = val; }
+    
+    } 
+    
+    else if (this.value === "") {
+        // Safe fallback so the graph doesn't freeze when backspacing
+        updateAll(getP(0), 'q5-input');
+    }
+});
 
         updateAll(currentState.price, 'init');
     }

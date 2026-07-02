@@ -76,19 +76,21 @@
   .axis path, .axis line{
     stroke:#333;
     shape-rendering:crispEdges;
+    stroke-width: 2px; /* Increased stroke width */
   }
   .axis text{
     fill:var(--sub);
-    font-size:11px;
+    font-size:14px; /* Increased font size */
+    font-weight: 600;
   }
   .demand-line{
     fill:none;
     stroke:var(--accent-dark);
-    stroke-width:2.5px;
+    stroke-width:4px; /* Increased line stroke width */
   }
   .proj-line{
     stroke:var(--proj);
-    stroke-width:1.5px;
+    stroke-width:2px; /* Increased line stroke width */
     stroke-dasharray:5,4;
   }
   .drag-dot{
@@ -101,7 +103,7 @@
   .drag-dot:active{cursor:grabbing;}
   .axis-label{
     fill:var(--ink);
-    font-size:11px;
+    font-size:15px; /* Increased axis label font size */
     font-weight:600;
   }
 
@@ -121,16 +123,20 @@
     text-align:center;
   }
   .data-block .label{
-    font-size:10px;
+    font-size:13px; /* Increased font size */
     color:var(--sub);
     text-transform:uppercase;
     letter-spacing:0.05em;
     margin-bottom:2px;
   }
   .data-block .value{
-    font-size:18px;
+    font-size:22px; /* Increased font size for general data blocks */
     font-weight:700;
     color:var(--accent-dark);
+  }
+  /* Keep original font size for calculated Equation and Revenue on desktop */
+  #equation-display, #revenue-display {
+    font-size: 18px;
   }
 
   /* ---------- Desktop controls (sliders) ---------- */
@@ -157,7 +163,7 @@
     margin-bottom:4px;
   }
   .control-top label{
-    font-size:12px;
+    font-size:15px; /* Increased font size */
     font-weight:600;
     color:var(--ink);
   }
@@ -166,7 +172,7 @@
     padding:3px 6px;
     border:1px solid var(--line);
     border-radius:6px;
-    font-size:13px;
+    font-size:16px; /* Increased font size */
     text-align:right;
   }
   input[type="range"]{
@@ -193,7 +199,7 @@
     padding:6px 8px;
   }
   .stepper-row .s-label{
-    font-size:12px;
+    font-size:15px; /* Increased font size */
     font-weight:600;
     width:52px;
     flex:0 0 auto;
@@ -205,7 +211,7 @@
     padding:8px 4px;
     border:1px solid var(--line);
     border-radius:6px;
-    font-size:14px;
+    font-size:17px; /* Increased font size */
   }
   .step-btn{
     flex:0 0 auto;
@@ -214,7 +220,7 @@
     border-radius:8px;
     border:1px solid var(--line);
     background:#fff;
-    font-size:20px;
+    font-size:24px; /* Increased font size */
     font-weight:700;
     line-height:1;
     color:var(--accent-dark);
@@ -237,19 +243,19 @@
     align-items:center;
     margin-bottom:6px;
   }
-  .quiz-header h2{font-size:14px;margin:0;}
+  .quiz-header h2{font-size:17px;margin:0;} /* Increased font size */
   #q-index{
-    font-size:12px;
+    font-size:14px; /* Increased font size */
     color:var(--sub);
   }
   .quiz-question{
-    font-size:13.5px;
+    font-size:16.5px; /* Increased font size */
     line-height:1.4;
     min-height:44px;
     margin-bottom:6px;
   }
   .quiz-answer{
-    font-size:13px;
+    font-size:15px; /* Increased font size */
     color:var(--good);
     font-weight:600;
     min-height:18px;
@@ -270,12 +276,12 @@
 .opt-btn{ text-align:left; padding:8px 10px; }
 .opt-btn.correct{ background:#eaf7ec; border-color:var(--good); color:var(--good); }
 .opt-btn.wrong{ background:#fdecec; border-color:#e03131; color:#e03131; }
-.quiz-status{ font-size:13px; font-weight:600; min-height:18px; margin-bottom:8px; }
+.quiz-status{ font-size:15px; font-weight:600; min-height:18px; margin-bottom:8px; } /* Increased font size */
 .quiz-status.correct{ color:var(--good); }
 .quiz-status.pending{ color:var(--sub); }
   button{
     font-family:inherit;
-    font-size:12px;
+    font-size:15px; /* Increased font size */
     padding:6px 12px;
     border-radius:8px;
     border:1px solid var(--line);
@@ -299,16 +305,16 @@
 
   /* Docs */
   .docs p{
-    font-size:12.5px;
+    font-size:15.5px; /* Increased font size */
     line-height:1.45;
     color:#333;
     margin:0 0 6px 0;
   }
-  .docs h2{font-size:14px;margin:0 0 6px 0;}
+  .docs h2{font-size:17px;margin:0 0 6px 0;} /* Increased font size */
   .docs ul{
     margin:0;
     padding-left:16px;
-    font-size:12.5px;
+    font-size:15.5px; /* Increased font size */
     line-height:1.45;
     color:#333;
   }
@@ -319,9 +325,21 @@
     .app{flex-direction:column; height:auto;}
     .col-left, .col-right{flex:1 1 auto; max-width:100%;}
     .col-left{height:auto;}
-    .graph-card{min-height:320px;}
+    
+    /* Removed fixed min-height and added aspect-ratio to get rid of white margin below graph */
+    .graph-card{
+      min-height:auto;
+      aspect-ratio: 560 / 420;
+    }
+    
     .controls-desktop{display:none;}
     .controls-mobile{display:flex;}
+
+    /* Reduced font size for Equation and Revenue on mobile to force it onto a single line */
+    #equation-display, #revenue-display {
+      font-size: 13px !important;
+      white-space: nowrap;
+    }
   }
 
 
@@ -335,7 +353,7 @@
   }
   .ghost-proj {
     stroke: var(--proj);
-    stroke-width: 1.2px;
+    stroke-width: 1.5px; /* Increased stroke width */
     stroke-dasharray: 4,4;
     opacity: 0.45;
     pointer-events: none;
@@ -972,6 +990,9 @@ if (item && item.validationState) {
 
 
 </script>
+
+
+update 1
 
 
 

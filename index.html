@@ -66,13 +66,20 @@
     min-height:0;
     display:flex;
   }
-  #graph-svg{
-    display:block;
-    width:100%;
-    height:100%;
-    background:#ffffff;
-    cursor:grab;
-  }
+  #graph-svg {
+  display:block;
+  width:100%;
+  height:100%;
+  background:#ffffff;
+  cursor:grab;
+  /* Prevent text selection and visual callouts on long-press */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
   .axis path, .axis line{
     stroke:#333;
     shape-rendering:crispEdges;
@@ -80,7 +87,7 @@
   }
   .axis text{
     fill:var(--sub);
-    font-size:14px; /* Increased font size */
+    font-size:16px; /* Increased font size */
     font-weight: 600;
   }
   .demand-line{
@@ -237,16 +244,35 @@
   }
 
   /* Quiz */
-  .quiz-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:6px;
-  }
-  .quiz-header h2{font-size:17px;margin:0;} /* Increased font size */
+  .quiz-header {
+  display: flex;
+  flex-direction: column; /* Forces layout into two lines */
+  gap: 8px;
+  margin-bottom: 12px;
+}
+  .quiz-header h2{
+    
+    font-size:17px;
+    margin:0;
+
+    width: 100%;
+  
+  
+  
+  } 
+  
+  .quiz-header .quiz-sub-row {
+  display: flex;
+  justify-content: space-between; /* Pushes tracker left, buttons right */
+  align-items: center;
+  width: 100%;
+}
+  
+  /* Increased font size */
   #q-index{
     font-size:14px; /* Increased font size */
     color:var(--sub);
+    order: 1;
   }
   .quiz-question{
     font-size:16.5px; /* Increased font size */
@@ -266,10 +292,11 @@
     justify-content:space-between;
     align-items:center;
     gap:8px;
+    order: 2;
   }
   .quiz-buttons .nav-group{
     display:flex;
-    gap:6px;
+    gap:20px;
   }
 
   .quiz-options{ display:flex; flex-direction:column; gap:6px; margin-bottom:8px; }
@@ -423,21 +450,26 @@
   <!-- RIGHT COLUMN -->
   <div class="col-right">
 
-    <div class="card">
+  <div class="card">
   <div class="quiz-header">
     <h2>Quick Check</h2>
-     <div class="quiz-buttons">
-    <div class="nav-group">
-      <button id="q-prev">Previous</button>
-      <button id="q-next">Next</button>
+    
+    <!-- New wrapper row to separate layout from the main title -->
+    <div class="quiz-sub-row">
+      <span id="q-index">Question 1 of 3</span>
+      
+      <div class="quiz-buttons">
+        <div class="nav-group">
+          <button id="q-prev">Previous</button>
+          <button id="q-next">Next</button>
+        </div>
+      </div>
     </div>
-  </div>
-    <span id="q-index">Question 1 of 3</span>
+    
   </div>
   <div class="quiz-question" id="q-text"></div>
   <div class="quiz-options" id="q-options"></div>
   <div class="quiz-status" id="q-status"></div>
- 
 </div>
 
     <div class="card docs">
@@ -990,9 +1022,6 @@ if (item && item.validationState) {
 
 
 </script>
-
-
-update 1
 
 
 

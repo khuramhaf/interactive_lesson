@@ -603,9 +603,10 @@
   const qtyLine = g.append("line").attr("class", "proj-line");
 
   // Draggable dot
+  const isMobile = window.innerWidth <= 900;
   const dot = g.append("circle")
     .attr("class", "drag-dot")
-    .attr("r", 12)
+    .attr("r", isMobile ? 16 : 12)
     .attr("cx", xScale(state.Q))
     .attr("cy", yScale(state.P));
 

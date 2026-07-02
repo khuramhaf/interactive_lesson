@@ -500,8 +500,8 @@
      STATE MODEL
   --------------------------------------------------------- */
   const state = {
-    Q: 5,
-    P: 10, // P = 20 - 2Q
+    Q: 4,
+    P: 12, // P = 20 - 2Q
     get R(){ return this.P * this.Q; }
   };
 
@@ -520,7 +520,7 @@
   function fix(n){ return Math.round(n * 100) / 100; }
 
   function setFromQ(rawQ){
-    hasInteracted = true;
+    
     let q = clamp(rawQ, Q_MIN, Q_MAX);
     q = fix(roundStep(q, Q_STEP));
     let p = fix(priceFromQty(q));
@@ -531,7 +531,7 @@
   }
 
   function setFromP(rawP){
-    hasInteracted = true;
+    
     let p = clamp(rawP, P_MIN, P_MAX);
     p = fix(roundStep(p, P_STEP));
     let q = fix(qtyFromPrice(p));
@@ -614,7 +614,7 @@
 
 let isDragging = false;
 let animTimer = null;
-let hasInteracted = false; 
+
 
   const ghostPriceLine = g.append("line").attr("class", "ghost-proj").style("display", "none");
   const ghostQtyLine = g.append("line").attr("class", "ghost-proj").style("display", "none");
@@ -661,7 +661,7 @@ let hasInteracted = false;
 
     if (targetP === null) return;
 
-    const isCorrect = hasInteracted && checkStateValidation(item, state);
+    const isCorrect = checkStateValidation(item, state);
 if (isCorrect || isDragging) return;
 
     ghostDot.style("display", null);
@@ -857,7 +857,7 @@ function evaluateQuiz(){
   // completely independent of whether an option is selected.
   let stateMatch = false;
 if (hasState) {
-  stateMatch = hasInteracted && checkStateValidation(item, state);
+  stateMatch = checkStateValidation(item, state);
 }
 
   if (hasOptions) {
@@ -996,7 +996,7 @@ renderQuiz();
 
     const item = quizQuestions[qIndex];
 if (item && item.validationState) {
-  const isCorrect = hasInteracted && checkStateValidation(item, state);
+  const isCorrect = checkStateValidation(item, state);
       
       if (isCorrect) {
         stopGhostAnimation();
